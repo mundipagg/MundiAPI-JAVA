@@ -699,8 +699,8 @@ void getSubscriptionsAsync(
 #### Example Usage
 
 ```java
-Integer page = 108;
-Integer size = 108;
+Integer page = 239;
+Integer size = 239;
 String code = "code";
 String billingType = "billing_type";
 String customerId = "customer_id";
@@ -989,8 +989,8 @@ void getDiscountsAsync(
 
 ```java
 String subscriptionId = "subscription_id";
-int page = 108;
-int size = 108;
+int page = 239;
+int size = 239;
 // Invoking the API call with sample inputs
 subscriptions.getDiscountsAsync(subscriptionId, page, size, new APICallBack<ListDiscountsResponse>() {
     public void onSuccess(HttpContext context, ListDiscountsResponse response) {
@@ -1072,8 +1072,8 @@ void getIncrementsAsync(
 
 ```java
 String subscriptionId = "subscription_id";
-Integer page = 108;
-Integer size = 108;
+Integer page = 239;
+Integer size = 239;
 // Invoking the API call with sample inputs
 subscriptions.getIncrementsAsync(subscriptionId, page, size, new APICallBack<ListIncrementsResponse>() {
     public void onSuccess(HttpContext context, ListIncrementsResponse response) {
@@ -1158,8 +1158,8 @@ void getUsagesDetailsAsync(
 ```java
 String subscriptionId = "subscription_id";
 String cycleId = "cycle_id";
-Integer size = 108;
-Integer page = 108;
+Integer size = 239;
+Integer page = 239;
 String itemId = "item_id";
 String group = "group";
 // Invoking the API call with sample inputs
@@ -1208,8 +1208,8 @@ void getUsagesAsync(
 ```java
 String subscriptionId = "subscription_id";
 String itemId = "item_id";
-Integer page = 108;
-Integer size = 108;
+Integer page = 239;
+Integer size = 239;
 String code = "code";
 String group = "group";
 // Invoking the API call with sample inputs
@@ -1263,8 +1263,8 @@ void getSubscriptionItemsAsync(
 
 ```java
 String subscriptionId = "subscription_id";
-Integer page = 108;
-Integer size = 108;
+Integer page = 239;
+Integer size = 239;
 String name = "name";
 String code = "code";
 String status = "status";
@@ -1410,16 +1410,16 @@ try {
 ```
 
 
-### <a name="update_current_cycle_end_date_async"></a>![Method: ](https://apidocs.io/img/method.png "com.mundipagg.api.controllers.SubscriptionsController.updateCurrentCycleEndDateAsync") updateCurrentCycleEndDateAsync
+### <a name="update_latest_period_end_at_async"></a>![Method: ](https://apidocs.io/img/method.png "com.mundipagg.api.controllers.SubscriptionsController.updateLatestPeriodEndAtAsync") updateLatestPeriodEndAtAsync
 
 > TODO: Add a method description
 
 
 ```java
-void updateCurrentCycleEndDateAsync(
+void updateLatestPeriodEndAtAsync(
         final String subscriptionId,
         final UpdateCurrentCycleEndDateRequest request,
-        final APICallBack<GetSubscriptionItemResponse> callBack)
+        final APICallBack<GetSubscriptionResponse> callBack)
 ```
 
 #### Parameters
@@ -1437,8 +1437,8 @@ try {
     String subscriptionId = "subscription_id";
     UpdateCurrentCycleEndDateRequest request = new UpdateCurrentCycleEndDateRequest();
     // Invoking the API call with sample inputs
-    subscriptions.updateCurrentCycleEndDateAsync(subscriptionId, request, new APICallBack<GetSubscriptionItemResponse>() {
-        public void onSuccess(HttpContext context, GetSubscriptionItemResponse response) {
+    subscriptions.updateLatestPeriodEndAtAsync(subscriptionId, request, new APICallBack<GetSubscriptionResponse>() {
+        public void onSuccess(HttpContext context, GetSubscriptionResponse response) {
             // TODO success callback handler
         }
         public void onFailure(HttpContext context, Throwable error) {
@@ -1573,6 +1573,41 @@ subscriptions.getSubscriptionCycleByIdAsync(subscriptionId, cycleId, new APICall
 ```
 
 
+### <a name="renew_subscription_async"></a>![Method: ](https://apidocs.io/img/method.png "com.mundipagg.api.controllers.SubscriptionsController.renewSubscriptionAsync") renewSubscriptionAsync
+
+> TODO: Add a method description
+
+
+```java
+void renewSubscriptionAsync(
+        final String subscriptionId,
+        final APICallBack<GetPeriodResponse> callBack)
+```
+
+#### Parameters
+
+| Parameter | Tags | Description |
+|-----------|------|-------------|
+| subscriptionId |  ``` Required ```  | TODO: Add a parameter description |
+
+
+#### Example Usage
+
+```java
+String subscriptionId = "subscription_id";
+// Invoking the API call with sample inputs
+subscriptions.renewSubscriptionAsync(subscriptionId, new APICallBack<GetPeriodResponse>() {
+    public void onSuccess(HttpContext context, GetPeriodResponse response) {
+        // TODO success callback handler
+    }
+    public void onFailure(HttpContext context, Throwable error) {
+        // TODO failure callback handler
+    }
+});
+
+```
+
+
 [Back to List of Controllers](#list_of_controllers)
 
 ## <a name="orders_controller"></a>![Class: ](https://apidocs.io/img/class.png "com.mundipagg.api.controllers.OrdersController") OrdersController
@@ -1692,8 +1727,8 @@ void getOrdersAsync(
 #### Example Usage
 
 ```java
-Integer page = 108;
-Integer size = 108;
+Integer page = 239;
+Integer size = 239;
 String code = "code";
 String status = "status";
 DateTime createdSince = new Date();
@@ -2277,8 +2312,8 @@ void getPlansAsync(
 #### Example Usage
 
 ```java
-Integer page = 108;
-Integer size = 108;
+Integer page = 75;
+Integer size = 75;
 String name = "name";
 String status = "status";
 String billingType = "billing_type";
@@ -2623,8 +2658,8 @@ void getInvoicesAsync(
 #### Example Usage
 
 ```java
-Integer page = 108;
-Integer size = 108;
+Integer page = 75;
+Integer size = 75;
 String code = "code";
 String customerId = "customer_id";
 String subscriptionId = "subscription_id";
@@ -2685,6 +2720,41 @@ try {
     // TODO Auto-generated catch block
     e.printStackTrace();
 }
+```
+
+
+### <a name="get_partial_invoice_async"></a>![Method: ](https://apidocs.io/img/method.png "com.mundipagg.api.controllers.InvoicesController.getPartialInvoiceAsync") getPartialInvoiceAsync
+
+> TODO: Add a method description
+
+
+```java
+void getPartialInvoiceAsync(
+        final String subscriptionId,
+        final APICallBack<GetInvoiceResponse> callBack)
+```
+
+#### Parameters
+
+| Parameter | Tags | Description |
+|-----------|------|-------------|
+| subscriptionId |  ``` Required ```  | Subscription Id |
+
+
+#### Example Usage
+
+```java
+String subscriptionId = "subscription_id";
+// Invoking the API call with sample inputs
+invoices.getPartialInvoiceAsync(subscriptionId, new APICallBack<GetInvoiceResponse>() {
+    public void onSuccess(HttpContext context, GetInvoiceResponse response) {
+        // TODO success callback handler
+    }
+    public void onFailure(HttpContext context, Throwable error) {
+        // TODO failure callback handler
+    }
+});
+
 ```
 
 
@@ -2890,8 +2960,8 @@ void getAccessTokensAsync(
 
 ```java
 String customerId = "customer_id";
-Integer page = 108;
-Integer size = 108;
+Integer page = 75;
+Integer size = 75;
 // Invoking the API call with sample inputs
 customers.getAccessTokensAsync(customerId, page, size, new APICallBack<ListAccessTokensResponse>() {
     public void onSuccess(HttpContext context, ListAccessTokensResponse response) {
@@ -2931,8 +3001,8 @@ void getAddressesAsync(
 
 ```java
 String customerId = "customer_id";
-Integer page = 108;
-Integer size = 108;
+Integer page = 75;
+Integer size = 75;
 // Invoking the API call with sample inputs
 customers.getAddressesAsync(customerId, page, size, new APICallBack<ListAddressesResponse>() {
     public void onSuccess(HttpContext context, ListAddressesResponse response) {
@@ -2972,8 +3042,8 @@ void getCardsAsync(
 
 ```java
 String customerId = "customer_id";
-Integer page = 108;
-Integer size = 108;
+Integer page = 75;
+Integer size = 75;
 // Invoking the API call with sample inputs
 customers.getCardsAsync(customerId, page, size, new APICallBack<ListCardsResponse>() {
     public void onSuccess(HttpContext context, ListCardsResponse response) {
@@ -3790,8 +3860,8 @@ void getChargesAsync(
 #### Example Usage
 
 ```java
-Integer page = 108;
-Integer size = 108;
+Integer page = 75;
+Integer size = 75;
 String code = "code";
 String status = "status";
 String paymentMethod = "payment_method";
@@ -4048,8 +4118,8 @@ void getChargeTransactionsAsync(
 
 ```java
 String chargeId = "charge_id";
-Integer page = 108;
-Integer size = 200;
+Integer page = 33;
+Integer size = 33;
 // Invoking the API call with sample inputs
 charges.getChargeTransactionsAsync(chargeId, page, size, new APICallBack<ListChargeTransactionsResponse>() {
     public void onSuccess(HttpContext context, ListChargeTransactionsResponse response) {
@@ -4187,8 +4257,8 @@ void getTransfersAsync(
 
 ```java
 String recipientId = "recipient_id";
-Integer page = 200;
-Integer size = 200;
+Integer page = 33;
+Integer size = 33;
 String status = "status";
 DateTime createdSince = new Date();
 DateTime createdUntil = new Date();
@@ -4364,8 +4434,8 @@ void getAnticipationsAsync(
 
 ```java
 String recipientId = "recipient_id";
-Integer page = 200;
-Integer size = 200;
+Integer page = 33;
+Integer size = 33;
 String status = "status";
 String timeframe = "timeframe";
 DateTime paymentDateSince = new Date();
@@ -4527,8 +4597,8 @@ void getRecipientsAsync(
 #### Example Usage
 
 ```java
-Integer page = 200;
-Integer size = 200;
+Integer page = 33;
+Integer size = 33;
 // Invoking the API call with sample inputs
 recipients.getRecipientsAsync(page, size, new APICallBack<ListRecipientResponse>() {
     public void onSuccess(HttpContext context, ListRecipientResponse response) {
@@ -4954,8 +5024,8 @@ void getSellersAsync(
 #### Example Usage
 
 ```java
-Integer page = 200;
-Integer size = 200;
+Integer page = 33;
+Integer size = 33;
 String name = "name";
 String document = "document";
 String code = "code";
