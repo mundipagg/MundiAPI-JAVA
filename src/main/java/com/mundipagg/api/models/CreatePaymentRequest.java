@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.ALWAYS)
 public class CreatePaymentRequest 
         implements java.io.Serializable {
-    private static final long serialVersionUID = 6146270705685971997L;
+    private static final long serialVersionUID = -4738634314378595801L;
     private String paymentMethod;
     private CreateCreditCardPaymentRequest creditCard;
     private CreateDebitCardPaymentRequest debitCard;
@@ -31,6 +31,7 @@ public class CreatePaymentRequest
     private LinkedHashMap<String, String> metadata;
     private CreateCashPaymentRequest cash;
     private CreatePrivateLabelPaymentRequest privateLabel;
+    private CreatePixPaymentRequest pix;
     /** GETTER
      * Payment method
      */
@@ -285,6 +286,22 @@ public class CreatePaymentRequest
     @JsonSetter("private_label")
     public void setPrivateLabel (CreatePrivateLabelPaymentRequest value) { 
         this.privateLabel = value;
+    }
+ 
+    /** GETTER
+     * Settings for pix payment
+     */
+    @JsonGetter("pix")
+    public CreatePixPaymentRequest getPix ( ) { 
+        return this.pix;
+    }
+    
+    /** SETTER
+     * Settings for pix payment
+     */
+    @JsonSetter("pix")
+    public void setPix (CreatePixPaymentRequest value) { 
+        this.pix = value;
     }
  
 }

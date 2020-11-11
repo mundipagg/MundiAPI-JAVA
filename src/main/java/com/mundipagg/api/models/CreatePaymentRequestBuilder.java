@@ -145,6 +145,14 @@ public class CreatePaymentRequestBuilder {
         createPaymentRequest.setPrivateLabel(privateLabel);
         return this;
     }
+
+    /**
+     * Settings for pix payment
+     */
+    public CreatePaymentRequestBuilder pix(CreatePixPaymentRequest pix) {
+        createPaymentRequest.setPix(pix);
+        return this;
+    }
     /**
      * Build the instance with the given values
      */
