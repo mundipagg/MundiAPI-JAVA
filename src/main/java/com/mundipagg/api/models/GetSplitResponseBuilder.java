@@ -54,6 +54,11 @@ public class GetSplitResponseBuilder {
         getSplitResponse.setOptions(options);
         return this;
     }
+
+    public GetSplitResponseBuilder id(String id) {
+        getSplitResponse.setId(id);
+        return this;
+    }
     /**
      * Build the instance with the given values
      */
