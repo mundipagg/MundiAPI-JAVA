@@ -18,7 +18,7 @@ import org.joda.time.DateTime;
 @JsonInclude(Include.ALWAYS)
 public class GetRecipientResponse 
         implements java.io.Serializable {
-    private static final long serialVersionUID = 1130853393278372895L;
+    private static final long serialVersionUID = -231221123519874838L;
     private String id;
     private String name;
     private String email;
@@ -33,6 +33,7 @@ public class GetRecipientResponse
     private List<GetGatewayRecipientResponse> gatewayRecipients;
     private LinkedHashMap<String, String> metadata;
     private GetAutomaticAnticipationResponse automaticAnticipationSettings;
+    private GetTransferSettingsResponse transferSettings;
     /** GETTER
      * Id
      */
@@ -261,6 +262,22 @@ public class GetRecipientResponse
     @JsonSetter("automatic_anticipation_settings")
     public void setAutomaticAnticipationSettings (GetAutomaticAnticipationResponse value) { 
         this.automaticAnticipationSettings = value;
+    }
+ 
+    /** GETTER
+     * TODO: Write general description for this method
+     */
+    @JsonGetter("transfer_settings")
+    public GetTransferSettingsResponse getTransferSettings ( ) { 
+        return this.transferSettings;
+    }
+    
+    /** SETTER
+     * TODO: Write general description for this method
+     */
+    @JsonSetter("transfer_settings")
+    public void setTransferSettings (GetTransferSettingsResponse value) { 
+        this.transferSettings = value;
     }
  
 }

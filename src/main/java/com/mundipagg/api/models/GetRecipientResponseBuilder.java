@@ -127,6 +127,11 @@ public class GetRecipientResponseBuilder {
         getRecipientResponse.setAutomaticAnticipationSettings(automaticAnticipationSettings);
         return this;
     }
+
+    public GetRecipientResponseBuilder transferSettings(GetTransferSettingsResponse transferSettings) {
+        getRecipientResponse.setTransferSettings(transferSettings);
+        return this;
+    }
     /**
      * Build the instance with the given values
      */
