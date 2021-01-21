@@ -18,7 +18,7 @@ import org.joda.time.DateTime;
 @JsonInclude(Include.ALWAYS)
 public class GetCustomerResponse 
         implements java.io.Serializable {
-    private static final long serialVersionUID = -1364264056880545034L;
+    private static final long serialVersionUID = 5044817949889648393L;
     private String id;
     private String name;
     private String email;
@@ -33,6 +33,7 @@ public class GetCustomerResponse
     private GetPhonesResponse phones;
     private Long fbId;
     private String code;
+    private String documentType;
     /** GETTER
      * TODO: Write general description for this method
      */
@@ -259,6 +260,22 @@ public class GetCustomerResponse
     @JsonSetter("code")
     public void setCode (String value) { 
         this.code = value;
+    }
+ 
+    /** GETTER
+     * TODO: Write general description for this method
+     */
+    @JsonGetter("document_type")
+    public String getDocumentType ( ) { 
+        return this.documentType;
+    }
+    
+    /** SETTER
+     * TODO: Write general description for this method
+     */
+    @JsonSetter("document_type")
+    public void setDocumentType (String value) { 
+        this.documentType = value;
     }
  
 }

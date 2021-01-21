@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.ALWAYS)
 public class UpdateCustomerRequest 
         implements java.io.Serializable {
-    private static final long serialVersionUID = -1369637636729418752L;
+    private static final long serialVersionUID = 3419136958063508335L;
     private String name;
     private String email;
     private String document;
@@ -24,6 +24,7 @@ public class UpdateCustomerRequest
     private CreatePhonesRequest phones;
     private String code;
     private String gender;
+    private String documentType;
     /** GETTER
      * Name
      */
@@ -166,6 +167,22 @@ public class UpdateCustomerRequest
     @JsonSetter("gender")
     public void setGender (String value) { 
         this.gender = value;
+    }
+ 
+    /** GETTER
+     * TODO: Write general description for this method
+     */
+    @JsonGetter("document_type")
+    public String getDocumentType ( ) { 
+        return this.documentType;
+    }
+    
+    /** SETTER
+     * TODO: Write general description for this method
+     */
+    @JsonSetter("document_type")
+    public void setDocumentType (String value) { 
+        this.documentType = value;
     }
  
 }

@@ -86,6 +86,11 @@ public class CreateCustomerRequestBuilder {
         createCustomerRequest.setGender(gender);
         return this;
     }
+
+    public CreateCustomerRequestBuilder documentType(String documentType) {
+        createCustomerRequest.setDocumentType(documentType);
+        return this;
+    }
     /**
      * Build the instance with the given values
      */
