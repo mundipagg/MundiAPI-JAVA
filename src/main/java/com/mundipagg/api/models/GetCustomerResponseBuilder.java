@@ -91,6 +91,11 @@ public class GetCustomerResponseBuilder {
         getCustomerResponse.setCode(code);
         return this;
     }
+
+    public GetCustomerResponseBuilder documentType(String documentType) {
+        getCustomerResponse.setDocumentType(documentType);
+        return this;
+    }
     /**
      * Build the instance with the given values
      */
