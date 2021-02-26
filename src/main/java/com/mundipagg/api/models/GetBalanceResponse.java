@@ -14,10 +14,12 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.ALWAYS)
 public class GetBalanceResponse 
         implements java.io.Serializable {
-    private static final long serialVersionUID = -8317337111181157482L;
+    private static final long serialVersionUID = 4290020402308774883L;
     private String currency;
     private int availableAmount;
     private GetRecipientResponse recipient;
+    private int waitingFundsAmount;
+    private int transferredAmount;
     /** GETTER
      * Currency
      */
@@ -64,6 +66,38 @@ public class GetBalanceResponse
     @JsonSetter("recipient")
     public void setRecipient (GetRecipientResponse value) { 
         this.recipient = value;
+    }
+ 
+    /** GETTER
+     * TODO: Write general description for this method
+     */
+    @JsonGetter("waiting_funds_amount")
+    public int getWaitingFundsAmount ( ) { 
+        return this.waitingFundsAmount;
+    }
+    
+    /** SETTER
+     * TODO: Write general description for this method
+     */
+    @JsonSetter("waiting_funds_amount")
+    public void setWaitingFundsAmount (int value) { 
+        this.waitingFundsAmount = value;
+    }
+ 
+    /** GETTER
+     * TODO: Write general description for this method
+     */
+    @JsonGetter("transferred_amount")
+    public int getTransferredAmount ( ) { 
+        return this.transferredAmount;
+    }
+    
+    /** SETTER
+     * TODO: Write general description for this method
+     */
+    @JsonSetter("transferred_amount")
+    public void setTransferredAmount (int value) { 
+        this.transferredAmount = value;
     }
  
 }
