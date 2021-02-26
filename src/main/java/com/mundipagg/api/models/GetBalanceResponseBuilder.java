@@ -41,6 +41,16 @@ public class GetBalanceResponseBuilder {
         getBalanceResponse.setRecipient(recipient);
         return this;
     }
+
+    public GetBalanceResponseBuilder waitingFundsAmount(int waitingFundsAmount) {
+        getBalanceResponse.setWaitingFundsAmount(waitingFundsAmount);
+        return this;
+    }
+
+    public GetBalanceResponseBuilder transferredAmount(int transferredAmount) {
+        getBalanceResponse.setTransferredAmount(transferredAmount);
+        return this;
+    }
     /**
      * Build the instance with the given values
      */
