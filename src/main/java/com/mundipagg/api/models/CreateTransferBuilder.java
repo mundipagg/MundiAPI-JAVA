@@ -33,7 +33,7 @@ public class CreateTransferBuilder {
         return this;
     }
 
-    public CreateTransferBuilder metadata(List<String> metadata) {
+    public CreateTransferBuilder metadata(LinkedHashMap<String, String> metadata) {
         createTransfer.setMetadata(metadata);
         return this;
     }
