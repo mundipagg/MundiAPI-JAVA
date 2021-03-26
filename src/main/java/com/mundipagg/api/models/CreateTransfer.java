@@ -14,11 +14,11 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.ALWAYS)
 public class CreateTransfer 
         implements java.io.Serializable {
-    private static final long serialVersionUID = -6704780029943525007L;
+    private static final long serialVersionUID = -6704780028667116480L;
     private int amount;
     private String sourceId;
     private String targetId;
-    private List<String> metadata;
+    private LinkedHashMap<String, String> metadata;
     /** GETTER
      * TODO: Write general description for this method
      */
@@ -71,7 +71,7 @@ public class CreateTransfer
      * TODO: Write general description for this method
      */
     @JsonGetter("metadata")
-    public List<String> getMetadata ( ) { 
+    public LinkedHashMap<String, String> getMetadata ( ) { 
         return this.metadata;
     }
     
@@ -79,7 +79,7 @@ public class CreateTransfer
      * TODO: Write general description for this method
      */
     @JsonSetter("metadata")
-    public void setMetadata (List<String> value) { 
+    public void setMetadata (LinkedHashMap<String, String> value) { 
         this.metadata = value;
     }
  
