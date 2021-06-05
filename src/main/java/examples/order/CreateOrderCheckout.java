@@ -36,7 +36,7 @@ public class CreateOrderCheckout {
         create_checkout_payment_request.setAcceptedPaymentMethods(acceptedPaymentMethods);
 
 
-        ArrayList<ArrayList<String>> multiPayments = new ArrayList<ArrayList<String>>();
+        ArrayList<Object> multiPayments = new ArrayList<Object>();
         ArrayList<String> paymentOne = new ArrayList<String>();
         paymentOne.add("credit_card");
         paymentOne.add("credit_card");
@@ -45,7 +45,7 @@ public class CreateOrderCheckout {
         paymentTwo.add("credit_card");
         paymentTwo.add("boleto");
         multiPayments.add(paymentTwo);
-        create_checkout_payment_request.setAcceptedMultiPaymentMethods(Collections.singletonList(multiPayments));
+        create_checkout_payment_request.setAcceptedMultiPaymentMethods(multiPayments);
 
         create_checkout_payment_request.setSuccessUrl("https://www.mundipagg.com'");
 
