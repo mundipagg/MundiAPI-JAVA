@@ -58,14 +58,6 @@ public class MundiAPIClient {
     }
 
     /**
-     * Singleton access to Sellers controller
-     * @return	Returns the SellersController instance 
-     */
-    public SellersController getSellers() {
-        return SellersController.getInstance();
-    }
-
-    /**
      * Singleton access to Tokens controller
      * @return	Returns the TokensController instance 
      */
