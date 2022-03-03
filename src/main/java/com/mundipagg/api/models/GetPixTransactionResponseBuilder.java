@@ -39,6 +39,11 @@ public class GetPixTransactionResponseBuilder
         getPixTransactionResponse.setAdditionalInformation(additionalInformation);
         return this;
     }
+
+    public GetPixTransactionResponseBuilder payer(GetPixPayerResponse payer) {
+        getPixTransactionResponse.setPayer(payer);
+        return this;
+    }
     /**
      * Build the instance with the given values
      */
