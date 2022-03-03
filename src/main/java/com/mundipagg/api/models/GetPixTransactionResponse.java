@@ -27,11 +27,12 @@ import org.joda.time.DateTime;
 @JsonInclude(Include.ALWAYS)
 public class GetPixTransactionResponse 
         extends GetTransactionResponse {
-    private static final long serialVersionUID = 8873642066584993106L;
+    private static final long serialVersionUID = 7503780076069809946L;
     private String qrCode;
     private String qrCodeUrl;
     private DateTime expiresAt;
     private List<PixAdditionalInformation> additionalInformation;
+    private GetPixPayerResponse payer;
     /** GETTER
      * TODO: Write general description for this method
      */
@@ -96,6 +97,22 @@ public class GetPixTransactionResponse
     @JsonSetter("additional_information")
     public void setAdditionalInformation (List<PixAdditionalInformation> value) { 
         this.additionalInformation = value;
+    }
+ 
+    /** GETTER
+     * TODO: Write general description for this method
+     */
+    @JsonGetter("payer")
+    public GetPixPayerResponse getPayer ( ) { 
+        return this.payer;
+    }
+    
+    /** SETTER
+     * TODO: Write general description for this method
+     */
+    @JsonSetter("payer")
+    public void setPayer (GetPixPayerResponse value) { 
+        this.payer = value;
     }
  
 }
