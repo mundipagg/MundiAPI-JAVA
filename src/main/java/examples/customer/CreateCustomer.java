@@ -8,10 +8,10 @@ import com.mundipagg.api.controllers.*;
 import java.util.LinkedHashMap;
 
 public class CreateCustomer {
-	
-	public static void main(String[] args) {
 
-        String basicAuthUserName = "sk_test_EegqODfvktNJn4YA"; // The username to use with basic authentication
+    public static void main(String[] args) {
+
+        String basicAuthUserName = "sk_test"; // The username to use with basic authentication
         String basicAuthPassword = ""; // The password to use with basic authentication
 
         MundiAPIClient client = new MundiAPIClient(basicAuthUserName, basicAuthPassword);
@@ -33,7 +33,7 @@ public class CreateCustomer {
         request.getAddress().setState("RJ");
         request.getAddress().setCountry("BR");
         LinkedHashMap<String, String> metadata = new LinkedHashMap<String, String>();
-        metadata.put("id","my_address_id");
+        metadata.put("id", "my_address_id");
         UpdateMetadataRequest updateMetadata = new UpdateMetadataRequest();
         updateMetadata.setMetadata(metadata);
         request.getAddress().setMetadata(updateMetadata.getMetadata());

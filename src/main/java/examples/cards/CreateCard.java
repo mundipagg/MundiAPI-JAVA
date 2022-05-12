@@ -9,7 +9,7 @@ public class CreateCard {
 
     public static void main(String[] args) {
 
-        String basicAuthUserName = "sk_test_4tdVXpseumRmqbo"; // The username to use with basic authentication
+        String basicAuthUserName = "sk_test"; // The username to use with basic authentication
         String basicAuthPassword = ""; // The password to use with basic authentication
 
         MundiAPIClient client = new MundiAPIClient(basicAuthUserName, basicAuthPassword);
@@ -27,11 +27,11 @@ public class CreateCard {
         request.setExpYear(25);
         request.setCvv("351");
 
-        //Brand is Optional field
+        // Brand is Optional field
         request.setBrand("Mastercard");
         request.setPrivateLabel(false);
 
-        //Billing Address
+        // Billing Address
         request.setBillingAddress(new CreateAddressRequest());
         request.getBillingAddress().setLine1("10880, Malibu Point, Malibu Central");
         request.getBillingAddress().setLine2("7º floor");
@@ -39,8 +39,8 @@ public class CreateCard {
         request.getBillingAddress().setCity("Malibu");
         request.getBillingAddress().setState("CA");
         request.getBillingAddress().setCountry("US");
-        
-        //Card Options: Verify OneDollarAuth
+
+        // Card Options: Verify OneDollarAuth
         request.setOptions(new CreateCardOptionsRequest());
         request.getOptions().setVerifyCard(true);
 

@@ -12,18 +12,16 @@ public class CreateOrderCheckout {
 
     public static void main(String[] args) {
 
-        String basicAuthUserName = "sk_test_q73YODBFQhyV9mod"; // The username to use with basic authentication
+        String basicAuthUserName = "sk_test"; // The username to use with basic authentication
         String basicAuthPassword = ""; // The password to use with basic authentication
 
         MundiAPIClient client = new MundiAPIClient(basicAuthUserName, basicAuthPassword);
 
         OrdersController orders_controller = new OrdersController();
 
-
         CreateCustomerRequest create_customer_request = new CreateCustomerRequest();
         create_customer_request.setName("Tony Stark");
         create_customer_request.setEmail("tonystark@avengers.com");
-
 
         CreateCheckoutPaymentRequest create_checkout_payment_request = new CreateCheckoutPaymentRequest();
         create_checkout_payment_request.setCustomerEditable(false);
@@ -34,7 +32,6 @@ public class CreateOrderCheckout {
         acceptedPaymentMethods.add("bank_transfer");
         acceptedPaymentMethods.add("debit_card");
         create_checkout_payment_request.setAcceptedPaymentMethods(acceptedPaymentMethods);
-
 
         ArrayList<ArrayList<String>> multiPayments = new ArrayList<ArrayList<String>>();
         ArrayList<String> paymentOne = new ArrayList<String>();
@@ -56,16 +53,13 @@ public class CreateOrderCheckout {
         banksTransfer.add("341");
         create_checkout_payment_request.getBankTransfer().setBank(banksTransfer);
 
-
         create_checkout_payment_request.setBoleto(new CreateCheckoutBoletoPaymentRequest());
         create_checkout_payment_request.getBoleto().setBank("033");
         create_checkout_payment_request.getBoleto().setInstructions("Pagar ate o vencimento");
         create_checkout_payment_request.getBoleto().setDueAt(DateTime.parse("2021-07-25T00:00:00Z"));
 
-
         create_checkout_payment_request.setCreditCard(new CreateCheckoutCreditCardPaymentRequest());
         create_checkout_payment_request.getCreditCard().setStatementDescriptor("Descriptor example");
-
 
         CreateCheckoutCardInstallmentOptionRequest create_checkout_card_installment_option_request_one = new CreateCheckoutCardInstallmentOptionRequest();
         create_checkout_card_installment_option_request_one.setNumber(1);
@@ -78,13 +72,14 @@ public class CreateOrderCheckout {
         listInstallment.add(create_checkout_card_installment_option_request_two);
         create_checkout_payment_request.getCreditCard().setInstallments(listInstallment);
 
-
         create_checkout_payment_request.setDebitCard(new CreateCheckoutDebitCardPaymentRequest());
         create_checkout_payment_request.getDebitCard().setAuthentication(new CreatePaymentAuthenticationRequest());
         create_checkout_payment_request.getDebitCard().getAuthentication().setType("threed_secure");
-        create_checkout_payment_request.getDebitCard().getAuthentication().setThreedSecure(new CreateThreeDSecureRequest());
+        create_checkout_payment_request.getDebitCard().getAuthentication()
+                .setThreedSecure(new CreateThreeDSecureRequest());
         create_checkout_payment_request.getDebitCard().getAuthentication().getThreedSecure().setMpi("acquirer");
-        create_checkout_payment_request.getDebitCard().getAuthentication().getThreedSecure().setSuccessUrl("https://www.mundipagg.com");
+        create_checkout_payment_request.getDebitCard().getAuthentication().getThreedSecure()
+                .setSuccessUrl("https://www.mundipagg.com");
 
         CreateOrderRequest request = new CreateOrderRequest();
         request.setCode("test-SDK-Java");
@@ -106,7 +101,6 @@ public class CreateOrderCheckout {
         request.setPayments(listPaymentItems);
 
         request.setCustomer(create_customer_request);
-
 
         orders_controller.createOrderAsync(request, null, new APICallBack<GetOrderResponse>() {
             @Override

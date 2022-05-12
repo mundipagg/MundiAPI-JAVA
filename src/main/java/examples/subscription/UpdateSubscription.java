@@ -6,10 +6,10 @@ import com.mundipagg.api.http.client.*;
 import com.mundipagg.api.models.*;
 
 public class UpdateSubscription {
-	
-	public static void main(String[] args) {
 
-        String basicAuthUserName = "sk_test_4tdVXpseumRmqbo"; // The username to use with basic authentication
+    public static void main(String[] args) {
+
+        String basicAuthUserName = "sk_test"; // The username to use with basic authentication
         String basicAuthPassword = ""; // The password to use with basic authentication
 
         MundiAPIClient client = new MundiAPIClient(basicAuthUserName, basicAuthPassword);
@@ -35,23 +35,24 @@ public class UpdateSubscription {
         request.getCard().getBillingAddress().setState("RJ");
         request.getCard().getBillingAddress().setCountry("BR");
 
-        subscriptions_controller.updateSubscriptionCardAsync(subscriptionId, request, null, new APICallBack<GetSubscriptionResponse>() {
-            public void onSuccess(HttpContext context, GetSubscriptionResponse response) {
-                System.out.println("Card updated !");
-                System.out.println("Status response: " + context.getResponse().getStatusCode());
-                System.out.println("Card id: " + response.getCard().getId());
-                System.out.println("First six digits: " + response.getCard().getFirstSixDigits());
-                System.out.println("Last four digits: " + response.getCard().getLastFourDigits());
-            }
+        subscriptions_controller.updateSubscriptionCardAsync(subscriptionId, request, null,
+                new APICallBack<GetSubscriptionResponse>() {
+                    public void onSuccess(HttpContext context, GetSubscriptionResponse response) {
+                        System.out.println("Card updated !");
+                        System.out.println("Status response: " + context.getResponse().getStatusCode());
+                        System.out.println("Card id: " + response.getCard().getId());
+                        System.out.println("First six digits: " + response.getCard().getFirstSixDigits());
+                        System.out.println("Last four digits: " + response.getCard().getLastFourDigits());
+                    }
 
-            public void onFailure(HttpContext context, Throwable error) {
+                    public void onFailure(HttpContext context, Throwable error) {
 
-                System.out.println("Status response: " + context.getResponse().getStatusCode());
-                System.out.println(error.getMessage());
-                error.printStackTrace();
+                        System.out.println("Status response: " + context.getResponse().getStatusCode());
+                        System.out.println(error.getMessage());
+                        error.printStackTrace();
 
-            }
-        });
+                    }
+                });
     }
 
 }

@@ -9,10 +9,10 @@ import org.joda.time.DateTime;
 import java.util.ArrayList;
 
 public class CreateOrderBankSlip {
-	
-	public static void main(String[] args) {
-		
-        String basicAuthUserName = "sk_test_4tdVXpseumRmqbo"; // The username to use with basic authentication
+
+    public static void main(String[] args) {
+
+        String basicAuthUserName = "sk_test"; // The username to use with basic authentication
         String basicAuthPassword = ""; // The password to use with basic authentication
 
         MundiAPIClient client = new MundiAPIClient(basicAuthUserName, basicAuthPassword);
@@ -53,7 +53,6 @@ public class CreateOrderBankSlip {
         ArrayList<CreatePaymentRequest> lisPaymentItem = new ArrayList<CreatePaymentRequest>();
         lisPaymentItem.add(paymentItem);
         request.setPayments(lisPaymentItem);
-
 
         orders_controller.createOrderAsync(request, null, new APICallBack<GetOrderResponse>() {
             public void onSuccess(HttpContext context, GetOrderResponse response) {

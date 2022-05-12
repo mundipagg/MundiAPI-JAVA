@@ -9,10 +9,10 @@ import com.mundipagg.api.models.*;
 import java.util.ArrayList;
 
 public class CreateOrderDebitCard {
-	
-	public static void main(String[] args) {
 
-        String basicAuthUserName = "sk_test_4tdVXpseumRmqbo"; // The username to use with basic authentication
+    public static void main(String[] args) {
+
+        String basicAuthUserName = "sk_test"; // The username to use with basic authentication
         String basicAuthPassword = ""; // The password to use with basic authentication
 
         MundiAPIClient client = new MundiAPIClient(basicAuthUserName, basicAuthPassword);
@@ -31,7 +31,6 @@ public class CreateOrderDebitCard {
         create_debit_card_payment_request.getCard().setExpMonth(1);
         create_debit_card_payment_request.getCard().setExpYear(2025);
         create_debit_card_payment_request.getCard().setCvv("123");
-
 
         CreateOrderRequest request = new CreateOrderRequest();
 

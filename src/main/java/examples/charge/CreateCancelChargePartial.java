@@ -6,12 +6,11 @@ import com.mundipagg.api.http.client.*;
 import com.mundipagg.api.models.CreateCancelChargeRequest;
 import com.mundipagg.api.models.GetChargeResponse;
 
-
 public class CreateCancelChargePartial {
 
-	public static void main(String[] args) {
+    public static void main(String[] args) {
 
-        String basicAuthUserName = "sk_test_4tdVXpseumRmqbo"; // The username to use with basic authentication
+        String basicAuthUserName = "sk_test"; // The username to use with basic authentication
         String basicAuthPassword = ""; // The password to use with basic authentication
 
         MundiAPIClient client = new MundiAPIClient(basicAuthUserName, basicAuthPassword);
