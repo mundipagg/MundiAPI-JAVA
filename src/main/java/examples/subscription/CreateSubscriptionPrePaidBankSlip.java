@@ -12,7 +12,7 @@ public class CreateSubscriptionPrePaidBankSlip {
 
     public static void main(String[] args) {
 
-        String basicAuthUserName = "sk_test"; // The username to use with basic authentication
+        String basicAuthUserName = "{{chave_de_integracao}}"; // The username to use with basic authentication
         String basicAuthPassword = ""; // The password to use with basic authentication
 
         MundiAPIClient client = new MundiAPIClient(basicAuthUserName, basicAuthPassword);
