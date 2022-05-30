@@ -9,10 +9,10 @@ import com.mundipagg.api.models.CreateRecipientRequest;
 import com.mundipagg.api.models.GetRecipientResponse;
 
 public class CreateRecipient {
-    
+
     public static void main(String[] args) {
-        
-        String basicAuthUserName = "sk_test_4tdVXpseumRmqbo"; // The username to use with basic authentication
+
+        String basicAuthUserName = "{{chave_de_integracao}}"; // The username to use with basic authentication
         String basicAuthPassword = ""; // The password to use with basic authentication
 
         MundiAPIClient client = new MundiAPIClient(basicAuthUserName, basicAuthPassword);
@@ -26,7 +26,6 @@ public class CreateRecipient {
         request.setDescription("Recebedor tony stark");
         request.setDocument("26224451990");
         request.setType("individual");
-
 
         request.setDefaultBankAccount(new CreateBankAccountRequest());
         request.getDefaultBankAccount().setHolderName("Tony Stark");
@@ -58,7 +57,6 @@ public class CreateRecipient {
 
             }
         });
-
 
     }
 }

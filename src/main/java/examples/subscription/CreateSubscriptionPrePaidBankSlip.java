@@ -9,10 +9,10 @@ import com.mundipagg.api.models.*;
 import java.util.*;
 
 public class CreateSubscriptionPrePaidBankSlip {
-	
-	public static void main(String[] args) {
 
-        String basicAuthUserName = "sk_test_4tdVXpseumRmqbo"; // The username to use with basic authentication
+    public static void main(String[] args) {
+
+        String basicAuthUserName = "{{chave_de_integracao}}"; // The username to use with basic authentication
         String basicAuthPassword = ""; // The password to use with basic authentication
 
         MundiAPIClient client = new MundiAPIClient(basicAuthUserName, basicAuthPassword);
@@ -39,7 +39,7 @@ public class CreateSubscriptionPrePaidBankSlip {
         discountRequest.setCycles(3);
         discountRequest.setValue(10);
         discountRequest.setDiscountType("percentage");
-        ArrayList<CreateDiscountRequest> listDiscountItem =  new ArrayList<CreateDiscountRequest>();
+        ArrayList<CreateDiscountRequest> listDiscountItem = new ArrayList<CreateDiscountRequest>();
         listDiscountItem.add(discountRequest);
         request.setDiscounts(listDiscountItem);
 
@@ -50,20 +50,19 @@ public class CreateSubscriptionPrePaidBankSlip {
         listIncrementItem.add(incrementRequest);
         request.setIncrements(listIncrementItem);
 
-
         CreateSubscriptionItemRequest create_subscription_item_request_one = new CreateSubscriptionItemRequest();
         create_subscription_item_request_one.setDescription("Musculação");
         create_subscription_item_request_one.setQuantity(1);
         create_subscription_item_request_one.setPricingScheme(new CreatePricingSchemeRequest());
         create_subscription_item_request_one.getPricingScheme().setPrice(18990);
-        
+
         CreateSubscriptionItemRequest create_subscription_item_request_two = new CreateSubscriptionItemRequest();
         create_subscription_item_request_two.setDescription("Matrícula");
         create_subscription_item_request_two.setQuantity(1);
         create_subscription_item_request_two.setCycles(1);
         create_subscription_item_request_two.setPricingScheme(new CreatePricingSchemeRequest());
         create_subscription_item_request_two.getPricingScheme().setPrice(5990);
-        
+
         List<CreateSubscriptionItemRequest> listItem = new ArrayList<CreateSubscriptionItemRequest>();
         listItem.add(create_subscription_item_request_one);
         listItem.add(create_subscription_item_request_two);

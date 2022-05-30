@@ -8,10 +8,10 @@ import com.mundipagg.api.models.GetCustomerResponse;
 import com.mundipagg.api.models.UpdateCustomerRequest;
 
 public class UpdateCustomer {
-	
-	public static void main(String[] args) {
 
-        String basicAuthUserName = "sk_test_4tdVXpseumRmqbo"; // The username to use with basic authentication
+    public static void main(String[] args) {
+
+        String basicAuthUserName = "{{chave_de_integracao}}"; // The username to use with basic authentication
         String basicAuthPassword = ""; // The password to use with basic authentication
 
         MundiAPIClient client = new MundiAPIClient(basicAuthUserName, basicAuthPassword);

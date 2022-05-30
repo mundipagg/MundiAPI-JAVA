@@ -11,7 +11,7 @@ public class CreateSplit {
 
     public static void main(String[] args) {
 
-        String basicAuthUserName = "sk_test_4tdVXpseumRmqbo"; // The username to use with basic authentication
+        String basicAuthUserName = "{{chave_de_integracao}}"; // The username to use with basic authentication
         String basicAuthPassword = ""; // The password to use with basic authentication
 
         MundiAPIClient client = new MundiAPIClient(basicAuthUserName, basicAuthPassword);
@@ -60,7 +60,6 @@ public class CreateSplit {
         splitItemTwo.setRecipientId("rp_4jl0ra2h3bI8VBvR");
         splitItemTwo.setAmount(100000);
         splitItemTwo.setType("flat");
-
 
         List<CreateSplitRequest> listSplit = new ArrayList<CreateSplitRequest>();
         listSplit.add(splitItemOne);

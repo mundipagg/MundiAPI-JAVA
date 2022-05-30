@@ -9,10 +9,10 @@ import com.mundipagg.api.models.*;
 import java.util.*;
 
 public class CreateSubscriptionPrePaidCreditCard {
-	
-	public static void main(String[] args) {
 
-        String basicAuthUserName = "sk_test_4tdVXpseumRmqbo"; // The username to use with basic authentication
+    public static void main(String[] args) {
+
+        String basicAuthUserName = "{{chave_de_integracao}}"; // The username to use with basic authentication
         String basicAuthPassword = ""; // The password to use with basic authentication
 
         MundiAPIClient client = new MundiAPIClient(basicAuthUserName, basicAuthPassword);
@@ -35,7 +35,6 @@ public class CreateSubscriptionPrePaidCreditCard {
         request.getCustomer().setName("Tony Stark'");
         request.getCustomer().setEmail("tonystark@avengers.com");
 
-
         request.setCard(new CreateCardRequest());
         request.getCard().setHolderName("ony Stark");
         request.getCard().setNumber("4000000000000010");
@@ -55,7 +54,7 @@ public class CreateSubscriptionPrePaidCreditCard {
         discountRequest.setCycles(3);
         discountRequest.setValue(10);
         discountRequest.setDiscountType("percentage");
-        ArrayList<CreateDiscountRequest> listDiscountItem =  new ArrayList<CreateDiscountRequest>();
+        ArrayList<CreateDiscountRequest> listDiscountItem = new ArrayList<CreateDiscountRequest>();
         listDiscountItem.add(discountRequest);
         request.setDiscounts(listDiscountItem);
 
@@ -71,21 +70,19 @@ public class CreateSubscriptionPrePaidCreditCard {
         create_subscription_item_request_one.setQuantity(1);
         create_subscription_item_request_one.setPricingScheme(new CreatePricingSchemeRequest());
         create_subscription_item_request_one.getPricingScheme().setPrice(18990);
-        
+
         CreateSubscriptionItemRequest create_subscription_item_request_two = new CreateSubscriptionItemRequest();
         create_subscription_item_request_two.setDescription("Matrícula");
         create_subscription_item_request_two.setQuantity(1);
         create_subscription_item_request_two.setCycles(1);
         create_subscription_item_request_two.setPricingScheme(new CreatePricingSchemeRequest());
         create_subscription_item_request_two.getPricingScheme().setPrice(5990);
-        
-        
+
         List<CreateSubscriptionItemRequest> listItem = new ArrayList<CreateSubscriptionItemRequest>();
         listItem.add(create_subscription_item_request_one);
         listItem.add(create_subscription_item_request_two);
 
         request.setItems(listItem);
-
 
         subscriptions_controller.createSubscriptionAsync(request, null, new APICallBack<GetSubscriptionResponse>() {
             public void onSuccess(HttpContext context, GetSubscriptionResponse response) {
