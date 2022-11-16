@@ -682,132 +682,6 @@ public class InvoicesController extends BaseController {
     }
 
     /**
-     * Cancels an invoice
-     * @param    invoiceId    Required parameter: Invoice id
-     * @param    idempotencyKey    Optional parameter: Example: 
-     * @return    Returns the GetInvoiceResponse response from the API call 
-     */
-    public GetInvoiceResponse cancelInvoice(
-                final String invoiceId,
-                final String idempotencyKey
-    ) throws Throwable {
-
-        HttpRequest _request = _buildCancelInvoiceRequest(invoiceId, idempotencyKey);
-        HttpResponse _response = getClientInstance().executeAsString(_request);
-        HttpContext _context = new HttpContext(_request, _response);
-
-        return _handleCancelInvoiceResponse(_context);
-    }
-
-    /**
-     * Cancels an invoice
-     * @param    invoiceId    Required parameter: Invoice id
-     * @param    idempotencyKey    Optional parameter: Example: 
-     */
-    public void cancelInvoiceAsync(
-                final String invoiceId,
-                final String idempotencyKey,
-                final APICallBack<GetInvoiceResponse> callBack
-    ) {
-        Runnable _responseTask = new Runnable() {
-            public void run() {
-
-                HttpRequest _request;
-                try {
-                    _request = _buildCancelInvoiceRequest(invoiceId, idempotencyKey);
-                } catch (Exception e) {
-                    callBack.onFailure(null, e);
-                    return;
-                }
-
-                // Invoke request and get response
-                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
-                    public void onSuccess(HttpContext _context, HttpResponse _response) {
-                        try {
-                            GetInvoiceResponse returnValue = _handleCancelInvoiceResponse(_context);
-                            callBack.onSuccess(_context, returnValue);
-                        } catch (Exception e) {
-                            callBack.onFailure(_context, e);
-                        }
-                    }
-
-                    public void onFailure(HttpContext _context, Throwable _exception) {
-                        // Let the caller know of the failure
-                        callBack.onFailure(_context, _exception);
-                    }
-                });
-            }
-        };
-
-        // Execute async using thread pool
-        APIHelper.getScheduler().execute(_responseTask);
-    }
-
-    /**
-     * Builds the HttpRequest object for cancelInvoice
-     */
-    private HttpRequest _buildCancelInvoiceRequest(
-                final String invoiceId,
-                final String idempotencyKey) throws IOException, APIException {
-        //the base uri for api requests
-        String _baseUri = Configuration.baseUri;
-
-        //prepare query string for API call
-        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/invoices/{invoice_id}");
-
-        //process template parameters
-        Map<String, Object> _templateParameters = new HashMap<String, Object>();
-        _templateParameters.put("invoice_id", invoiceId);
-        APIHelper.appendUrlWithTemplateParameters(_queryBuilder, _templateParameters);
-        //validate and preprocess url
-        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
-
-        //load all headers for the outgoing API request
-        Map<String, String> _headers = new HashMap<String, String>();
-        if (idempotencyKey != null) {
-            _headers.put("idempotency-key", idempotencyKey);
-        }
-        _headers.put("user-agent", BaseController.userAgent);
-        _headers.put("accept", "application/json");
-
-
-        //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().delete(_queryUrl, _headers, null,
-                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
-
-        // Invoke the callback before request if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnBeforeRequest(_request);
-        }
-
-        return _request;
-    }
-
-    /**
-     * Processes the response for cancelInvoice
-     * @return An object of type GetInvoiceResponse
-     */
-    private GetInvoiceResponse _handleCancelInvoiceResponse(HttpContext _context)
-            throws APIException, IOException {
-        HttpResponse _response = _context.getResponse();
-
-        //invoke the callback after response if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnAfterResponse(_context);
-        }
-
-        //handle errors defined at the API level
-        validateResponse(_response, _context);
-
-        //extract result from the http response
-        String _responseBody = ((HttpStringResponse)_response).getBody();
-        GetInvoiceResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<GetInvoiceResponse>(){});
-
-        return _result;
-    }
-
-    /**
      * Gets all invoices
      * @param    page    Optional parameter: Page number
      * @param    size    Optional parameter: Page size
@@ -1003,6 +877,132 @@ public class InvoicesController extends BaseController {
         String _responseBody = ((HttpStringResponse)_response).getBody();
         ListInvoicesResponse _result = APIHelper.deserialize(_responseBody,
                                                         new TypeReference<ListInvoicesResponse>(){});
+
+        return _result;
+    }
+
+    /**
+     * Cancels an invoice
+     * @param    invoiceId    Required parameter: Invoice id
+     * @param    idempotencyKey    Optional parameter: Example: 
+     * @return    Returns the GetInvoiceResponse response from the API call 
+     */
+    public GetInvoiceResponse cancelInvoice(
+                final String invoiceId,
+                final String idempotencyKey
+    ) throws Throwable {
+
+        HttpRequest _request = _buildCancelInvoiceRequest(invoiceId, idempotencyKey);
+        HttpResponse _response = getClientInstance().executeAsString(_request);
+        HttpContext _context = new HttpContext(_request, _response);
+
+        return _handleCancelInvoiceResponse(_context);
+    }
+
+    /**
+     * Cancels an invoice
+     * @param    invoiceId    Required parameter: Invoice id
+     * @param    idempotencyKey    Optional parameter: Example: 
+     */
+    public void cancelInvoiceAsync(
+                final String invoiceId,
+                final String idempotencyKey,
+                final APICallBack<GetInvoiceResponse> callBack
+    ) {
+        Runnable _responseTask = new Runnable() {
+            public void run() {
+
+                HttpRequest _request;
+                try {
+                    _request = _buildCancelInvoiceRequest(invoiceId, idempotencyKey);
+                } catch (Exception e) {
+                    callBack.onFailure(null, e);
+                    return;
+                }
+
+                // Invoke request and get response
+                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
+                    public void onSuccess(HttpContext _context, HttpResponse _response) {
+                        try {
+                            GetInvoiceResponse returnValue = _handleCancelInvoiceResponse(_context);
+                            callBack.onSuccess(_context, returnValue);
+                        } catch (Exception e) {
+                            callBack.onFailure(_context, e);
+                        }
+                    }
+
+                    public void onFailure(HttpContext _context, Throwable _exception) {
+                        // Let the caller know of the failure
+                        callBack.onFailure(_context, _exception);
+                    }
+                });
+            }
+        };
+
+        // Execute async using thread pool
+        APIHelper.getScheduler().execute(_responseTask);
+    }
+
+    /**
+     * Builds the HttpRequest object for cancelInvoice
+     */
+    private HttpRequest _buildCancelInvoiceRequest(
+                final String invoiceId,
+                final String idempotencyKey) throws IOException, APIException {
+        //the base uri for api requests
+        String _baseUri = Configuration.baseUri;
+
+        //prepare query string for API call
+        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/invoices/{invoice_id}");
+
+        //process template parameters
+        Map<String, Object> _templateParameters = new HashMap<String, Object>();
+        _templateParameters.put("invoice_id", invoiceId);
+        APIHelper.appendUrlWithTemplateParameters(_queryBuilder, _templateParameters);
+        //validate and preprocess url
+        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
+
+        //load all headers for the outgoing API request
+        Map<String, String> _headers = new HashMap<String, String>();
+        if (idempotencyKey != null) {
+            _headers.put("idempotency-key", idempotencyKey);
+        }
+        _headers.put("user-agent", BaseController.userAgent);
+        _headers.put("accept", "application/json");
+
+
+        //prepare and invoke the API call request to fetch the response
+        HttpRequest _request = getClientInstance().delete(_queryUrl, _headers, null,
+                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
+
+        // Invoke the callback before request if its not null
+        if (getHttpCallBack() != null) {
+            getHttpCallBack().OnBeforeRequest(_request);
+        }
+
+        return _request;
+    }
+
+    /**
+     * Processes the response for cancelInvoice
+     * @return An object of type GetInvoiceResponse
+     */
+    private GetInvoiceResponse _handleCancelInvoiceResponse(HttpContext _context)
+            throws APIException, IOException {
+        HttpResponse _response = _context.getResponse();
+
+        //invoke the callback after response if its not null
+        if (getHttpCallBack() != null) {
+            getHttpCallBack().OnAfterResponse(_context);
+        }
+
+        //handle errors defined at the API level
+        validateResponse(_response, _context);
+
+        //extract result from the http response
+        String _responseBody = ((HttpStringResponse)_response).getBody();
+        GetInvoiceResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<GetInvoiceResponse>(){});
 
         return _result;
     }
