@@ -1246,6 +1246,140 @@ public class RecipientsController extends BaseController {
     }
 
     /**
+     * Gets the anticipation limits for a recipient
+     * @param    recipientId    Required parameter: Recipient id
+     * @param    timeframe    Required parameter: Timeframe
+     * @param    paymentDate    Required parameter: Anticipation payment date
+     * @return    Returns the GetAnticipationLimitResponse response from the API call 
+     */
+    public GetAnticipationLimitResponse getAnticipationLimits(
+                final String recipientId,
+                final String timeframe,
+                final DateTime paymentDate
+    ) throws Throwable {
+
+        HttpRequest _request = _buildGetAnticipationLimitsRequest(recipientId, timeframe, paymentDate);
+        HttpResponse _response = getClientInstance().executeAsString(_request);
+        HttpContext _context = new HttpContext(_request, _response);
+
+        return _handleGetAnticipationLimitsResponse(_context);
+    }
+
+    /**
+     * Gets the anticipation limits for a recipient
+     * @param    recipientId    Required parameter: Recipient id
+     * @param    timeframe    Required parameter: Timeframe
+     * @param    paymentDate    Required parameter: Anticipation payment date
+     */
+    public void getAnticipationLimitsAsync(
+                final String recipientId,
+                final String timeframe,
+                final DateTime paymentDate,
+                final APICallBack<GetAnticipationLimitResponse> callBack
+    ) {
+        Runnable _responseTask = new Runnable() {
+            public void run() {
+
+                HttpRequest _request;
+                try {
+                    _request = _buildGetAnticipationLimitsRequest(recipientId, timeframe, paymentDate);
+                } catch (Exception e) {
+                    callBack.onFailure(null, e);
+                    return;
+                }
+
+                // Invoke request and get response
+                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
+                    public void onSuccess(HttpContext _context, HttpResponse _response) {
+                        try {
+                            GetAnticipationLimitResponse returnValue = _handleGetAnticipationLimitsResponse(_context);
+                            callBack.onSuccess(_context, returnValue);
+                        } catch (Exception e) {
+                            callBack.onFailure(_context, e);
+                        }
+                    }
+
+                    public void onFailure(HttpContext _context, Throwable _exception) {
+                        // Let the caller know of the failure
+                        callBack.onFailure(_context, _exception);
+                    }
+                });
+            }
+        };
+
+        // Execute async using thread pool
+        APIHelper.getScheduler().execute(_responseTask);
+    }
+
+    /**
+     * Builds the HttpRequest object for getAnticipationLimits
+     */
+    private HttpRequest _buildGetAnticipationLimitsRequest(
+                final String recipientId,
+                final String timeframe,
+                final DateTime paymentDate) throws IOException, APIException {
+        //the base uri for api requests
+        String _baseUri = Configuration.baseUri;
+
+        //prepare query string for API call
+        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/recipients/{recipient_id}/anticipation_limits");
+
+        //process template parameters
+        Map<String, Object> _templateParameters = new HashMap<String, Object>();
+        _templateParameters.put("recipient_id", recipientId);
+        APIHelper.appendUrlWithTemplateParameters(_queryBuilder, _templateParameters);
+
+        //process query parameters
+        Map<String, Object> _queryParameters = new HashMap<String, Object>();
+        _queryParameters.put("timeframe", timeframe);
+        _queryParameters.put("payment_date", DateTimeHelper.toRfc8601DateTime(paymentDate));
+        APIHelper.appendUrlWithQueryParameters(_queryBuilder, _queryParameters);
+        //validate and preprocess url
+        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
+
+        //load all headers for the outgoing API request
+        Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("user-agent", BaseController.userAgent);
+        _headers.put("accept", "application/json");
+
+
+        //prepare and invoke the API call request to fetch the response
+        HttpRequest _request = getClientInstance().get(_queryUrl, _headers, null,
+                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
+
+        // Invoke the callback before request if its not null
+        if (getHttpCallBack() != null) {
+            getHttpCallBack().OnBeforeRequest(_request);
+        }
+
+        return _request;
+    }
+
+    /**
+     * Processes the response for getAnticipationLimits
+     * @return An object of type GetAnticipationLimitResponse
+     */
+    private GetAnticipationLimitResponse _handleGetAnticipationLimitsResponse(HttpContext _context)
+            throws APIException, IOException {
+        HttpResponse _response = _context.getResponse();
+
+        //invoke the callback after response if its not null
+        if (getHttpCallBack() != null) {
+            getHttpCallBack().OnAfterResponse(_context);
+        }
+
+        //handle errors defined at the API level
+        validateResponse(_response, _context);
+
+        //extract result from the http response
+        String _responseBody = ((HttpStringResponse)_response).getBody();
+        GetAnticipationLimitResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<GetAnticipationLimitResponse>(){});
+
+        return _result;
+    }
+
+    /**
      * Gets a transfer
      * @param    recipientId    Required parameter: Recipient id
      * @param    transferId    Required parameter: Transfer id
@@ -1913,140 +2047,6 @@ public class RecipientsController extends BaseController {
         String _responseBody = ((HttpStringResponse)_response).getBody();
         GetTransferResponse _result = APIHelper.deserialize(_responseBody,
                                                         new TypeReference<GetTransferResponse>(){});
-
-        return _result;
-    }
-
-    /**
-     * Gets the anticipation limits for a recipient
-     * @param    recipientId    Required parameter: Recipient id
-     * @param    timeframe    Required parameter: Timeframe
-     * @param    paymentDate    Required parameter: Anticipation payment date
-     * @return    Returns the GetAnticipationLimitResponse response from the API call 
-     */
-    public GetAnticipationLimitResponse getAnticipationLimits(
-                final String recipientId,
-                final String timeframe,
-                final DateTime paymentDate
-    ) throws Throwable {
-
-        HttpRequest _request = _buildGetAnticipationLimitsRequest(recipientId, timeframe, paymentDate);
-        HttpResponse _response = getClientInstance().executeAsString(_request);
-        HttpContext _context = new HttpContext(_request, _response);
-
-        return _handleGetAnticipationLimitsResponse(_context);
-    }
-
-    /**
-     * Gets the anticipation limits for a recipient
-     * @param    recipientId    Required parameter: Recipient id
-     * @param    timeframe    Required parameter: Timeframe
-     * @param    paymentDate    Required parameter: Anticipation payment date
-     */
-    public void getAnticipationLimitsAsync(
-                final String recipientId,
-                final String timeframe,
-                final DateTime paymentDate,
-                final APICallBack<GetAnticipationLimitResponse> callBack
-    ) {
-        Runnable _responseTask = new Runnable() {
-            public void run() {
-
-                HttpRequest _request;
-                try {
-                    _request = _buildGetAnticipationLimitsRequest(recipientId, timeframe, paymentDate);
-                } catch (Exception e) {
-                    callBack.onFailure(null, e);
-                    return;
-                }
-
-                // Invoke request and get response
-                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
-                    public void onSuccess(HttpContext _context, HttpResponse _response) {
-                        try {
-                            GetAnticipationLimitResponse returnValue = _handleGetAnticipationLimitsResponse(_context);
-                            callBack.onSuccess(_context, returnValue);
-                        } catch (Exception e) {
-                            callBack.onFailure(_context, e);
-                        }
-                    }
-
-                    public void onFailure(HttpContext _context, Throwable _exception) {
-                        // Let the caller know of the failure
-                        callBack.onFailure(_context, _exception);
-                    }
-                });
-            }
-        };
-
-        // Execute async using thread pool
-        APIHelper.getScheduler().execute(_responseTask);
-    }
-
-    /**
-     * Builds the HttpRequest object for getAnticipationLimits
-     */
-    private HttpRequest _buildGetAnticipationLimitsRequest(
-                final String recipientId,
-                final String timeframe,
-                final DateTime paymentDate) throws IOException, APIException {
-        //the base uri for api requests
-        String _baseUri = Configuration.baseUri;
-
-        //prepare query string for API call
-        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/recipients/{recipient_id}/anticipation_limits");
-
-        //process template parameters
-        Map<String, Object> _templateParameters = new HashMap<String, Object>();
-        _templateParameters.put("recipient_id", recipientId);
-        APIHelper.appendUrlWithTemplateParameters(_queryBuilder, _templateParameters);
-
-        //process query parameters
-        Map<String, Object> _queryParameters = new HashMap<String, Object>();
-        _queryParameters.put("timeframe", timeframe);
-        _queryParameters.put("payment_date", DateTimeHelper.toRfc8601DateTime(paymentDate));
-        APIHelper.appendUrlWithQueryParameters(_queryBuilder, _queryParameters);
-        //validate and preprocess url
-        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
-
-        //load all headers for the outgoing API request
-        Map<String, String> _headers = new HashMap<String, String>();
-        _headers.put("user-agent", BaseController.userAgent);
-        _headers.put("accept", "application/json");
-
-
-        //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().get(_queryUrl, _headers, null,
-                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
-
-        // Invoke the callback before request if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnBeforeRequest(_request);
-        }
-
-        return _request;
-    }
-
-    /**
-     * Processes the response for getAnticipationLimits
-     * @return An object of type GetAnticipationLimitResponse
-     */
-    private GetAnticipationLimitResponse _handleGetAnticipationLimitsResponse(HttpContext _context)
-            throws APIException, IOException {
-        HttpResponse _response = _context.getResponse();
-
-        //invoke the callback after response if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnAfterResponse(_context);
-        }
-
-        //handle errors defined at the API level
-        validateResponse(_response, _context);
-
-        //extract result from the http response
-        String _responseBody = ((HttpStringResponse)_response).getBody();
-        GetAnticipationLimitResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<GetAnticipationLimitResponse>(){});
 
         return _result;
     }
