@@ -18,7 +18,7 @@ import org.joda.time.DateTime;
 @JsonInclude(Include.ALWAYS)
 public class GetCheckoutPaymentResponse 
         implements java.io.Serializable {
-    private static final long serialVersionUID = 4985686597734183068L;
+    private static final long serialVersionUID = 6800048996207910665L;
     private String id;
     private Integer amount;
     private String defaultPaymentMethod;
@@ -32,18 +32,18 @@ public class GetCheckoutPaymentResponse
     private DateTime updatedAt;
     private DateTime canceledAt;
     private boolean customerEditable;
-    private GetCustomerResponse customer;
-    private GetAddressResponse billingaddress;
+    private Customer customer;
+    private Billingaddress3 billingaddress;
     private GetCheckoutCreditCardPaymentResponse creditCard;
     private GetCheckoutBoletoPaymentResponse boleto;
     private boolean billingAddressEditable;
-    private GetShippingResponse shipping;
+    private Shipping shipping;
     private boolean shippable;
     private DateTime closedAt;
     private DateTime expiresAt;
     private String currency;
     private GetCheckoutDebitCardPaymentResponse debitCard;
-    private GetCheckoutBankTransferPaymentResponse bankTransfer;
+    private BankTransfer bankTransfer;
     private List<String> acceptedBrands;
     /** GETTER
      * TODO: Write general description for this method
@@ -260,39 +260,39 @@ public class GetCheckoutPaymentResponse
     }
  
     /** GETTER
-     * Dados do comprador
+     * TODO: Write general description for this method
      */
     @JsonGetter("customer")
-    public GetCustomerResponse getCustomer ( ) { 
+    public Customer getCustomer ( ) { 
         return this.customer;
     }
     
     /** SETTER
-     * Dados do comprador
+     * TODO: Write general description for this method
      */
     @JsonSetter("customer")
-    public void setCustomer (GetCustomerResponse value) { 
+    public void setCustomer (Customer value) { 
         this.customer = value;
     }
  
     /** GETTER
-     * Dados do endereço de cobrança
+     * TODO: Write general description for this method
      */
     @JsonGetter("billingaddress")
-    public GetAddressResponse getBillingaddress ( ) { 
+    public Billingaddress3 getBillingaddress ( ) { 
         return this.billingaddress;
     }
     
     /** SETTER
-     * Dados do endereço de cobrança
+     * TODO: Write general description for this method
      */
     @JsonSetter("billingaddress")
-    public void setBillingaddress (GetAddressResponse value) { 
+    public void setBillingaddress (Billingaddress3 value) { 
         this.billingaddress = value;
     }
  
     /** GETTER
-     * Configurações de cartão de crédito
+     * TODO: Write general description for this method
      */
     @JsonGetter("credit_card")
     public GetCheckoutCreditCardPaymentResponse getCreditCard ( ) { 
@@ -300,7 +300,7 @@ public class GetCheckoutPaymentResponse
     }
     
     /** SETTER
-     * Configurações de cartão de crédito
+     * TODO: Write general description for this method
      */
     @JsonSetter("credit_card")
     public void setCreditCard (GetCheckoutCreditCardPaymentResponse value) { 
@@ -308,7 +308,7 @@ public class GetCheckoutPaymentResponse
     }
  
     /** GETTER
-     * Configurações de boleto
+     * TODO: Write general description for this method
      */
     @JsonGetter("boleto")
     public GetCheckoutBoletoPaymentResponse getBoleto ( ) { 
@@ -316,7 +316,7 @@ public class GetCheckoutPaymentResponse
     }
     
     /** SETTER
-     * Configurações de boleto
+     * TODO: Write general description for this method
      */
     @JsonSetter("boleto")
     public void setBoleto (GetCheckoutBoletoPaymentResponse value) { 
@@ -340,18 +340,18 @@ public class GetCheckoutPaymentResponse
     }
  
     /** GETTER
-     * Configurações  de entrega
+     * TODO: Write general description for this method
      */
     @JsonGetter("shipping")
-    public GetShippingResponse getShipping ( ) { 
+    public Shipping getShipping ( ) { 
         return this.shipping;
     }
     
     /** SETTER
-     * Configurações  de entrega
+     * TODO: Write general description for this method
      */
     @JsonSetter("shipping")
-    public void setShipping (GetShippingResponse value) { 
+    public void setShipping (Shipping value) { 
         this.shipping = value;
     }
  
@@ -424,7 +424,7 @@ public class GetCheckoutPaymentResponse
     }
  
     /** GETTER
-     * Configurações de cartão de débito
+     * TODO: Write general description for this method
      */
     @JsonGetter("debit_card")
     public GetCheckoutDebitCardPaymentResponse getDebitCard ( ) { 
@@ -432,7 +432,7 @@ public class GetCheckoutPaymentResponse
     }
     
     /** SETTER
-     * Configurações de cartão de débito
+     * TODO: Write general description for this method
      */
     @JsonSetter("debit_card")
     public void setDebitCard (GetCheckoutDebitCardPaymentResponse value) { 
@@ -440,18 +440,18 @@ public class GetCheckoutPaymentResponse
     }
  
     /** GETTER
-     * Bank transfer payment response
+     * TODO: Write general description for this method
      */
     @JsonGetter("bank_transfer")
-    public GetCheckoutBankTransferPaymentResponse getBankTransfer ( ) { 
+    public BankTransfer getBankTransfer ( ) { 
         return this.bankTransfer;
     }
     
     /** SETTER
-     * Bank transfer payment response
+     * TODO: Write general description for this method
      */
     @JsonSetter("bank_transfer")
-    public void setBankTransfer (GetCheckoutBankTransferPaymentResponse value) { 
+    public void setBankTransfer (BankTransfer value) { 
         this.bankTransfer = value;
     }
  

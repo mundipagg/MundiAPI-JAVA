@@ -49,12 +49,12 @@ public class PlansController extends BaseController {
      * @param    planItemId    Required parameter: Plan item id
      * @param    body    Required parameter: Request for updating the plan item
      * @param    idempotencyKey    Optional parameter: Example: 
-     * @return    Returns the GetPlanItemResponse response from the API call 
+     * @return    Returns the PlansItemsResponse response from the API call 
      */
-    public GetPlanItemResponse updatePlanItem(
+    public PlansItemsResponse updatePlanItem(
                 final String planId,
                 final String planItemId,
-                final UpdatePlanItemRequest body,
+                final PlansItemsRequest body,
                 final String idempotencyKey
     ) throws Throwable {
 
@@ -75,9 +75,9 @@ public class PlansController extends BaseController {
     public void updatePlanItemAsync(
                 final String planId,
                 final String planItemId,
-                final UpdatePlanItemRequest body,
+                final PlansItemsRequest body,
                 final String idempotencyKey,
-                final APICallBack<GetPlanItemResponse> callBack
+                final APICallBack<PlansItemsResponse> callBack
     ) {
         Runnable _responseTask = new Runnable() {
             public void run() {
@@ -94,7 +94,7 @@ public class PlansController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            GetPlanItemResponse returnValue = _handleUpdatePlanItemResponse(_context);
+                            PlansItemsResponse returnValue = _handleUpdatePlanItemResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -119,7 +119,161 @@ public class PlansController extends BaseController {
     private HttpRequest _buildUpdatePlanItemRequest(
                 final String planId,
                 final String planItemId,
-                final UpdatePlanItemRequest body,
+                final PlansItemsRequest body,
+                final String idempotencyKey) throws IOException, APIException {
+        //the base uri for api requests
+        String _baseUri = Configuration.baseUri;
+
+        //prepare query string for API call
+        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/plans/{plan_id}/items/{plan_item_id}");
+
+        //process template parameters
+        Map<String, Object> _templateParameters = new HashMap<String, Object>();
+        _templateParameters.put("plan_id", planId);
+        _templateParameters.put("plan_item_id", planItemId);
+        APIHelper.appendUrlWithTemplateParameters(_queryBuilder, _templateParameters);
+        //validate and preprocess url
+        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
+
+        //load all headers for the outgoing API request
+        Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("Content-Type", "application/json");
+        if (idempotencyKey != null) {
+            _headers.put("idempotency-key", idempotencyKey);
+        }
+        _headers.put("user-agent", BaseController.userAgent);
+        _headers.put("accept", "application/json");
+
+
+        //prepare and invoke the API call request to fetch the response
+        HttpRequest _request = getClientInstance().putBody(_queryUrl, _headers, APIHelper.serialize(body),
+                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
+
+        // Invoke the callback before request if its not null
+        if (getHttpCallBack() != null) {
+            getHttpCallBack().OnBeforeRequest(_request);
+        }
+
+        return _request;
+    }
+
+    /**
+     * Processes the response for updatePlanItem
+     * @return An object of type PlansItemsResponse
+     */
+    private PlansItemsResponse _handleUpdatePlanItemResponse(HttpContext _context)
+            throws APIException, IOException {
+        HttpResponse _response = _context.getResponse();
+
+        //invoke the callback after response if its not null
+        if (getHttpCallBack() != null) {
+            getHttpCallBack().OnAfterResponse(_context);
+        }
+
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
+        //handle errors defined at the API level
+        validateResponse(_response, _context);
+
+        //extract result from the http response
+        String _responseBody = ((HttpStringResponse)_response).getBody();
+        PlansItemsResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<PlansItemsResponse>(){});
+
+        return _result;
+    }
+
+    /**
+     * Removes an item from a plan
+     * @param    planId    Required parameter: Plan id
+     * @param    planItemId    Required parameter: Plan item id
+     * @param    idempotencyKey    Optional parameter: Example: 
+     * @return    Returns the PlansItemsResponse response from the API call 
+     */
+    public PlansItemsResponse deletePlanItem(
+                final String planId,
+                final String planItemId,
+                final String idempotencyKey
+    ) throws Throwable {
+
+        HttpRequest _request = _buildDeletePlanItemRequest(planId, planItemId, idempotencyKey);
+        HttpResponse _response = getClientInstance().executeAsString(_request);
+        HttpContext _context = new HttpContext(_request, _response);
+
+        return _handleDeletePlanItemResponse(_context);
+    }
+
+    /**
+     * Removes an item from a plan
+     * @param    planId    Required parameter: Plan id
+     * @param    planItemId    Required parameter: Plan item id
+     * @param    idempotencyKey    Optional parameter: Example: 
+     */
+    public void deletePlanItemAsync(
+                final String planId,
+                final String planItemId,
+                final String idempotencyKey,
+                final APICallBack<PlansItemsResponse> callBack
+    ) {
+        Runnable _responseTask = new Runnable() {
+            public void run() {
+
+                HttpRequest _request;
+                try {
+                    _request = _buildDeletePlanItemRequest(planId, planItemId, idempotencyKey);
+                } catch (Exception e) {
+                    callBack.onFailure(null, e);
+                    return;
+                }
+
+                // Invoke request and get response
+                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
+                    public void onSuccess(HttpContext _context, HttpResponse _response) {
+                        try {
+                            PlansItemsResponse returnValue = _handleDeletePlanItemResponse(_context);
+                            callBack.onSuccess(_context, returnValue);
+                        } catch (Exception e) {
+                            callBack.onFailure(_context, e);
+                        }
+                    }
+
+                    public void onFailure(HttpContext _context, Throwable _exception) {
+                        // Let the caller know of the failure
+                        callBack.onFailure(_context, _exception);
+                    }
+                });
+            }
+        };
+
+        // Execute async using thread pool
+        APIHelper.getScheduler().execute(_responseTask);
+    }
+
+    /**
+     * Builds the HttpRequest object for deletePlanItem
+     */
+    private HttpRequest _buildDeletePlanItemRequest(
+                final String planId,
+                final String planItemId,
                 final String idempotencyKey) throws IOException, APIException {
         //the base uri for api requests
         String _baseUri = Configuration.baseUri;
@@ -142,11 +296,10 @@ public class PlansController extends BaseController {
         }
         _headers.put("user-agent", BaseController.userAgent);
         _headers.put("accept", "application/json");
-        _headers.put("content-type", "application/json");
 
 
         //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().putBody(_queryUrl, _headers, APIHelper.serialize(body),
+        HttpRequest _request = getClientInstance().delete(_queryUrl, _headers, null,
                 Configuration.basicAuthUserName, Configuration.basicAuthPassword);
 
         // Invoke the callback before request if its not null
@@ -158,10 +311,10 @@ public class PlansController extends BaseController {
     }
 
     /**
-     * Processes the response for updatePlanItem
-     * @return An object of type GetPlanItemResponse
+     * Processes the response for deletePlanItem
+     * @return An object of type PlansItemsResponse
      */
-    private GetPlanItemResponse _handleUpdatePlanItemResponse(HttpContext _context)
+    private PlansItemsResponse _handleDeletePlanItemResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -170,55 +323,72 @@ public class PlansController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
         //extract result from the http response
         String _responseBody = ((HttpStringResponse)_response).getBody();
-        GetPlanItemResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<GetPlanItemResponse>(){});
+        PlansItemsResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<PlansItemsResponse>(){});
 
         return _result;
     }
 
     /**
-     * Adds a new item to a plan
+     * Gets a plan item
      * @param    planId    Required parameter: Plan id
-     * @param    request    Required parameter: Request for creating a plan item
-     * @param    idempotencyKey    Optional parameter: Example: 
-     * @return    Returns the GetPlanItemResponse response from the API call 
+     * @param    planItemId    Required parameter: Plan item id
+     * @return    Returns the PlansItemsResponse response from the API call 
      */
-    public GetPlanItemResponse createPlanItem(
+    public PlansItemsResponse getPlanItem(
                 final String planId,
-                final CreatePlanItemRequest request,
-                final String idempotencyKey
+                final String planItemId
     ) throws Throwable {
 
-        HttpRequest _request = _buildCreatePlanItemRequest(planId, request, idempotencyKey);
+        HttpRequest _request = _buildGetPlanItemRequest(planId, planItemId);
         HttpResponse _response = getClientInstance().executeAsString(_request);
         HttpContext _context = new HttpContext(_request, _response);
 
-        return _handleCreatePlanItemResponse(_context);
+        return _handleGetPlanItemResponse(_context);
     }
 
     /**
-     * Adds a new item to a plan
+     * Gets a plan item
      * @param    planId    Required parameter: Plan id
-     * @param    request    Required parameter: Request for creating a plan item
-     * @param    idempotencyKey    Optional parameter: Example: 
+     * @param    planItemId    Required parameter: Plan item id
      */
-    public void createPlanItemAsync(
+    public void getPlanItemAsync(
                 final String planId,
-                final CreatePlanItemRequest request,
-                final String idempotencyKey,
-                final APICallBack<GetPlanItemResponse> callBack
+                final String planItemId,
+                final APICallBack<PlansItemsResponse> callBack
     ) {
         Runnable _responseTask = new Runnable() {
             public void run() {
 
                 HttpRequest _request;
                 try {
-                    _request = _buildCreatePlanItemRequest(planId, request, idempotencyKey);
+                    _request = _buildGetPlanItemRequest(planId, planItemId);
                 } catch (Exception e) {
                     callBack.onFailure(null, e);
                     return;
@@ -228,7 +398,156 @@ public class PlansController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            GetPlanItemResponse returnValue = _handleCreatePlanItemResponse(_context);
+                            PlansItemsResponse returnValue = _handleGetPlanItemResponse(_context);
+                            callBack.onSuccess(_context, returnValue);
+                        } catch (Exception e) {
+                            callBack.onFailure(_context, e);
+                        }
+                    }
+
+                    public void onFailure(HttpContext _context, Throwable _exception) {
+                        // Let the caller know of the failure
+                        callBack.onFailure(_context, _exception);
+                    }
+                });
+            }
+        };
+
+        // Execute async using thread pool
+        APIHelper.getScheduler().execute(_responseTask);
+    }
+
+    /**
+     * Builds the HttpRequest object for getPlanItem
+     */
+    private HttpRequest _buildGetPlanItemRequest(
+                final String planId,
+                final String planItemId) throws IOException, APIException {
+        //the base uri for api requests
+        String _baseUri = Configuration.baseUri;
+
+        //prepare query string for API call
+        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/plans/{plan_id}/items/{plan_item_id}");
+
+        //process template parameters
+        Map<String, Object> _templateParameters = new HashMap<String, Object>();
+        _templateParameters.put("plan_id", planId);
+        _templateParameters.put("plan_item_id", planItemId);
+        APIHelper.appendUrlWithTemplateParameters(_queryBuilder, _templateParameters);
+        //validate and preprocess url
+        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
+
+        //load all headers for the outgoing API request
+        Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("user-agent", BaseController.userAgent);
+        _headers.put("accept", "application/json");
+
+
+        //prepare and invoke the API call request to fetch the response
+        HttpRequest _request = getClientInstance().get(_queryUrl, _headers, null,
+                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
+
+        // Invoke the callback before request if its not null
+        if (getHttpCallBack() != null) {
+            getHttpCallBack().OnBeforeRequest(_request);
+        }
+
+        return _request;
+    }
+
+    /**
+     * Processes the response for getPlanItem
+     * @return An object of type PlansItemsResponse
+     */
+    private PlansItemsResponse _handleGetPlanItemResponse(HttpContext _context)
+            throws APIException, IOException {
+        HttpResponse _response = _context.getResponse();
+
+        //invoke the callback after response if its not null
+        if (getHttpCallBack() != null) {
+            getHttpCallBack().OnAfterResponse(_context);
+        }
+
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
+        //handle errors defined at the API level
+        validateResponse(_response, _context);
+
+        //extract result from the http response
+        String _responseBody = ((HttpStringResponse)_response).getBody();
+        PlansItemsResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<PlansItemsResponse>(){});
+
+        return _result;
+    }
+
+    /**
+     * Adds a new item to a plan
+     * @param    planId    Required parameter: Plan id
+     * @param    body    Required parameter: Request for creating a plan item
+     * @param    idempotencyKey    Optional parameter: Example: 
+     * @return    Returns the PlansItemsResponse response from the API call 
+     */
+    public PlansItemsResponse createPlanItem(
+                final String planId,
+                final PlansItemsRequest1 body,
+                final String idempotencyKey
+    ) throws Throwable {
+
+        HttpRequest _request = _buildCreatePlanItemRequest(planId, body, idempotencyKey);
+        HttpResponse _response = getClientInstance().executeAsString(_request);
+        HttpContext _context = new HttpContext(_request, _response);
+
+        return _handleCreatePlanItemResponse(_context);
+    }
+
+    /**
+     * Adds a new item to a plan
+     * @param    planId    Required parameter: Plan id
+     * @param    body    Required parameter: Request for creating a plan item
+     * @param    idempotencyKey    Optional parameter: Example: 
+     */
+    public void createPlanItemAsync(
+                final String planId,
+                final PlansItemsRequest1 body,
+                final String idempotencyKey,
+                final APICallBack<PlansItemsResponse> callBack
+    ) {
+        Runnable _responseTask = new Runnable() {
+            public void run() {
+
+                HttpRequest _request;
+                try {
+                    _request = _buildCreatePlanItemRequest(planId, body, idempotencyKey);
+                } catch (Exception e) {
+                    callBack.onFailure(null, e);
+                    return;
+                }
+
+                // Invoke request and get response
+                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
+                    public void onSuccess(HttpContext _context, HttpResponse _response) {
+                        try {
+                            PlansItemsResponse returnValue = _handleCreatePlanItemResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -252,7 +571,7 @@ public class PlansController extends BaseController {
      */
     private HttpRequest _buildCreatePlanItemRequest(
                 final String planId,
-                final CreatePlanItemRequest request,
+                final PlansItemsRequest1 body,
                 final String idempotencyKey) throws IOException, APIException {
         //the base uri for api requests
         String _baseUri = Configuration.baseUri;
@@ -269,16 +588,16 @@ public class PlansController extends BaseController {
 
         //load all headers for the outgoing API request
         Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("Content-Type", "application/json");
         if (idempotencyKey != null) {
             _headers.put("idempotency-key", idempotencyKey);
         }
         _headers.put("user-agent", BaseController.userAgent);
         _headers.put("accept", "application/json");
-        _headers.put("content-type", "application/json");
 
 
         //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().postBody(_queryUrl, _headers, APIHelper.serialize(request),
+        HttpRequest _request = getClientInstance().postBody(_queryUrl, _headers, APIHelper.serialize(body),
                 Configuration.basicAuthUserName, Configuration.basicAuthPassword);
 
         // Invoke the callback before request if its not null
@@ -291,9 +610,9 @@ public class PlansController extends BaseController {
 
     /**
      * Processes the response for createPlanItem
-     * @return An object of type GetPlanItemResponse
+     * @return An object of type PlansItemsResponse
      */
-    private GetPlanItemResponse _handleCreatePlanItemResponse(HttpContext _context)
+    private PlansItemsResponse _handleCreatePlanItemResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -302,13 +621,34 @@ public class PlansController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
         //extract result from the http response
         String _responseBody = ((HttpStringResponse)_response).getBody();
-        GetPlanItemResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<GetPlanItemResponse>(){});
+        PlansItemsResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<PlansItemsResponse>(){});
 
         return _result;
     }
@@ -322,9 +662,9 @@ public class PlansController extends BaseController {
      * @param    billingType    Optional parameter: Filter for plan's billing type
      * @param    createdSince    Optional parameter: Filter for plan's creation date start range
      * @param    createdUntil    Optional parameter: Filter for plan's creation date end range
-     * @return    Returns the ListPlansResponse response from the API call 
+     * @return    Returns the PlansResponse response from the API call 
      */
-    public ListPlansResponse getPlans(
+    public PlansResponse getPlans(
                 final Integer page,
                 final Integer size,
                 final String name,
@@ -359,7 +699,7 @@ public class PlansController extends BaseController {
                 final String billingType,
                 final DateTime createdSince,
                 final DateTime createdUntil,
-                final APICallBack<ListPlansResponse> callBack
+                final APICallBack<PlansResponse> callBack
     ) {
         Runnable _responseTask = new Runnable() {
             public void run() {
@@ -376,7 +716,7 @@ public class PlansController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            ListPlansResponse returnValue = _handleGetPlansResponse(_context);
+                            PlansResponse returnValue = _handleGetPlansResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -459,9 +799,9 @@ public class PlansController extends BaseController {
 
     /**
      * Processes the response for getPlans
-     * @return An object of type ListPlansResponse
+     * @return An object of type PlansResponse
      */
-    private ListPlansResponse _handleGetPlansResponse(HttpContext _context)
+    private PlansResponse _handleGetPlansResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -470,13 +810,177 @@ public class PlansController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
         //extract result from the http response
         String _responseBody = ((HttpStringResponse)_response).getBody();
-        ListPlansResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<ListPlansResponse>(){});
+        PlansResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<PlansResponse>(){});
+
+        return _result;
+    }
+
+    /**
+     * Creates a new plan
+     * @param    body    Required parameter: Request for creating a plan
+     * @param    idempotencyKey    Optional parameter: Example: 
+     * @return    Returns the PlansResponse1 response from the API call 
+     */
+    public PlansResponse1 createPlan(
+                final PlansRequest body,
+                final String idempotencyKey
+    ) throws Throwable {
+
+        HttpRequest _request = _buildCreatePlanRequest(body, idempotencyKey);
+        HttpResponse _response = getClientInstance().executeAsString(_request);
+        HttpContext _context = new HttpContext(_request, _response);
+
+        return _handleCreatePlanResponse(_context);
+    }
+
+    /**
+     * Creates a new plan
+     * @param    body    Required parameter: Request for creating a plan
+     * @param    idempotencyKey    Optional parameter: Example: 
+     */
+    public void createPlanAsync(
+                final PlansRequest body,
+                final String idempotencyKey,
+                final APICallBack<PlansResponse1> callBack
+    ) {
+        Runnable _responseTask = new Runnable() {
+            public void run() {
+
+                HttpRequest _request;
+                try {
+                    _request = _buildCreatePlanRequest(body, idempotencyKey);
+                } catch (Exception e) {
+                    callBack.onFailure(null, e);
+                    return;
+                }
+
+                // Invoke request and get response
+                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
+                    public void onSuccess(HttpContext _context, HttpResponse _response) {
+                        try {
+                            PlansResponse1 returnValue = _handleCreatePlanResponse(_context);
+                            callBack.onSuccess(_context, returnValue);
+                        } catch (Exception e) {
+                            callBack.onFailure(_context, e);
+                        }
+                    }
+
+                    public void onFailure(HttpContext _context, Throwable _exception) {
+                        // Let the caller know of the failure
+                        callBack.onFailure(_context, _exception);
+                    }
+                });
+            }
+        };
+
+        // Execute async using thread pool
+        APIHelper.getScheduler().execute(_responseTask);
+    }
+
+    /**
+     * Builds the HttpRequest object for createPlan
+     */
+    private HttpRequest _buildCreatePlanRequest(
+                final PlansRequest body,
+                final String idempotencyKey) throws IOException, APIException {
+        //the base uri for api requests
+        String _baseUri = Configuration.baseUri;
+
+        //prepare query string for API call
+        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/plans");
+        //validate and preprocess url
+        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
+
+        //load all headers for the outgoing API request
+        Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("Content-Type", "application/json");
+        if (idempotencyKey != null) {
+            _headers.put("idempotency-key", idempotencyKey);
+        }
+        _headers.put("user-agent", BaseController.userAgent);
+        _headers.put("accept", "application/json");
+
+
+        //prepare and invoke the API call request to fetch the response
+        HttpRequest _request = getClientInstance().postBody(_queryUrl, _headers, APIHelper.serialize(body),
+                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
+
+        // Invoke the callback before request if its not null
+        if (getHttpCallBack() != null) {
+            getHttpCallBack().OnBeforeRequest(_request);
+        }
+
+        return _request;
+    }
+
+    /**
+     * Processes the response for createPlan
+     * @return An object of type PlansResponse1
+     */
+    private PlansResponse1 _handleCreatePlanResponse(HttpContext _context)
+            throws APIException, IOException {
+        HttpResponse _response = _context.getResponse();
+
+        //invoke the callback after response if its not null
+        if (getHttpCallBack() != null) {
+            getHttpCallBack().OnAfterResponse(_context);
+        }
+
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
+        //handle errors defined at the API level
+        validateResponse(_response, _context);
+
+        //extract result from the http response
+        String _responseBody = ((HttpStringResponse)_response).getBody();
+        PlansResponse1 _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<PlansResponse1>(){});
 
         return _result;
     }
@@ -484,9 +988,9 @@ public class PlansController extends BaseController {
     /**
      * Gets a plan
      * @param    planId    Required parameter: Plan id
-     * @return    Returns the GetPlanResponse response from the API call 
+     * @return    Returns the PlansResponse1 response from the API call 
      */
-    public GetPlanResponse getPlan(
+    public PlansResponse1 getPlan(
                 final String planId
     ) throws Throwable {
 
@@ -503,7 +1007,7 @@ public class PlansController extends BaseController {
      */
     public void getPlanAsync(
                 final String planId,
-                final APICallBack<GetPlanResponse> callBack
+                final APICallBack<PlansResponse1> callBack
     ) {
         Runnable _responseTask = new Runnable() {
             public void run() {
@@ -520,7 +1024,7 @@ public class PlansController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            GetPlanResponse returnValue = _handleGetPlanResponse(_context);
+                            PlansResponse1 returnValue = _handleGetPlanResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -577,9 +1081,9 @@ public class PlansController extends BaseController {
 
     /**
      * Processes the response for getPlan
-     * @return An object of type GetPlanResponse
+     * @return An object of type PlansResponse1
      */
-    private GetPlanResponse _handleGetPlanResponse(HttpContext _context)
+    private PlansResponse1 _handleGetPlanResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -588,13 +1092,34 @@ public class PlansController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
         //extract result from the http response
         String _responseBody = ((HttpStringResponse)_response).getBody();
-        GetPlanResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<GetPlanResponse>(){});
+        PlansResponse1 _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<PlansResponse1>(){});
 
         return _result;
     }
@@ -602,17 +1127,17 @@ public class PlansController extends BaseController {
     /**
      * Updates a plan
      * @param    planId    Required parameter: Plan id
-     * @param    request    Required parameter: Request for updating a plan
+     * @param    body    Required parameter: Request for updating a plan
      * @param    idempotencyKey    Optional parameter: Example: 
-     * @return    Returns the GetPlanResponse response from the API call 
+     * @return    Returns the PlansResponse1 response from the API call 
      */
-    public GetPlanResponse updatePlan(
+    public PlansResponse1 updatePlan(
                 final String planId,
-                final UpdatePlanRequest request,
+                final PlansRequest1 body,
                 final String idempotencyKey
     ) throws Throwable {
 
-        HttpRequest _request = _buildUpdatePlanRequest(planId, request, idempotencyKey);
+        HttpRequest _request = _buildUpdatePlanRequest(planId, body, idempotencyKey);
         HttpResponse _response = getClientInstance().executeAsString(_request);
         HttpContext _context = new HttpContext(_request, _response);
 
@@ -622,21 +1147,21 @@ public class PlansController extends BaseController {
     /**
      * Updates a plan
      * @param    planId    Required parameter: Plan id
-     * @param    request    Required parameter: Request for updating a plan
+     * @param    body    Required parameter: Request for updating a plan
      * @param    idempotencyKey    Optional parameter: Example: 
      */
     public void updatePlanAsync(
                 final String planId,
-                final UpdatePlanRequest request,
+                final PlansRequest1 body,
                 final String idempotencyKey,
-                final APICallBack<GetPlanResponse> callBack
+                final APICallBack<PlansResponse1> callBack
     ) {
         Runnable _responseTask = new Runnable() {
             public void run() {
 
                 HttpRequest _request;
                 try {
-                    _request = _buildUpdatePlanRequest(planId, request, idempotencyKey);
+                    _request = _buildUpdatePlanRequest(planId, body, idempotencyKey);
                 } catch (Exception e) {
                     callBack.onFailure(null, e);
                     return;
@@ -646,7 +1171,7 @@ public class PlansController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            GetPlanResponse returnValue = _handleUpdatePlanResponse(_context);
+                            PlansResponse1 returnValue = _handleUpdatePlanResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -670,7 +1195,7 @@ public class PlansController extends BaseController {
      */
     private HttpRequest _buildUpdatePlanRequest(
                 final String planId,
-                final UpdatePlanRequest request,
+                final PlansRequest1 body,
                 final String idempotencyKey) throws IOException, APIException {
         //the base uri for api requests
         String _baseUri = Configuration.baseUri;
@@ -687,16 +1212,16 @@ public class PlansController extends BaseController {
 
         //load all headers for the outgoing API request
         Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("Content-Type", "application/json");
         if (idempotencyKey != null) {
             _headers.put("idempotency-key", idempotencyKey);
         }
         _headers.put("user-agent", BaseController.userAgent);
         _headers.put("accept", "application/json");
-        _headers.put("content-type", "application/json");
 
 
         //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().putBody(_queryUrl, _headers, APIHelper.serialize(request),
+        HttpRequest _request = getClientInstance().putBody(_queryUrl, _headers, APIHelper.serialize(body),
                 Configuration.basicAuthUserName, Configuration.basicAuthPassword);
 
         // Invoke the callback before request if its not null
@@ -709,9 +1234,9 @@ public class PlansController extends BaseController {
 
     /**
      * Processes the response for updatePlan
-     * @return An object of type GetPlanResponse
+     * @return An object of type PlansResponse1
      */
-    private GetPlanResponse _handleUpdatePlanResponse(HttpContext _context)
+    private PlansResponse1 _handleUpdatePlanResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -720,399 +1245,34 @@ public class PlansController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
         //extract result from the http response
         String _responseBody = ((HttpStringResponse)_response).getBody();
-        GetPlanResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<GetPlanResponse>(){});
-
-        return _result;
-    }
-
-    /**
-     * Updates the metadata from a plan
-     * @param    planId    Required parameter: The plan id
-     * @param    request    Required parameter: Request for updating the plan metadata
-     * @param    idempotencyKey    Optional parameter: Example: 
-     * @return    Returns the GetPlanResponse response from the API call 
-     */
-    public GetPlanResponse updatePlanMetadata(
-                final String planId,
-                final UpdateMetadataRequest request,
-                final String idempotencyKey
-    ) throws Throwable {
-
-        HttpRequest _request = _buildUpdatePlanMetadataRequest(planId, request, idempotencyKey);
-        HttpResponse _response = getClientInstance().executeAsString(_request);
-        HttpContext _context = new HttpContext(_request, _response);
-
-        return _handleUpdatePlanMetadataResponse(_context);
-    }
-
-    /**
-     * Updates the metadata from a plan
-     * @param    planId    Required parameter: The plan id
-     * @param    request    Required parameter: Request for updating the plan metadata
-     * @param    idempotencyKey    Optional parameter: Example: 
-     */
-    public void updatePlanMetadataAsync(
-                final String planId,
-                final UpdateMetadataRequest request,
-                final String idempotencyKey,
-                final APICallBack<GetPlanResponse> callBack
-    ) {
-        Runnable _responseTask = new Runnable() {
-            public void run() {
-
-                HttpRequest _request;
-                try {
-                    _request = _buildUpdatePlanMetadataRequest(planId, request, idempotencyKey);
-                } catch (Exception e) {
-                    callBack.onFailure(null, e);
-                    return;
-                }
-
-                // Invoke request and get response
-                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
-                    public void onSuccess(HttpContext _context, HttpResponse _response) {
-                        try {
-                            GetPlanResponse returnValue = _handleUpdatePlanMetadataResponse(_context);
-                            callBack.onSuccess(_context, returnValue);
-                        } catch (Exception e) {
-                            callBack.onFailure(_context, e);
-                        }
-                    }
-
-                    public void onFailure(HttpContext _context, Throwable _exception) {
-                        // Let the caller know of the failure
-                        callBack.onFailure(_context, _exception);
-                    }
-                });
-            }
-        };
-
-        // Execute async using thread pool
-        APIHelper.getScheduler().execute(_responseTask);
-    }
-
-    /**
-     * Builds the HttpRequest object for updatePlanMetadata
-     */
-    private HttpRequest _buildUpdatePlanMetadataRequest(
-                final String planId,
-                final UpdateMetadataRequest request,
-                final String idempotencyKey) throws IOException, APIException {
-        //the base uri for api requests
-        String _baseUri = Configuration.baseUri;
-
-        //prepare query string for API call
-        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/Plans/{plan_id}/metadata");
-
-        //process template parameters
-        Map<String, Object> _templateParameters = new HashMap<String, Object>();
-        _templateParameters.put("plan_id", planId);
-        APIHelper.appendUrlWithTemplateParameters(_queryBuilder, _templateParameters);
-        //validate and preprocess url
-        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
-
-        //load all headers for the outgoing API request
-        Map<String, String> _headers = new HashMap<String, String>();
-        if (idempotencyKey != null) {
-            _headers.put("idempotency-key", idempotencyKey);
-        }
-        _headers.put("user-agent", BaseController.userAgent);
-        _headers.put("accept", "application/json");
-        _headers.put("content-type", "application/json");
-
-
-        //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().patchBody(_queryUrl, _headers, APIHelper.serialize(request),
-                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
-
-        // Invoke the callback before request if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnBeforeRequest(_request);
-        }
-
-        return _request;
-    }
-
-    /**
-     * Processes the response for updatePlanMetadata
-     * @return An object of type GetPlanResponse
-     */
-    private GetPlanResponse _handleUpdatePlanMetadataResponse(HttpContext _context)
-            throws APIException, IOException {
-        HttpResponse _response = _context.getResponse();
-
-        //invoke the callback after response if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnAfterResponse(_context);
-        }
-
-        //handle errors defined at the API level
-        validateResponse(_response, _context);
-
-        //extract result from the http response
-        String _responseBody = ((HttpStringResponse)_response).getBody();
-        GetPlanResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<GetPlanResponse>(){});
-
-        return _result;
-    }
-
-    /**
-     * Creates a new plan
-     * @param    body    Required parameter: Request for creating a plan
-     * @param    idempotencyKey    Optional parameter: Example: 
-     * @return    Returns the GetPlanResponse response from the API call 
-     */
-    public GetPlanResponse createPlan(
-                final CreatePlanRequest body,
-                final String idempotencyKey
-    ) throws Throwable {
-
-        HttpRequest _request = _buildCreatePlanRequest(body, idempotencyKey);
-        HttpResponse _response = getClientInstance().executeAsString(_request);
-        HttpContext _context = new HttpContext(_request, _response);
-
-        return _handleCreatePlanResponse(_context);
-    }
-
-    /**
-     * Creates a new plan
-     * @param    body    Required parameter: Request for creating a plan
-     * @param    idempotencyKey    Optional parameter: Example: 
-     */
-    public void createPlanAsync(
-                final CreatePlanRequest body,
-                final String idempotencyKey,
-                final APICallBack<GetPlanResponse> callBack
-    ) {
-        Runnable _responseTask = new Runnable() {
-            public void run() {
-
-                HttpRequest _request;
-                try {
-                    _request = _buildCreatePlanRequest(body, idempotencyKey);
-                } catch (Exception e) {
-                    callBack.onFailure(null, e);
-                    return;
-                }
-
-                // Invoke request and get response
-                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
-                    public void onSuccess(HttpContext _context, HttpResponse _response) {
-                        try {
-                            GetPlanResponse returnValue = _handleCreatePlanResponse(_context);
-                            callBack.onSuccess(_context, returnValue);
-                        } catch (Exception e) {
-                            callBack.onFailure(_context, e);
-                        }
-                    }
-
-                    public void onFailure(HttpContext _context, Throwable _exception) {
-                        // Let the caller know of the failure
-                        callBack.onFailure(_context, _exception);
-                    }
-                });
-            }
-        };
-
-        // Execute async using thread pool
-        APIHelper.getScheduler().execute(_responseTask);
-    }
-
-    /**
-     * Builds the HttpRequest object for createPlan
-     */
-    private HttpRequest _buildCreatePlanRequest(
-                final CreatePlanRequest body,
-                final String idempotencyKey) throws IOException, APIException {
-        //the base uri for api requests
-        String _baseUri = Configuration.baseUri;
-
-        //prepare query string for API call
-        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/plans");
-        //validate and preprocess url
-        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
-
-        //load all headers for the outgoing API request
-        Map<String, String> _headers = new HashMap<String, String>();
-        if (idempotencyKey != null) {
-            _headers.put("idempotency-key", idempotencyKey);
-        }
-        _headers.put("user-agent", BaseController.userAgent);
-        _headers.put("accept", "application/json");
-        _headers.put("content-type", "application/json");
-
-
-        //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().postBody(_queryUrl, _headers, APIHelper.serialize(body),
-                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
-
-        // Invoke the callback before request if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnBeforeRequest(_request);
-        }
-
-        return _request;
-    }
-
-    /**
-     * Processes the response for createPlan
-     * @return An object of type GetPlanResponse
-     */
-    private GetPlanResponse _handleCreatePlanResponse(HttpContext _context)
-            throws APIException, IOException {
-        HttpResponse _response = _context.getResponse();
-
-        //invoke the callback after response if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnAfterResponse(_context);
-        }
-
-        //handle errors defined at the API level
-        validateResponse(_response, _context);
-
-        //extract result from the http response
-        String _responseBody = ((HttpStringResponse)_response).getBody();
-        GetPlanResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<GetPlanResponse>(){});
-
-        return _result;
-    }
-
-    /**
-     * Removes an item from a plan
-     * @param    planId    Required parameter: Plan id
-     * @param    planItemId    Required parameter: Plan item id
-     * @param    idempotencyKey    Optional parameter: Example: 
-     * @return    Returns the GetPlanItemResponse response from the API call 
-     */
-    public GetPlanItemResponse deletePlanItem(
-                final String planId,
-                final String planItemId,
-                final String idempotencyKey
-    ) throws Throwable {
-
-        HttpRequest _request = _buildDeletePlanItemRequest(planId, planItemId, idempotencyKey);
-        HttpResponse _response = getClientInstance().executeAsString(_request);
-        HttpContext _context = new HttpContext(_request, _response);
-
-        return _handleDeletePlanItemResponse(_context);
-    }
-
-    /**
-     * Removes an item from a plan
-     * @param    planId    Required parameter: Plan id
-     * @param    planItemId    Required parameter: Plan item id
-     * @param    idempotencyKey    Optional parameter: Example: 
-     */
-    public void deletePlanItemAsync(
-                final String planId,
-                final String planItemId,
-                final String idempotencyKey,
-                final APICallBack<GetPlanItemResponse> callBack
-    ) {
-        Runnable _responseTask = new Runnable() {
-            public void run() {
-
-                HttpRequest _request;
-                try {
-                    _request = _buildDeletePlanItemRequest(planId, planItemId, idempotencyKey);
-                } catch (Exception e) {
-                    callBack.onFailure(null, e);
-                    return;
-                }
-
-                // Invoke request and get response
-                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
-                    public void onSuccess(HttpContext _context, HttpResponse _response) {
-                        try {
-                            GetPlanItemResponse returnValue = _handleDeletePlanItemResponse(_context);
-                            callBack.onSuccess(_context, returnValue);
-                        } catch (Exception e) {
-                            callBack.onFailure(_context, e);
-                        }
-                    }
-
-                    public void onFailure(HttpContext _context, Throwable _exception) {
-                        // Let the caller know of the failure
-                        callBack.onFailure(_context, _exception);
-                    }
-                });
-            }
-        };
-
-        // Execute async using thread pool
-        APIHelper.getScheduler().execute(_responseTask);
-    }
-
-    /**
-     * Builds the HttpRequest object for deletePlanItem
-     */
-    private HttpRequest _buildDeletePlanItemRequest(
-                final String planId,
-                final String planItemId,
-                final String idempotencyKey) throws IOException, APIException {
-        //the base uri for api requests
-        String _baseUri = Configuration.baseUri;
-
-        //prepare query string for API call
-        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/plans/{plan_id}/items/{plan_item_id}");
-
-        //process template parameters
-        Map<String, Object> _templateParameters = new HashMap<String, Object>();
-        _templateParameters.put("plan_id", planId);
-        _templateParameters.put("plan_item_id", planItemId);
-        APIHelper.appendUrlWithTemplateParameters(_queryBuilder, _templateParameters);
-        //validate and preprocess url
-        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
-
-        //load all headers for the outgoing API request
-        Map<String, String> _headers = new HashMap<String, String>();
-        if (idempotencyKey != null) {
-            _headers.put("idempotency-key", idempotencyKey);
-        }
-        _headers.put("user-agent", BaseController.userAgent);
-        _headers.put("accept", "application/json");
-
-
-        //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().delete(_queryUrl, _headers, null,
-                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
-
-        // Invoke the callback before request if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnBeforeRequest(_request);
-        }
-
-        return _request;
-    }
-
-    /**
-     * Processes the response for deletePlanItem
-     * @return An object of type GetPlanItemResponse
-     */
-    private GetPlanItemResponse _handleDeletePlanItemResponse(HttpContext _context)
-            throws APIException, IOException {
-        HttpResponse _response = _context.getResponse();
-
-        //invoke the callback after response if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnAfterResponse(_context);
-        }
-
-        //handle errors defined at the API level
-        validateResponse(_response, _context);
-
-        //extract result from the http response
-        String _responseBody = ((HttpStringResponse)_response).getBody();
-        GetPlanItemResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<GetPlanItemResponse>(){});
+        PlansResponse1 _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<PlansResponse1>(){});
 
         return _result;
     }
@@ -1121,9 +1281,9 @@ public class PlansController extends BaseController {
      * Deletes a plan
      * @param    planId    Required parameter: Plan id
      * @param    idempotencyKey    Optional parameter: Example: 
-     * @return    Returns the GetPlanResponse response from the API call 
+     * @return    Returns the PlansResponse1 response from the API call 
      */
-    public GetPlanResponse deletePlan(
+    public PlansResponse1 deletePlan(
                 final String planId,
                 final String idempotencyKey
     ) throws Throwable {
@@ -1143,7 +1303,7 @@ public class PlansController extends BaseController {
     public void deletePlanAsync(
                 final String planId,
                 final String idempotencyKey,
-                final APICallBack<GetPlanResponse> callBack
+                final APICallBack<PlansResponse1> callBack
     ) {
         Runnable _responseTask = new Runnable() {
             public void run() {
@@ -1160,7 +1320,7 @@ public class PlansController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            GetPlanResponse returnValue = _handleDeletePlanResponse(_context);
+                            PlansResponse1 returnValue = _handleDeletePlanResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -1221,9 +1381,9 @@ public class PlansController extends BaseController {
 
     /**
      * Processes the response for deletePlan
-     * @return An object of type GetPlanResponse
+     * @return An object of type PlansResponse1
      */
-    private GetPlanResponse _handleDeletePlanResponse(HttpContext _context)
+    private PlansResponse1 _handleDeletePlanResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -1232,51 +1392,76 @@ public class PlansController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
         //extract result from the http response
         String _responseBody = ((HttpStringResponse)_response).getBody();
-        GetPlanResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<GetPlanResponse>(){});
+        PlansResponse1 _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<PlansResponse1>(){});
 
         return _result;
     }
 
     /**
-     * Gets a plan item
-     * @param    planId    Required parameter: Plan id
-     * @param    planItemId    Required parameter: Plan item id
-     * @return    Returns the GetPlanItemResponse response from the API call 
+     * Updates the metadata from a plan
+     * @param    planId    Required parameter: The plan id
+     * @param    body    Required parameter: Request for updating the plan metadata
+     * @param    idempotencyKey    Optional parameter: Example: 
+     * @return    Returns the PlansMetadataResponse response from the API call 
      */
-    public GetPlanItemResponse getPlanItem(
+    public PlansMetadataResponse updatePlanMetadata(
                 final String planId,
-                final String planItemId
+                final PlansMetadataRequest body,
+                final String idempotencyKey
     ) throws Throwable {
 
-        HttpRequest _request = _buildGetPlanItemRequest(planId, planItemId);
+        HttpRequest _request = _buildUpdatePlanMetadataRequest(planId, body, idempotencyKey);
         HttpResponse _response = getClientInstance().executeAsString(_request);
         HttpContext _context = new HttpContext(_request, _response);
 
-        return _handleGetPlanItemResponse(_context);
+        return _handleUpdatePlanMetadataResponse(_context);
     }
 
     /**
-     * Gets a plan item
-     * @param    planId    Required parameter: Plan id
-     * @param    planItemId    Required parameter: Plan item id
+     * Updates the metadata from a plan
+     * @param    planId    Required parameter: The plan id
+     * @param    body    Required parameter: Request for updating the plan metadata
+     * @param    idempotencyKey    Optional parameter: Example: 
      */
-    public void getPlanItemAsync(
+    public void updatePlanMetadataAsync(
                 final String planId,
-                final String planItemId,
-                final APICallBack<GetPlanItemResponse> callBack
+                final PlansMetadataRequest body,
+                final String idempotencyKey,
+                final APICallBack<PlansMetadataResponse> callBack
     ) {
         Runnable _responseTask = new Runnable() {
             public void run() {
 
                 HttpRequest _request;
                 try {
-                    _request = _buildGetPlanItemRequest(planId, planItemId);
+                    _request = _buildUpdatePlanMetadataRequest(planId, body, idempotencyKey);
                 } catch (Exception e) {
                     callBack.onFailure(null, e);
                     return;
@@ -1286,7 +1471,7 @@ public class PlansController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            GetPlanItemResponse returnValue = _handleGetPlanItemResponse(_context);
+                            PlansMetadataResponse returnValue = _handleUpdatePlanMetadataResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -1306,33 +1491,37 @@ public class PlansController extends BaseController {
     }
 
     /**
-     * Builds the HttpRequest object for getPlanItem
+     * Builds the HttpRequest object for updatePlanMetadata
      */
-    private HttpRequest _buildGetPlanItemRequest(
+    private HttpRequest _buildUpdatePlanMetadataRequest(
                 final String planId,
-                final String planItemId) throws IOException, APIException {
+                final PlansMetadataRequest body,
+                final String idempotencyKey) throws IOException, APIException {
         //the base uri for api requests
         String _baseUri = Configuration.baseUri;
 
         //prepare query string for API call
-        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/plans/{plan_id}/items/{plan_item_id}");
+        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/Plans/{plan_id}/metadata");
 
         //process template parameters
         Map<String, Object> _templateParameters = new HashMap<String, Object>();
         _templateParameters.put("plan_id", planId);
-        _templateParameters.put("plan_item_id", planItemId);
         APIHelper.appendUrlWithTemplateParameters(_queryBuilder, _templateParameters);
         //validate and preprocess url
         String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
 
         //load all headers for the outgoing API request
         Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("Content-Type", "application/json");
+        if (idempotencyKey != null) {
+            _headers.put("idempotency-key", idempotencyKey);
+        }
         _headers.put("user-agent", BaseController.userAgent);
         _headers.put("accept", "application/json");
 
 
         //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().get(_queryUrl, _headers, null,
+        HttpRequest _request = getClientInstance().patchBody(_queryUrl, _headers, APIHelper.serialize(body),
                 Configuration.basicAuthUserName, Configuration.basicAuthPassword);
 
         // Invoke the callback before request if its not null
@@ -1344,10 +1533,10 @@ public class PlansController extends BaseController {
     }
 
     /**
-     * Processes the response for getPlanItem
-     * @return An object of type GetPlanItemResponse
+     * Processes the response for updatePlanMetadata
+     * @return An object of type PlansMetadataResponse
      */
-    private GetPlanItemResponse _handleGetPlanItemResponse(HttpContext _context)
+    private PlansMetadataResponse _handleUpdatePlanMetadataResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -1356,13 +1545,34 @@ public class PlansController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
         //extract result from the http response
         String _responseBody = ((HttpStringResponse)_response).getBody();
-        GetPlanItemResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<GetPlanItemResponse>(){});
+        PlansMetadataResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<PlansMetadataResponse>(){});
 
         return _result;
     }

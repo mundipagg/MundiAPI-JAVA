@@ -18,18 +18,12 @@ public class GetAnticipationLimitsResponseBuilder {
         getAnticipationLimitsResponse = new GetAnticipationLimitsResponse();
     }
 
-    /**
-     * Max limit
-     */
-    public GetAnticipationLimitsResponseBuilder max(GetAnticipationLimitResponse max) {
+    public GetAnticipationLimitsResponseBuilder max(Max max) {
         getAnticipationLimitsResponse.setMax(max);
         return this;
     }
 
-    /**
-     * Min limit
-     */
-    public GetAnticipationLimitsResponseBuilder min(GetAnticipationLimitResponse min) {
+    public GetAnticipationLimitsResponseBuilder min(Min min) {
         getAnticipationLimitsResponse.setMin(min);
         return this;
     }

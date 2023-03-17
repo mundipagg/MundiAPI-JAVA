@@ -50,10 +50,7 @@ public class UpdateCustomerRequestBuilder {
         return this;
     }
 
-    /**
-     * Address
-     */
-    public UpdateCustomerRequestBuilder address(CreateAddressRequest address) {
+    public UpdateCustomerRequestBuilder address(Address1 address) {
         updateCustomerRequest.setAddress(address);
         return this;
     }

@@ -34,18 +34,12 @@ public class GetUsagesDetailsResponseBuilder {
         return this;
     }
 
-    /**
-     * Period Details
-     */
-    public GetUsagesDetailsResponseBuilder period(GetPeriodResponse period) {
+    public GetUsagesDetailsResponseBuilder period(Period period) {
         getUsagesDetailsResponse.setPeriod(period);
         return this;
     }
 
-    /**
-     * Usages Details
-     */
-    public GetUsagesDetailsResponseBuilder usages(ListUsagesDetailsResponse usages) {
+    public GetUsagesDetailsResponseBuilder usages(Usages usages) {
         getUsagesDetailsResponse.setUsages(usages);
         return this;
     }

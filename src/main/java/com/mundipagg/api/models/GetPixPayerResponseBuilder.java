@@ -33,7 +33,7 @@ public class GetPixPayerResponseBuilder {
         return this;
     }
 
-    public GetPixPayerResponseBuilder bankAccount(GetPixBankAccountResponse bankAccount) {
+    public GetPixPayerResponseBuilder bankAccount(Object bankAccount) {
         getPixPayerResponse.setBankAccount(bankAccount);
         return this;
     }

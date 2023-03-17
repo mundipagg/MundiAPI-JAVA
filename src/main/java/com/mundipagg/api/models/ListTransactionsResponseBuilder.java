@@ -26,10 +26,7 @@ public class ListTransactionsResponseBuilder {
         return this;
     }
 
-    /**
-     * Paging object
-     */
-    public ListTransactionsResponseBuilder paging(PagingResponse paging) {
+    public ListTransactionsResponseBuilder paging(Paging paging) {
         listTransactionsResponse.setPaging(paging);
         return this;
     }

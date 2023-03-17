@@ -49,7 +49,7 @@ public class GetSubscriptionResponseBuilder {
         return this;
     }
 
-    public GetSubscriptionResponseBuilder currentCycle(GetPeriodResponse currentCycle) {
+    public GetSubscriptionResponseBuilder currentCycle(CurrentCycle currentCycle) {
         getSubscriptionResponse.setCurrentCycle(currentCycle);
         return this;
     }
@@ -84,12 +84,12 @@ public class GetSubscriptionResponseBuilder {
         return this;
     }
 
-    public GetSubscriptionResponseBuilder customer(GetCustomerResponse customer) {
+    public GetSubscriptionResponseBuilder customer(Customer customer) {
         getSubscriptionResponse.setCustomer(customer);
         return this;
     }
 
-    public GetSubscriptionResponseBuilder card(GetCardResponse card) {
+    public GetSubscriptionResponseBuilder card(Card card) {
         getSubscriptionResponse.setCard(card);
         return this;
     }
@@ -109,7 +109,7 @@ public class GetSubscriptionResponseBuilder {
         return this;
     }
 
-    public GetSubscriptionResponseBuilder setup(GetSetupResponse setup) {
+    public GetSubscriptionResponseBuilder setup(Setup setup) {
         getSubscriptionResponse.setSetup(setup);
         return this;
     }
@@ -166,10 +166,7 @@ public class GetSubscriptionResponseBuilder {
         return this;
     }
 
-    /**
-     * Subscription's split response
-     */
-    public GetSubscriptionResponseBuilder split(GetSubscriptionSplitResponse split) {
+    public GetSubscriptionResponseBuilder split(Split split) {
         getSubscriptionResponse.setSplit(split);
         return this;
     }

@@ -34,10 +34,7 @@ public class UpdateSubscriptionItemRequestBuilder {
         return this;
     }
 
-    /**
-     * Pricing scheme
-     */
-    public UpdateSubscriptionItemRequestBuilder pricingScheme(UpdatePricingSchemeRequest pricingScheme) {
+    public UpdateSubscriptionItemRequestBuilder pricingScheme(PricingScheme3 pricingScheme) {
         updateSubscriptionItemRequest.setPricingScheme(pricingScheme);
         return this;
     }

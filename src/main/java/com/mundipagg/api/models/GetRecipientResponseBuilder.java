@@ -99,10 +99,7 @@ public class GetRecipientResponseBuilder {
         return this;
     }
 
-    /**
-     * Default bank account
-     */
-    public GetRecipientResponseBuilder defaultBankAccount(GetBankAccountResponse defaultBankAccount) {
+    public GetRecipientResponseBuilder defaultBankAccount(DefaultBankAccount defaultBankAccount) {
         getRecipientResponse.setDefaultBankAccount(defaultBankAccount);
         return this;
     }
@@ -123,7 +120,7 @@ public class GetRecipientResponseBuilder {
         return this;
     }
 
-    public GetRecipientResponseBuilder automaticAnticipationSettings(GetAutomaticAnticipationResponse automaticAnticipationSettings) {
+    public GetRecipientResponseBuilder automaticAnticipationSettings(CreateAutomaticAnticipationSettingsRequest automaticAnticipationSettings) {
         getRecipientResponse.setAutomaticAnticipationSettings(automaticAnticipationSettings);
         return this;
     }

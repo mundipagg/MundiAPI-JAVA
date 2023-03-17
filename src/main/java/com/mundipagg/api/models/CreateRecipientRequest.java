@@ -14,17 +14,17 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.ALWAYS)
 public class CreateRecipientRequest 
         implements java.io.Serializable {
-    private static final long serialVersionUID = -7808458358315985803L;
+    private static final long serialVersionUID = -6262333458696613889L;
     private String name;
     private String email;
     private String description;
     private String document;
     private String type;
-    private CreateBankAccountRequest defaultBankAccount;
+    private DefaultBankAccount1 defaultBankAccount;
     private LinkedHashMap<String, String> metadata;
-    private CreateTransferSettingsRequest transferSettings;
+    private GetTransferSettingsResponse transferSettings;
     private String code;
-    private String paymentMode = "bank_transfer";
+    private String paymentMode;
     /** GETTER
      * Recipient name
      */
@@ -106,18 +106,18 @@ public class CreateRecipientRequest
     }
  
     /** GETTER
-     * Bank account
+     * TODO: Write general description for this method
      */
     @JsonGetter("default_bank_account")
-    public CreateBankAccountRequest getDefaultBankAccount ( ) { 
+    public DefaultBankAccount1 getDefaultBankAccount ( ) { 
         return this.defaultBankAccount;
     }
     
     /** SETTER
-     * Bank account
+     * TODO: Write general description for this method
      */
     @JsonSetter("default_bank_account")
-    public void setDefaultBankAccount (CreateBankAccountRequest value) { 
+    public void setDefaultBankAccount (DefaultBankAccount1 value) { 
         this.defaultBankAccount = value;
     }
  
@@ -138,18 +138,18 @@ public class CreateRecipientRequest
     }
  
     /** GETTER
-     * Receiver Transfer Information
+     * TODO: Write general description for this method
      */
     @JsonGetter("transfer_settings")
-    public CreateTransferSettingsRequest getTransferSettings ( ) { 
+    public GetTransferSettingsResponse getTransferSettings ( ) { 
         return this.transferSettings;
     }
     
     /** SETTER
-     * Receiver Transfer Information
+     * TODO: Write general description for this method
      */
     @JsonSetter("transfer_settings")
-    public void setTransferSettings (CreateTransferSettingsRequest value) { 
+    public void setTransferSettings (GetTransferSettingsResponse value) { 
         this.transferSettings = value;
     }
  

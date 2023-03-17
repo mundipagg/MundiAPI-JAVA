@@ -14,11 +14,11 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.ALWAYS)
 public class CancelSplitRequest 
         implements java.io.Serializable {
-    private static final long serialVersionUID = -8284007873104052870L;
+    private static final long serialVersionUID = 8283823946649634516L;
     private String type;
     private int amount;
     private String recipientId;
-    private CreateSplitOptionsRequest options;
+    private Options2 options;
     private String splitRuleId;
     /** GETTER
      * Split type
@@ -69,18 +69,18 @@ public class CancelSplitRequest
     }
  
     /** GETTER
-     * The split options request
+     * TODO: Write general description for this method
      */
     @JsonGetter("options")
-    public CreateSplitOptionsRequest getOptions ( ) { 
+    public Options2 getOptions ( ) { 
         return this.options;
     }
     
     /** SETTER
-     * The split options request
+     * TODO: Write general description for this method
      */
     @JsonSetter("options")
-    public void setOptions (CreateSplitOptionsRequest value) { 
+    public void setOptions (Options2 value) { 
         this.options = value;
     }
  

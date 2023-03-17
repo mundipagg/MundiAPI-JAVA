@@ -18,13 +18,13 @@ import org.joda.time.DateTime;
 @JsonInclude(Include.ALWAYS)
 public class GetSubscriptionItemResponse 
         implements java.io.Serializable {
-    private static final long serialVersionUID = -2343850217395000365L;
+    private static final long serialVersionUID = 2113350145775709335L;
     private String id;
     private String description;
     private String status;
     private DateTime createdAt;
     private DateTime updatedAt;
-    private GetPricingSchemeResponse pricingScheme;
+    private PricingScheme pricingScheme;
     private List<GetDiscountResponse> discounts;
     private List<GetIncrementResponse> increments;
     private GetSubscriptionResponse subscription;
@@ -120,7 +120,7 @@ public class GetSubscriptionItemResponse
      * TODO: Write general description for this method
      */
     @JsonGetter("pricing_scheme")
-    public GetPricingSchemeResponse getPricingScheme ( ) { 
+    public PricingScheme getPricingScheme ( ) { 
         return this.pricingScheme;
     }
     
@@ -128,7 +128,7 @@ public class GetSubscriptionItemResponse
      * TODO: Write general description for this method
      */
     @JsonSetter("pricing_scheme")
-    public void setPricingScheme (GetPricingSchemeResponse value) { 
+    public void setPricingScheme (PricingScheme value) { 
         this.pricingScheme = value;
     }
  

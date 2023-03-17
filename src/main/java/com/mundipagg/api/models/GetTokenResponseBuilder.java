@@ -39,7 +39,7 @@ public class GetTokenResponseBuilder {
         return this;
     }
 
-    public GetTokenResponseBuilder card(GetCardTokenResponse card) {
+    public GetTokenResponseBuilder card(Card9 card) {
         getTokenResponse.setCard(card);
         return this;
     }

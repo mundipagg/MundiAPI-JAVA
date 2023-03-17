@@ -42,10 +42,7 @@ public class CreateSplitRequestBuilder {
         return this;
     }
 
-    /**
-     * The split options request
-     */
-    public CreateSplitRequestBuilder options(CreateSplitOptionsRequest options) {
+    public CreateSplitRequestBuilder options(Options2 options) {
         createSplitRequest.setOptions(options);
         return this;
     }

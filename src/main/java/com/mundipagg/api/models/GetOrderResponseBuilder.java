@@ -39,7 +39,7 @@ public class GetOrderResponseBuilder {
         return this;
     }
 
-    public GetOrderResponseBuilder customer(GetCustomerResponse customer) {
+    public GetOrderResponseBuilder customer(Customer customer) {
         getOrderResponse.setCustomer(customer);
         return this;
     }
@@ -69,7 +69,7 @@ public class GetOrderResponseBuilder {
         return this;
     }
 
-    public GetOrderResponseBuilder shipping(GetShippingResponse shipping) {
+    public GetOrderResponseBuilder shipping(Shipping shipping) {
         getOrderResponse.setShipping(shipping);
         return this;
     }
@@ -103,18 +103,12 @@ public class GetOrderResponseBuilder {
         return this;
     }
 
-    /**
-     * Location
-     */
-    public GetOrderResponseBuilder location(GetLocationResponse location) {
+    public GetOrderResponseBuilder location(Location location) {
         getOrderResponse.setLocation(location);
         return this;
     }
 
-    /**
-     * Device's informations
-     */
-    public GetOrderResponseBuilder device(GetDeviceResponse device) {
+    public GetOrderResponseBuilder device(Device device) {
         getOrderResponse.setDevice(device);
         return this;
     }

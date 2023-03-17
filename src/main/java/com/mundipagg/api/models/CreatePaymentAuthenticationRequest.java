@@ -14,9 +14,9 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.ALWAYS)
 public class CreatePaymentAuthenticationRequest 
         implements java.io.Serializable {
-    private static final long serialVersionUID = -769276752497354234L;
+    private static final long serialVersionUID = -769276751873817748L;
     private String type;
-    private CreateThreeDSecureRequest threedSecure;
+    private ThreedSecure1 threedSecure;
     /** GETTER
      * The Authentication type
      */
@@ -34,18 +34,18 @@ public class CreatePaymentAuthenticationRequest
     }
  
     /** GETTER
-     * The 3D-S authentication object
+     * TODO: Write general description for this method
      */
     @JsonGetter("threed_secure")
-    public CreateThreeDSecureRequest getThreedSecure ( ) { 
+    public ThreedSecure1 getThreedSecure ( ) { 
         return this.threedSecure;
     }
     
     /** SETTER
-     * The 3D-S authentication object
+     * TODO: Write general description for this method
      */
     @JsonSetter("threed_secure")
-    public void setThreedSecure (CreateThreeDSecureRequest value) { 
+    public void setThreedSecure (ThreedSecure1 value) { 
         this.threedSecure = value;
     }
  

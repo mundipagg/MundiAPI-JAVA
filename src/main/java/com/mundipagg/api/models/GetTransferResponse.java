@@ -18,13 +18,13 @@ import org.joda.time.DateTime;
 @JsonInclude(Include.ALWAYS)
 public class GetTransferResponse 
         implements java.io.Serializable {
-    private static final long serialVersionUID = 8120702587643768875L;
+    private static final long serialVersionUID = 8120594670163125233L;
     private String id;
     private int amount;
     private String status;
     private DateTime createdAt;
     private DateTime updatedAt;
-    private GetBankAccountResponse bankAccount;
+    private BankAccount bankAccount;
     private LinkedHashMap<String, String> metadata;
     /** GETTER
      * Id
@@ -111,18 +111,18 @@ public class GetTransferResponse
     }
  
     /** GETTER
-     * Bank account
+     * TODO: Write general description for this method
      */
     @JsonGetter("bank_account")
-    public GetBankAccountResponse getBankAccount ( ) { 
+    public BankAccount getBankAccount ( ) { 
         return this.bankAccount;
     }
     
     /** SETTER
-     * Bank account
+     * TODO: Write general description for this method
      */
     @JsonSetter("bank_account")
-    public void setBankAccount (GetBankAccountResponse value) { 
+    public void setBankAccount (BankAccount value) { 
         this.bankAccount = value;
     }
  

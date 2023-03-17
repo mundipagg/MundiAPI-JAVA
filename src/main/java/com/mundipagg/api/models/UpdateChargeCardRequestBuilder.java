@@ -34,10 +34,7 @@ public class UpdateChargeCardRequestBuilder {
         return this;
     }
 
-    /**
-     * Card data
-     */
-    public UpdateChargeCardRequestBuilder card(CreateCardRequest card) {
+    public UpdateChargeCardRequestBuilder card(Card1 card) {
         updateChargeCardRequest.setCard(card);
         return this;
     }

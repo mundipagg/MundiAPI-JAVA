@@ -14,23 +14,23 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.ALWAYS)
 public class CreateOrderRequest 
         implements java.io.Serializable {
-    private static final long serialVersionUID = -4709111399684235256L;
+    private static final long serialVersionUID = 4544086154871316442L;
     private List<CreateOrderItemRequest> items;
-    private CreateCustomerRequest customer;
+    private Customer8 customer;
     private List<CreatePaymentRequest> payments;
     private String code;
     private String customerId;
-    private CreateShippingRequest shipping;
+    private Shipping3 shipping;
     private LinkedHashMap<String, String> metadata;
     private Boolean antifraudEnabled;
     private String ip;
     private String sessionId;
-    private CreateLocationRequest location;
-    private CreateDeviceRequest device;
-    private boolean closed = true;
+    private Location location;
+    private Device1 device;
+    private boolean closed;
     private String currency;
     private CreateAntifraudRequest antifraud;
-    private CreateSubMerchantRequest submerchant;
+    private Submerchant submerchant;
     /** GETTER
      * Items
      */
@@ -48,18 +48,18 @@ public class CreateOrderRequest
     }
  
     /** GETTER
-     * Customer
+     * TODO: Write general description for this method
      */
     @JsonGetter("customer")
-    public CreateCustomerRequest getCustomer ( ) { 
+    public Customer8 getCustomer ( ) { 
         return this.customer;
     }
     
     /** SETTER
-     * Customer
+     * TODO: Write general description for this method
      */
     @JsonSetter("customer")
-    public void setCustomer (CreateCustomerRequest value) { 
+    public void setCustomer (Customer8 value) { 
         this.customer = value;
     }
  
@@ -112,18 +112,18 @@ public class CreateOrderRequest
     }
  
     /** GETTER
-     * Shipping data
+     * TODO: Write general description for this method
      */
     @JsonGetter("shipping")
-    public CreateShippingRequest getShipping ( ) { 
+    public Shipping3 getShipping ( ) { 
         return this.shipping;
     }
     
     /** SETTER
-     * Shipping data
+     * TODO: Write general description for this method
      */
     @JsonSetter("shipping")
-    public void setShipping (CreateShippingRequest value) { 
+    public void setShipping (Shipping3 value) { 
         this.shipping = value;
     }
  
@@ -192,34 +192,34 @@ public class CreateOrderRequest
     }
  
     /** GETTER
-     * Request's location
+     * TODO: Write general description for this method
      */
     @JsonGetter("location")
-    public CreateLocationRequest getLocation ( ) { 
+    public Location getLocation ( ) { 
         return this.location;
     }
     
     /** SETTER
-     * Request's location
+     * TODO: Write general description for this method
      */
     @JsonSetter("location")
-    public void setLocation (CreateLocationRequest value) { 
+    public void setLocation (Location value) { 
         this.location = value;
     }
  
     /** GETTER
-     * Device's informations
+     * TODO: Write general description for this method
      */
     @JsonGetter("device")
-    public CreateDeviceRequest getDevice ( ) { 
+    public Device1 getDevice ( ) { 
         return this.device;
     }
     
     /** SETTER
-     * Device's informations
+     * TODO: Write general description for this method
      */
     @JsonSetter("device")
-    public void setDevice (CreateDeviceRequest value) { 
+    public void setDevice (Device1 value) { 
         this.device = value;
     }
  
@@ -272,18 +272,18 @@ public class CreateOrderRequest
     }
  
     /** GETTER
-     * SubMerchant
+     * TODO: Write general description for this method
      */
     @JsonGetter("submerchant")
-    public CreateSubMerchantRequest getSubmerchant ( ) { 
+    public Submerchant getSubmerchant ( ) { 
         return this.submerchant;
     }
     
     /** SETTER
-     * SubMerchant
+     * TODO: Write general description for this method
      */
     @JsonSetter("submerchant")
-    public void setSubmerchant (CreateSubMerchantRequest value) { 
+    public void setSubmerchant (Submerchant value) { 
         this.submerchant = value;
     }
  

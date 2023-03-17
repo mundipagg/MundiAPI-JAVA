@@ -26,10 +26,7 @@ public class ListAnticipationResponseBuilder {
         return this;
     }
 
-    /**
-     * Paging
-     */
-    public ListAnticipationResponseBuilder paging(PagingResponse paging) {
+    public ListAnticipationResponseBuilder paging(Paging paging) {
         listAnticipationResponse.setPaging(paging);
         return this;
     }

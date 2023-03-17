@@ -18,26 +18,26 @@ import org.joda.time.DateTime;
 @JsonInclude(Include.ALWAYS)
 public class GetSubscriptionResponse 
         implements java.io.Serializable {
-    private static final long serialVersionUID = 6665266992638812086L;
+    private static final long serialVersionUID = -284752809351716863L;
     private String id;
     private String code;
     private DateTime startAt;
     private String interval;
     private int intervalCount;
     private String billingType;
-    private GetPeriodResponse currentCycle;
+    private CurrentCycle currentCycle;
     private String paymentMethod;
     private String currency;
     private int installments;
     private String status;
     private DateTime createdAt;
     private DateTime updatedAt;
-    private GetCustomerResponse customer;
-    private GetCardResponse card;
+    private Customer customer;
+    private Card card;
     private List<GetSubscriptionItemResponse> items;
     private String statementDescriptor;
     private LinkedHashMap<String, String> metadata;
-    private GetSetupResponse setup;
+    private Setup setup;
     private String gatewayAffiliationId;
     private DateTime nextBillingAt;
     private Integer billingDay;
@@ -46,7 +46,7 @@ public class GetSubscriptionResponse
     private List<GetDiscountResponse> discounts;
     private List<GetIncrementResponse> increments;
     private Integer boletoDueDays;
-    private GetSubscriptionSplitResponse split;
+    private Split split;
     /** GETTER
      * TODO: Write general description for this method
      */
@@ -149,7 +149,7 @@ public class GetSubscriptionResponse
      * TODO: Write general description for this method
      */
     @JsonGetter("current_cycle")
-    public GetPeriodResponse getCurrentCycle ( ) { 
+    public CurrentCycle getCurrentCycle ( ) { 
         return this.currentCycle;
     }
     
@@ -157,7 +157,7 @@ public class GetSubscriptionResponse
      * TODO: Write general description for this method
      */
     @JsonSetter("current_cycle")
-    public void setCurrentCycle (GetPeriodResponse value) { 
+    public void setCurrentCycle (CurrentCycle value) { 
         this.currentCycle = value;
     }
  
@@ -265,7 +265,7 @@ public class GetSubscriptionResponse
      * TODO: Write general description for this method
      */
     @JsonGetter("customer")
-    public GetCustomerResponse getCustomer ( ) { 
+    public Customer getCustomer ( ) { 
         return this.customer;
     }
     
@@ -273,7 +273,7 @@ public class GetSubscriptionResponse
      * TODO: Write general description for this method
      */
     @JsonSetter("customer")
-    public void setCustomer (GetCustomerResponse value) { 
+    public void setCustomer (Customer value) { 
         this.customer = value;
     }
  
@@ -281,7 +281,7 @@ public class GetSubscriptionResponse
      * TODO: Write general description for this method
      */
     @JsonGetter("card")
-    public GetCardResponse getCard ( ) { 
+    public Card getCard ( ) { 
         return this.card;
     }
     
@@ -289,7 +289,7 @@ public class GetSubscriptionResponse
      * TODO: Write general description for this method
      */
     @JsonSetter("card")
-    public void setCard (GetCardResponse value) { 
+    public void setCard (Card value) { 
         this.card = value;
     }
  
@@ -345,7 +345,7 @@ public class GetSubscriptionResponse
      * TODO: Write general description for this method
      */
     @JsonGetter("setup")
-    public GetSetupResponse getSetup ( ) { 
+    public Setup getSetup ( ) { 
         return this.setup;
     }
     
@@ -353,7 +353,7 @@ public class GetSubscriptionResponse
      * TODO: Write general description for this method
      */
     @JsonSetter("setup")
-    public void setSetup (GetSetupResponse value) { 
+    public void setSetup (Setup value) { 
         this.setup = value;
     }
  
@@ -490,18 +490,18 @@ public class GetSubscriptionResponse
     }
  
     /** GETTER
-     * Subscription's split response
+     * TODO: Write general description for this method
      */
     @JsonGetter("split")
-    public GetSubscriptionSplitResponse getSplit ( ) { 
+    public Split getSplit ( ) { 
         return this.split;
     }
     
     /** SETTER
-     * Subscription's split response
+     * TODO: Write general description for this method
      */
     @JsonSetter("split")
-    public void setSplit (GetSubscriptionSplitResponse value) { 
+    public void setSplit (Split value) { 
         this.split = value;
     }
  

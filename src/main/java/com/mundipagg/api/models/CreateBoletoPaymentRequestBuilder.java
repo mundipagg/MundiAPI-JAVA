@@ -51,10 +51,7 @@ public class CreateBoletoPaymentRequestBuilder {
         return this;
     }
 
-    /**
-     * Card's billing address
-     */
-    public CreateBoletoPaymentRequestBuilder billingAddress(CreateAddressRequest billingAddress) {
+    public CreateBoletoPaymentRequestBuilder billingAddress(BillingAddress1 billingAddress) {
         createBoletoPaymentRequest.setBillingAddress(billingAddress);
         return this;
     }
@@ -83,12 +80,12 @@ public class CreateBoletoPaymentRequestBuilder {
         return this;
     }
 
-    public CreateBoletoPaymentRequestBuilder interest(CreateInterestRequest interest) {
+    public CreateBoletoPaymentRequestBuilder interest(Interest interest) {
         createBoletoPaymentRequest.setInterest(interest);
         return this;
     }
 
-    public CreateBoletoPaymentRequestBuilder fine(CreateFineRequest fine) {
+    public CreateBoletoPaymentRequestBuilder fine(Fine fine) {
         createBoletoPaymentRequest.setFine(fine);
         return this;
     }

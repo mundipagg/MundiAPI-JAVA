@@ -39,7 +39,7 @@ public class GetAccessTokenResponseBuilder {
         return this;
     }
 
-    public GetAccessTokenResponseBuilder customer(GetCustomerResponse customer) {
+    public GetAccessTokenResponseBuilder customer(Customer customer) {
         getAccessTokenResponse.setCustomer(customer);
         return this;
     }

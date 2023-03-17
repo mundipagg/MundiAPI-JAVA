@@ -26,10 +26,7 @@ public class ListAccessTokensResponseBuilder {
         return this;
     }
 
-    /**
-     * Paging object
-     */
-    public ListAccessTokensResponseBuilder paging(PagingResponse paging) {
+    public ListAccessTokensResponseBuilder paging(Paging paging) {
         listAccessTokensResponse.setPaging(paging);
         return this;
     }

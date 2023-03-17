@@ -26,10 +26,7 @@ public class ListCardsResponseBuilder {
         return this;
     }
 
-    /**
-     * Paging object
-     */
-    public ListCardsResponseBuilder paging(PagingResponse paging) {
+    public ListCardsResponseBuilder paging(Paging paging) {
         listCardsResponse.setPaging(paging);
         return this;
     }

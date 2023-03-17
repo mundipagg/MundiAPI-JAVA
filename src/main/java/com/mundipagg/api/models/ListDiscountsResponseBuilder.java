@@ -26,10 +26,7 @@ public class ListDiscountsResponseBuilder {
         return this;
     }
 
-    /**
-     * Paging object
-     */
-    public ListDiscountsResponseBuilder paging(PagingResponse paging) {
+    public ListDiscountsResponseBuilder paging(Paging paging) {
         listDiscountsResponse.setPaging(paging);
         return this;
     }

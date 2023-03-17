@@ -26,10 +26,7 @@ public class ListWithdrawalsBuilder {
         return this;
     }
 
-    /**
-     * Paging object
-     */
-    public ListWithdrawalsBuilder paging(PagingResponse paging) {
+    public ListWithdrawalsBuilder paging(Paging paging) {
         listWithdrawals.setPaging(paging);
         return this;
     }

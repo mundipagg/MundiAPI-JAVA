@@ -18,12 +18,12 @@ public class CreatePhonesRequestBuilder {
         createPhonesRequest = new CreatePhonesRequest();
     }
 
-    public CreatePhonesRequestBuilder homePhone(CreatePhoneRequest homePhone) {
+    public CreatePhonesRequestBuilder homePhone(GetPhoneResponse homePhone) {
         createPhonesRequest.setHomePhone(homePhone);
         return this;
     }
 
-    public CreatePhonesRequestBuilder mobilePhone(CreatePhoneRequest mobilePhone) {
+    public CreatePhonesRequestBuilder mobilePhone(GetPhoneResponse mobilePhone) {
         createPhonesRequest.setMobilePhone(mobilePhone);
         return this;
     }

@@ -74,17 +74,17 @@ public class GetChargeResponseBuilder {
         return this;
     }
 
-    public GetChargeResponseBuilder invoice(GetInvoiceResponse invoice) {
+    public GetChargeResponseBuilder invoice(Invoice invoice) {
         getChargeResponse.setInvoice(invoice);
         return this;
     }
 
-    public GetChargeResponseBuilder order(GetOrderResponse order) {
+    public GetChargeResponseBuilder order(Order order) {
         getChargeResponse.setOrder(order);
         return this;
     }
 
-    public GetChargeResponseBuilder customer(GetCustomerResponse customer) {
+    public GetChargeResponseBuilder customer(Customer customer) {
         getChargeResponse.setCustomer(customer);
         return this;
     }

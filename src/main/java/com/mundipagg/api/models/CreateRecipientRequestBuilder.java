@@ -58,10 +58,7 @@ public class CreateRecipientRequestBuilder {
         return this;
     }
 
-    /**
-     * Bank account
-     */
-    public CreateRecipientRequestBuilder defaultBankAccount(CreateBankAccountRequest defaultBankAccount) {
+    public CreateRecipientRequestBuilder defaultBankAccount(DefaultBankAccount1 defaultBankAccount) {
         createRecipientRequest.setDefaultBankAccount(defaultBankAccount);
         return this;
     }
@@ -74,10 +71,7 @@ public class CreateRecipientRequestBuilder {
         return this;
     }
 
-    /**
-     * Receiver Transfer Information
-     */
-    public CreateRecipientRequestBuilder transferSettings(CreateTransferSettingsRequest transferSettings) {
+    public CreateRecipientRequestBuilder transferSettings(GetTransferSettingsResponse transferSettings) {
         createRecipientRequest.setTransferSettings(transferSettings);
         return this;
     }

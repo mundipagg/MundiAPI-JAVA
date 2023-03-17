@@ -14,38 +14,38 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.ALWAYS)
 public class GetAnticipationLimitsResponse 
         implements java.io.Serializable {
-    private static final long serialVersionUID = 6798306282668259341L;
-    private GetAnticipationLimitResponse max;
-    private GetAnticipationLimitResponse min;
+    private static final long serialVersionUID = 6798452558780747815L;
+    private Max max;
+    private Min min;
     /** GETTER
-     * Max limit
+     * TODO: Write general description for this method
      */
     @JsonGetter("max")
-    public GetAnticipationLimitResponse getMax ( ) { 
+    public Max getMax ( ) { 
         return this.max;
     }
     
     /** SETTER
-     * Max limit
+     * TODO: Write general description for this method
      */
     @JsonSetter("max")
-    public void setMax (GetAnticipationLimitResponse value) { 
+    public void setMax (Max value) { 
         this.max = value;
     }
  
     /** GETTER
-     * Min limit
+     * TODO: Write general description for this method
      */
     @JsonGetter("min")
-    public GetAnticipationLimitResponse getMin ( ) { 
+    public Min getMin ( ) { 
         return this.min;
     }
     
     /** SETTER
-     * Min limit
+     * TODO: Write general description for this method
      */
     @JsonSetter("min")
-    public void setMin (GetAnticipationLimitResponse value) { 
+    public void setMin (Min value) { 
         this.min = value;
     }
  

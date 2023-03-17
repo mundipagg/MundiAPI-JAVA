@@ -47,18 +47,18 @@ public class InvoicesController extends BaseController {
      * Create an Invoice
      * @param    subscriptionId    Required parameter: Subscription Id
      * @param    cycleId    Required parameter: Cycle Id
-     * @param    request    Optional parameter: Example: 
      * @param    idempotencyKey    Optional parameter: Example: 
-     * @return    Returns the GetInvoiceResponse response from the API call 
+     * @param    body    Optional parameter: Example: 
+     * @return    Returns the SubscriptionsCyclesPayResponse response from the API call 
      */
-    public GetInvoiceResponse createInvoice(
+    public SubscriptionsCyclesPayResponse createInvoice(
                 final String subscriptionId,
                 final String cycleId,
-                final CreateInvoiceRequest request,
-                final String idempotencyKey
+                final String idempotencyKey,
+                final SubscriptionsCyclesPayRequest body
     ) throws Throwable {
 
-        HttpRequest _request = _buildCreateInvoiceRequest(subscriptionId, cycleId, request, idempotencyKey);
+        HttpRequest _request = _buildCreateInvoiceRequest(subscriptionId, cycleId, idempotencyKey, body);
         HttpResponse _response = getClientInstance().executeAsString(_request);
         HttpContext _context = new HttpContext(_request, _response);
 
@@ -69,22 +69,22 @@ public class InvoicesController extends BaseController {
      * Create an Invoice
      * @param    subscriptionId    Required parameter: Subscription Id
      * @param    cycleId    Required parameter: Cycle Id
-     * @param    request    Optional parameter: Example: 
      * @param    idempotencyKey    Optional parameter: Example: 
+     * @param    body    Optional parameter: Example: 
      */
     public void createInvoiceAsync(
                 final String subscriptionId,
                 final String cycleId,
-                final CreateInvoiceRequest request,
                 final String idempotencyKey,
-                final APICallBack<GetInvoiceResponse> callBack
+                final SubscriptionsCyclesPayRequest body,
+                final APICallBack<SubscriptionsCyclesPayResponse> callBack
     ) {
         Runnable _responseTask = new Runnable() {
             public void run() {
 
                 HttpRequest _request;
                 try {
-                    _request = _buildCreateInvoiceRequest(subscriptionId, cycleId, request, idempotencyKey);
+                    _request = _buildCreateInvoiceRequest(subscriptionId, cycleId, idempotencyKey, body);
                 } catch (Exception e) {
                     callBack.onFailure(null, e);
                     return;
@@ -94,7 +94,7 @@ public class InvoicesController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            GetInvoiceResponse returnValue = _handleCreateInvoiceResponse(_context);
+                            SubscriptionsCyclesPayResponse returnValue = _handleCreateInvoiceResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -119,8 +119,8 @@ public class InvoicesController extends BaseController {
     private HttpRequest _buildCreateInvoiceRequest(
                 final String subscriptionId,
                 final String cycleId,
-                final CreateInvoiceRequest request,
-                final String idempotencyKey) throws IOException, APIException {
+                final String idempotencyKey,
+                final SubscriptionsCyclesPayRequest body) throws IOException, APIException {
         //the base uri for api requests
         String _baseUri = Configuration.baseUri;
 
@@ -137,16 +137,16 @@ public class InvoicesController extends BaseController {
 
         //load all headers for the outgoing API request
         Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("Content-Type", "application/json");
         if (idempotencyKey != null) {
             _headers.put("idempotency-key", idempotencyKey);
         }
         _headers.put("user-agent", BaseController.userAgent);
         _headers.put("accept", "application/json");
-        _headers.put("content-type", "application/json");
 
 
         //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().postBody(_queryUrl, _headers, APIHelper.serialize(request),
+        HttpRequest _request = getClientInstance().postBody(_queryUrl, _headers, APIHelper.serialize(body),
                 Configuration.basicAuthUserName, Configuration.basicAuthPassword);
 
         // Invoke the callback before request if its not null
@@ -159,9 +159,9 @@ public class InvoicesController extends BaseController {
 
     /**
      * Processes the response for createInvoice
-     * @return An object of type GetInvoiceResponse
+     * @return An object of type SubscriptionsCyclesPayResponse
      */
-    private GetInvoiceResponse _handleCreateInvoiceResponse(HttpContext _context)
+    private SubscriptionsCyclesPayResponse _handleCreateInvoiceResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -170,23 +170,44 @@ public class InvoicesController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
         //extract result from the http response
         String _responseBody = ((HttpStringResponse)_response).getBody();
-        GetInvoiceResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<GetInvoiceResponse>(){});
+        SubscriptionsCyclesPayResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<SubscriptionsCyclesPayResponse>(){});
 
         return _result;
     }
 
     /**
-     * TODO: type endpoint description here
+     * GetPartialInvoice
      * @param    subscriptionId    Required parameter: Subscription Id
-     * @return    Returns the GetInvoiceResponse response from the API call 
+     * @return    Returns the SubscriptionsPartialInvoiceResponse response from the API call 
      */
-    public GetInvoiceResponse getPartialInvoice(
+    public SubscriptionsPartialInvoiceResponse getPartialInvoice(
                 final String subscriptionId
     ) throws Throwable {
 
@@ -198,12 +219,12 @@ public class InvoicesController extends BaseController {
     }
 
     /**
-     * TODO: type endpoint description here
+     * GetPartialInvoice
      * @param    subscriptionId    Required parameter: Subscription Id
      */
     public void getPartialInvoiceAsync(
                 final String subscriptionId,
-                final APICallBack<GetInvoiceResponse> callBack
+                final APICallBack<SubscriptionsPartialInvoiceResponse> callBack
     ) {
         Runnable _responseTask = new Runnable() {
             public void run() {
@@ -220,7 +241,7 @@ public class InvoicesController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            GetInvoiceResponse returnValue = _handleGetPartialInvoiceResponse(_context);
+                            SubscriptionsPartialInvoiceResponse returnValue = _handleGetPartialInvoiceResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -277,9 +298,9 @@ public class InvoicesController extends BaseController {
 
     /**
      * Processes the response for getPartialInvoice
-     * @return An object of type GetInvoiceResponse
+     * @return An object of type SubscriptionsPartialInvoiceResponse
      */
-    private GetInvoiceResponse _handleGetPartialInvoiceResponse(HttpContext _context)
+    private SubscriptionsPartialInvoiceResponse _handleGetPartialInvoiceResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -288,13 +309,34 @@ public class InvoicesController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
         //extract result from the http response
         String _responseBody = ((HttpStringResponse)_response).getBody();
-        GetInvoiceResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<GetInvoiceResponse>(){});
+        SubscriptionsPartialInvoiceResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<SubscriptionsPartialInvoiceResponse>(){});
 
         return _result;
     }
@@ -302,17 +344,17 @@ public class InvoicesController extends BaseController {
     /**
      * Updates the status from an invoice
      * @param    invoiceId    Required parameter: Invoice Id
-     * @param    request    Required parameter: Request for updating an invoice's status
+     * @param    body    Required parameter: Request for updating an invoice's status
      * @param    idempotencyKey    Optional parameter: Example: 
-     * @return    Returns the GetInvoiceResponse response from the API call 
+     * @return    Returns the InvoicesStatusResponse response from the API call 
      */
-    public GetInvoiceResponse updateInvoiceStatus(
+    public InvoicesStatusResponse updateInvoiceStatus(
                 final String invoiceId,
-                final UpdateInvoiceStatusRequest request,
+                final UpdateCurrentCycleStatusRequest body,
                 final String idempotencyKey
     ) throws Throwable {
 
-        HttpRequest _request = _buildUpdateInvoiceStatusRequest(invoiceId, request, idempotencyKey);
+        HttpRequest _request = _buildUpdateInvoiceStatusRequest(invoiceId, body, idempotencyKey);
         HttpResponse _response = getClientInstance().executeAsString(_request);
         HttpContext _context = new HttpContext(_request, _response);
 
@@ -322,21 +364,21 @@ public class InvoicesController extends BaseController {
     /**
      * Updates the status from an invoice
      * @param    invoiceId    Required parameter: Invoice Id
-     * @param    request    Required parameter: Request for updating an invoice's status
+     * @param    body    Required parameter: Request for updating an invoice's status
      * @param    idempotencyKey    Optional parameter: Example: 
      */
     public void updateInvoiceStatusAsync(
                 final String invoiceId,
-                final UpdateInvoiceStatusRequest request,
+                final UpdateCurrentCycleStatusRequest body,
                 final String idempotencyKey,
-                final APICallBack<GetInvoiceResponse> callBack
+                final APICallBack<InvoicesStatusResponse> callBack
     ) {
         Runnable _responseTask = new Runnable() {
             public void run() {
 
                 HttpRequest _request;
                 try {
-                    _request = _buildUpdateInvoiceStatusRequest(invoiceId, request, idempotencyKey);
+                    _request = _buildUpdateInvoiceStatusRequest(invoiceId, body, idempotencyKey);
                 } catch (Exception e) {
                     callBack.onFailure(null, e);
                     return;
@@ -346,7 +388,7 @@ public class InvoicesController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            GetInvoiceResponse returnValue = _handleUpdateInvoiceStatusResponse(_context);
+                            InvoicesStatusResponse returnValue = _handleUpdateInvoiceStatusResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -370,7 +412,7 @@ public class InvoicesController extends BaseController {
      */
     private HttpRequest _buildUpdateInvoiceStatusRequest(
                 final String invoiceId,
-                final UpdateInvoiceStatusRequest request,
+                final UpdateCurrentCycleStatusRequest body,
                 final String idempotencyKey) throws IOException, APIException {
         //the base uri for api requests
         String _baseUri = Configuration.baseUri;
@@ -387,16 +429,16 @@ public class InvoicesController extends BaseController {
 
         //load all headers for the outgoing API request
         Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("Content-Type", "application/json");
         if (idempotencyKey != null) {
             _headers.put("idempotency-key", idempotencyKey);
         }
         _headers.put("user-agent", BaseController.userAgent);
         _headers.put("accept", "application/json");
-        _headers.put("content-type", "application/json");
 
 
         //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().patchBody(_queryUrl, _headers, APIHelper.serialize(request),
+        HttpRequest _request = getClientInstance().patchBody(_queryUrl, _headers, APIHelper.serialize(body),
                 Configuration.basicAuthUserName, Configuration.basicAuthPassword);
 
         // Invoke the callback before request if its not null
@@ -409,9 +451,9 @@ public class InvoicesController extends BaseController {
 
     /**
      * Processes the response for updateInvoiceStatus
-     * @return An object of type GetInvoiceResponse
+     * @return An object of type InvoicesStatusResponse
      */
-    private GetInvoiceResponse _handleUpdateInvoiceStatusResponse(HttpContext _context)
+    private InvoicesStatusResponse _handleUpdateInvoiceStatusResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -420,13 +462,34 @@ public class InvoicesController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
         //extract result from the http response
         String _responseBody = ((HttpStringResponse)_response).getBody();
-        GetInvoiceResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<GetInvoiceResponse>(){});
+        InvoicesStatusResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<InvoicesStatusResponse>(){});
 
         return _result;
     }
@@ -434,9 +497,9 @@ public class InvoicesController extends BaseController {
     /**
      * Gets an invoice
      * @param    invoiceId    Required parameter: Invoice Id
-     * @return    Returns the GetInvoiceResponse response from the API call 
+     * @return    Returns the InvoicesResponse response from the API call 
      */
-    public GetInvoiceResponse getInvoice(
+    public InvoicesResponse getInvoice(
                 final String invoiceId
     ) throws Throwable {
 
@@ -453,7 +516,7 @@ public class InvoicesController extends BaseController {
      */
     public void getInvoiceAsync(
                 final String invoiceId,
-                final APICallBack<GetInvoiceResponse> callBack
+                final APICallBack<InvoicesResponse> callBack
     ) {
         Runnable _responseTask = new Runnable() {
             public void run() {
@@ -470,7 +533,7 @@ public class InvoicesController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            GetInvoiceResponse returnValue = _handleGetInvoiceResponse(_context);
+                            InvoicesResponse returnValue = _handleGetInvoiceResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -527,9 +590,9 @@ public class InvoicesController extends BaseController {
 
     /**
      * Processes the response for getInvoice
-     * @return An object of type GetInvoiceResponse
+     * @return An object of type InvoicesResponse
      */
-    private GetInvoiceResponse _handleGetInvoiceResponse(HttpContext _context)
+    private InvoicesResponse _handleGetInvoiceResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -538,55 +601,72 @@ public class InvoicesController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
         //extract result from the http response
         String _responseBody = ((HttpStringResponse)_response).getBody();
-        GetInvoiceResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<GetInvoiceResponse>(){});
+        InvoicesResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<InvoicesResponse>(){});
 
         return _result;
     }
 
     /**
-     * Updates the metadata from an invoice
-     * @param    invoiceId    Required parameter: The invoice id
-     * @param    request    Required parameter: Request for updating the invoice metadata
+     * Cancels an invoice
+     * @param    invoiceId    Required parameter: Invoice id
      * @param    idempotencyKey    Optional parameter: Example: 
-     * @return    Returns the GetInvoiceResponse response from the API call 
+     * @return    Returns the InvoicesResponse response from the API call 
      */
-    public GetInvoiceResponse updateInvoiceMetadata(
+    public InvoicesResponse cancelInvoice(
                 final String invoiceId,
-                final UpdateMetadataRequest request,
                 final String idempotencyKey
     ) throws Throwable {
 
-        HttpRequest _request = _buildUpdateInvoiceMetadataRequest(invoiceId, request, idempotencyKey);
+        HttpRequest _request = _buildCancelInvoiceRequest(invoiceId, idempotencyKey);
         HttpResponse _response = getClientInstance().executeAsString(_request);
         HttpContext _context = new HttpContext(_request, _response);
 
-        return _handleUpdateInvoiceMetadataResponse(_context);
+        return _handleCancelInvoiceResponse(_context);
     }
 
     /**
-     * Updates the metadata from an invoice
-     * @param    invoiceId    Required parameter: The invoice id
-     * @param    request    Required parameter: Request for updating the invoice metadata
+     * Cancels an invoice
+     * @param    invoiceId    Required parameter: Invoice id
      * @param    idempotencyKey    Optional parameter: Example: 
      */
-    public void updateInvoiceMetadataAsync(
+    public void cancelInvoiceAsync(
                 final String invoiceId,
-                final UpdateMetadataRequest request,
                 final String idempotencyKey,
-                final APICallBack<GetInvoiceResponse> callBack
+                final APICallBack<InvoicesResponse> callBack
     ) {
         Runnable _responseTask = new Runnable() {
             public void run() {
 
                 HttpRequest _request;
                 try {
-                    _request = _buildUpdateInvoiceMetadataRequest(invoiceId, request, idempotencyKey);
+                    _request = _buildCancelInvoiceRequest(invoiceId, idempotencyKey);
                 } catch (Exception e) {
                     callBack.onFailure(null, e);
                     return;
@@ -596,7 +676,158 @@ public class InvoicesController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            GetInvoiceResponse returnValue = _handleUpdateInvoiceMetadataResponse(_context);
+                            InvoicesResponse returnValue = _handleCancelInvoiceResponse(_context);
+                            callBack.onSuccess(_context, returnValue);
+                        } catch (Exception e) {
+                            callBack.onFailure(_context, e);
+                        }
+                    }
+
+                    public void onFailure(HttpContext _context, Throwable _exception) {
+                        // Let the caller know of the failure
+                        callBack.onFailure(_context, _exception);
+                    }
+                });
+            }
+        };
+
+        // Execute async using thread pool
+        APIHelper.getScheduler().execute(_responseTask);
+    }
+
+    /**
+     * Builds the HttpRequest object for cancelInvoice
+     */
+    private HttpRequest _buildCancelInvoiceRequest(
+                final String invoiceId,
+                final String idempotencyKey) throws IOException, APIException {
+        //the base uri for api requests
+        String _baseUri = Configuration.baseUri;
+
+        //prepare query string for API call
+        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/invoices/{invoice_id}");
+
+        //process template parameters
+        Map<String, Object> _templateParameters = new HashMap<String, Object>();
+        _templateParameters.put("invoice_id", invoiceId);
+        APIHelper.appendUrlWithTemplateParameters(_queryBuilder, _templateParameters);
+        //validate and preprocess url
+        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
+
+        //load all headers for the outgoing API request
+        Map<String, String> _headers = new HashMap<String, String>();
+        if (idempotencyKey != null) {
+            _headers.put("idempotency-key", idempotencyKey);
+        }
+        _headers.put("user-agent", BaseController.userAgent);
+        _headers.put("accept", "application/json");
+
+
+        //prepare and invoke the API call request to fetch the response
+        HttpRequest _request = getClientInstance().delete(_queryUrl, _headers, null,
+                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
+
+        // Invoke the callback before request if its not null
+        if (getHttpCallBack() != null) {
+            getHttpCallBack().OnBeforeRequest(_request);
+        }
+
+        return _request;
+    }
+
+    /**
+     * Processes the response for cancelInvoice
+     * @return An object of type InvoicesResponse
+     */
+    private InvoicesResponse _handleCancelInvoiceResponse(HttpContext _context)
+            throws APIException, IOException {
+        HttpResponse _response = _context.getResponse();
+
+        //invoke the callback after response if its not null
+        if (getHttpCallBack() != null) {
+            getHttpCallBack().OnAfterResponse(_context);
+        }
+
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
+        //handle errors defined at the API level
+        validateResponse(_response, _context);
+
+        //extract result from the http response
+        String _responseBody = ((HttpStringResponse)_response).getBody();
+        InvoicesResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<InvoicesResponse>(){});
+
+        return _result;
+    }
+
+    /**
+     * Updates the metadata from an invoice
+     * @param    invoiceId    Required parameter: The invoice id
+     * @param    body    Required parameter: Request for updating the invoice metadata
+     * @param    idempotencyKey    Optional parameter: Example: 
+     * @return    Returns the InvoicesMetadataResponse response from the API call 
+     */
+    public InvoicesMetadataResponse updateInvoiceMetadata(
+                final String invoiceId,
+                final InvoicesMetadataRequest body,
+                final String idempotencyKey
+    ) throws Throwable {
+
+        HttpRequest _request = _buildUpdateInvoiceMetadataRequest(invoiceId, body, idempotencyKey);
+        HttpResponse _response = getClientInstance().executeAsString(_request);
+        HttpContext _context = new HttpContext(_request, _response);
+
+        return _handleUpdateInvoiceMetadataResponse(_context);
+    }
+
+    /**
+     * Updates the metadata from an invoice
+     * @param    invoiceId    Required parameter: The invoice id
+     * @param    body    Required parameter: Request for updating the invoice metadata
+     * @param    idempotencyKey    Optional parameter: Example: 
+     */
+    public void updateInvoiceMetadataAsync(
+                final String invoiceId,
+                final InvoicesMetadataRequest body,
+                final String idempotencyKey,
+                final APICallBack<InvoicesMetadataResponse> callBack
+    ) {
+        Runnable _responseTask = new Runnable() {
+            public void run() {
+
+                HttpRequest _request;
+                try {
+                    _request = _buildUpdateInvoiceMetadataRequest(invoiceId, body, idempotencyKey);
+                } catch (Exception e) {
+                    callBack.onFailure(null, e);
+                    return;
+                }
+
+                // Invoke request and get response
+                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
+                    public void onSuccess(HttpContext _context, HttpResponse _response) {
+                        try {
+                            InvoicesMetadataResponse returnValue = _handleUpdateInvoiceMetadataResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -620,7 +851,7 @@ public class InvoicesController extends BaseController {
      */
     private HttpRequest _buildUpdateInvoiceMetadataRequest(
                 final String invoiceId,
-                final UpdateMetadataRequest request,
+                final InvoicesMetadataRequest body,
                 final String idempotencyKey) throws IOException, APIException {
         //the base uri for api requests
         String _baseUri = Configuration.baseUri;
@@ -637,16 +868,16 @@ public class InvoicesController extends BaseController {
 
         //load all headers for the outgoing API request
         Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("Content-Type", "application/json");
         if (idempotencyKey != null) {
             _headers.put("idempotency-key", idempotencyKey);
         }
         _headers.put("user-agent", BaseController.userAgent);
         _headers.put("accept", "application/json");
-        _headers.put("content-type", "application/json");
 
 
         //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().patchBody(_queryUrl, _headers, APIHelper.serialize(request),
+        HttpRequest _request = getClientInstance().patchBody(_queryUrl, _headers, APIHelper.serialize(body),
                 Configuration.basicAuthUserName, Configuration.basicAuthPassword);
 
         // Invoke the callback before request if its not null
@@ -659,9 +890,9 @@ public class InvoicesController extends BaseController {
 
     /**
      * Processes the response for updateInvoiceMetadata
-     * @return An object of type GetInvoiceResponse
+     * @return An object of type InvoicesMetadataResponse
      */
-    private GetInvoiceResponse _handleUpdateInvoiceMetadataResponse(HttpContext _context)
+    private InvoicesMetadataResponse _handleUpdateInvoiceMetadataResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -670,13 +901,34 @@ public class InvoicesController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
         //extract result from the http response
         String _responseBody = ((HttpStringResponse)_response).getBody();
-        GetInvoiceResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<GetInvoiceResponse>(){});
+        InvoicesMetadataResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<InvoicesMetadataResponse>(){});
 
         return _result;
     }
@@ -694,9 +946,9 @@ public class InvoicesController extends BaseController {
      * @param    dueSince    Optional parameter: Filter for Invoice's due date start range
      * @param    dueUntil    Optional parameter: Filter for Invoice's due date end range
      * @param    customerDocument    Optional parameter: Fillter for invoice's document
-     * @return    Returns the ListInvoicesResponse response from the API call 
+     * @return    Returns the InvoicesResponse2 response from the API call 
      */
-    public ListInvoicesResponse getInvoices(
+    public InvoicesResponse2 getInvoices(
                 final Integer page,
                 final Integer size,
                 final String code,
@@ -743,7 +995,7 @@ public class InvoicesController extends BaseController {
                 final DateTime dueSince,
                 final DateTime dueUntil,
                 final String customerDocument,
-                final APICallBack<ListInvoicesResponse> callBack
+                final APICallBack<InvoicesResponse2> callBack
     ) {
         Runnable _responseTask = new Runnable() {
             public void run() {
@@ -760,7 +1012,7 @@ public class InvoicesController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            ListInvoicesResponse returnValue = _handleGetInvoicesResponse(_context);
+                            InvoicesResponse2 returnValue = _handleGetInvoicesResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -859,9 +1111,9 @@ public class InvoicesController extends BaseController {
 
     /**
      * Processes the response for getInvoices
-     * @return An object of type ListInvoicesResponse
+     * @return An object of type InvoicesResponse2
      */
-    private ListInvoicesResponse _handleGetInvoicesResponse(HttpContext _context)
+    private InvoicesResponse2 _handleGetInvoicesResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -870,139 +1122,34 @@ public class InvoicesController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
         //extract result from the http response
         String _responseBody = ((HttpStringResponse)_response).getBody();
-        ListInvoicesResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<ListInvoicesResponse>(){});
-
-        return _result;
-    }
-
-    /**
-     * Cancels an invoice
-     * @param    invoiceId    Required parameter: Invoice id
-     * @param    idempotencyKey    Optional parameter: Example: 
-     * @return    Returns the GetInvoiceResponse response from the API call 
-     */
-    public GetInvoiceResponse cancelInvoice(
-                final String invoiceId,
-                final String idempotencyKey
-    ) throws Throwable {
-
-        HttpRequest _request = _buildCancelInvoiceRequest(invoiceId, idempotencyKey);
-        HttpResponse _response = getClientInstance().executeAsString(_request);
-        HttpContext _context = new HttpContext(_request, _response);
-
-        return _handleCancelInvoiceResponse(_context);
-    }
-
-    /**
-     * Cancels an invoice
-     * @param    invoiceId    Required parameter: Invoice id
-     * @param    idempotencyKey    Optional parameter: Example: 
-     */
-    public void cancelInvoiceAsync(
-                final String invoiceId,
-                final String idempotencyKey,
-                final APICallBack<GetInvoiceResponse> callBack
-    ) {
-        Runnable _responseTask = new Runnable() {
-            public void run() {
-
-                HttpRequest _request;
-                try {
-                    _request = _buildCancelInvoiceRequest(invoiceId, idempotencyKey);
-                } catch (Exception e) {
-                    callBack.onFailure(null, e);
-                    return;
-                }
-
-                // Invoke request and get response
-                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
-                    public void onSuccess(HttpContext _context, HttpResponse _response) {
-                        try {
-                            GetInvoiceResponse returnValue = _handleCancelInvoiceResponse(_context);
-                            callBack.onSuccess(_context, returnValue);
-                        } catch (Exception e) {
-                            callBack.onFailure(_context, e);
-                        }
-                    }
-
-                    public void onFailure(HttpContext _context, Throwable _exception) {
-                        // Let the caller know of the failure
-                        callBack.onFailure(_context, _exception);
-                    }
-                });
-            }
-        };
-
-        // Execute async using thread pool
-        APIHelper.getScheduler().execute(_responseTask);
-    }
-
-    /**
-     * Builds the HttpRequest object for cancelInvoice
-     */
-    private HttpRequest _buildCancelInvoiceRequest(
-                final String invoiceId,
-                final String idempotencyKey) throws IOException, APIException {
-        //the base uri for api requests
-        String _baseUri = Configuration.baseUri;
-
-        //prepare query string for API call
-        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/invoices/{invoice_id}");
-
-        //process template parameters
-        Map<String, Object> _templateParameters = new HashMap<String, Object>();
-        _templateParameters.put("invoice_id", invoiceId);
-        APIHelper.appendUrlWithTemplateParameters(_queryBuilder, _templateParameters);
-        //validate and preprocess url
-        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
-
-        //load all headers for the outgoing API request
-        Map<String, String> _headers = new HashMap<String, String>();
-        if (idempotencyKey != null) {
-            _headers.put("idempotency-key", idempotencyKey);
-        }
-        _headers.put("user-agent", BaseController.userAgent);
-        _headers.put("accept", "application/json");
-
-
-        //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().delete(_queryUrl, _headers, null,
-                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
-
-        // Invoke the callback before request if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnBeforeRequest(_request);
-        }
-
-        return _request;
-    }
-
-    /**
-     * Processes the response for cancelInvoice
-     * @return An object of type GetInvoiceResponse
-     */
-    private GetInvoiceResponse _handleCancelInvoiceResponse(HttpContext _context)
-            throws APIException, IOException {
-        HttpResponse _response = _context.getResponse();
-
-        //invoke the callback after response if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnAfterResponse(_context);
-        }
-
-        //handle errors defined at the API level
-        validateResponse(_response, _context);
-
-        //extract result from the http response
-        String _responseBody = ((HttpStringResponse)_response).getBody();
-        GetInvoiceResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<GetInvoiceResponse>(){});
+        InvoicesResponse2 _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<InvoicesResponse2>(){});
 
         return _result;
     }

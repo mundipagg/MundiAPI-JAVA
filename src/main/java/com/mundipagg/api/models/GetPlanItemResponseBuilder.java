@@ -44,7 +44,7 @@ public class GetPlanItemResponseBuilder {
         return this;
     }
 
-    public GetPlanItemResponseBuilder pricingScheme(GetPricingSchemeResponse pricingScheme) {
+    public GetPlanItemResponseBuilder pricingScheme(PricingScheme pricingScheme) {
         getPlanItemResponse.setPricingScheme(pricingScheme);
         return this;
     }
@@ -54,7 +54,7 @@ public class GetPlanItemResponseBuilder {
         return this;
     }
 
-    public GetPlanItemResponseBuilder plan(GetPlanResponse plan) {
+    public GetPlanItemResponseBuilder plan(Plan plan) {
         getPlanItemResponse.setPlan(plan);
         return this;
     }

@@ -14,10 +14,10 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.ALWAYS)
 public class CreateApplePayRequest 
         implements java.io.Serializable {
-    private static final long serialVersionUID = -386434762009498254L;
+    private static final long serialVersionUID = -1759501858328986767L;
     private String version;
     private String data;
-    private CreateApplePayHeaderRequest header;
+    private Header header;
     private String signature;
     private String merchantIdentifier;
     /** GETTER
@@ -53,18 +53,18 @@ public class CreateApplePayRequest
     }
  
     /** GETTER
-     * The ApplePay header request
+     * TODO: Write general description for this method
      */
     @JsonGetter("header")
-    public CreateApplePayHeaderRequest getHeader ( ) { 
+    public Header getHeader ( ) { 
         return this.header;
     }
     
     /** SETTER
-     * The ApplePay header request
+     * TODO: Write general description for this method
      */
     @JsonSetter("header")
-    public void setHeader (CreateApplePayHeaderRequest value) { 
+    public void setHeader (Header value) { 
         this.header = value;
     }
  

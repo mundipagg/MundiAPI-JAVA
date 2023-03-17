@@ -50,10 +50,7 @@ public class CreateCustomerRequestBuilder {
         return this;
     }
 
-    /**
-     * The customer's address
-     */
-    public CreateCustomerRequestBuilder address(CreateAddressRequest address) {
+    public CreateCustomerRequestBuilder address(Address1 address) {
         createCustomerRequest.setAddress(address);
         return this;
     }

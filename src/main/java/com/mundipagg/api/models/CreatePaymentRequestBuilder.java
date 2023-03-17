@@ -26,26 +26,17 @@ public class CreatePaymentRequestBuilder {
         return this;
     }
 
-    /**
-     * Settings for credit card payment
-     */
-    public CreatePaymentRequestBuilder creditCard(CreateCreditCardPaymentRequest creditCard) {
+    public CreatePaymentRequestBuilder creditCard(CreditCard1 creditCard) {
         createPaymentRequest.setCreditCard(creditCard);
         return this;
     }
 
-    /**
-     * Settings for debit card payment
-     */
-    public CreatePaymentRequestBuilder debitCard(CreateDebitCardPaymentRequest debitCard) {
+    public CreatePaymentRequestBuilder debitCard(DebitCard1 debitCard) {
         createPaymentRequest.setDebitCard(debitCard);
         return this;
     }
 
-    /**
-     * Settings for boleto payment
-     */
-    public CreatePaymentRequestBuilder boleto(CreateBoletoPaymentRequest boleto) {
+    public CreatePaymentRequestBuilder boleto(Boleto1 boleto) {
         createPaymentRequest.setBoleto(boleto);
         return this;
     }
@@ -58,10 +49,7 @@ public class CreatePaymentRequestBuilder {
         return this;
     }
 
-    /**
-     * Settings for voucher payment
-     */
-    public CreatePaymentRequestBuilder voucher(CreateVoucherPaymentRequest voucher) {
+    public CreatePaymentRequestBuilder voucher(Voucher voucher) {
         createPaymentRequest.setVoucher(voucher);
         return this;
     }
@@ -74,10 +62,7 @@ public class CreatePaymentRequestBuilder {
         return this;
     }
 
-    /**
-     * Settings for bank transfer payment
-     */
-    public CreatePaymentRequestBuilder bankTransfer(CreateBankTransferPaymentRequest bankTransfer) {
+    public CreatePaymentRequestBuilder bankTransfer(BankTransfer1 bankTransfer) {
         createPaymentRequest.setBankTransfer(bankTransfer);
         return this;
     }
@@ -98,10 +83,7 @@ public class CreatePaymentRequestBuilder {
         return this;
     }
 
-    /**
-     * Settings for checkout payment
-     */
-    public CreatePaymentRequestBuilder checkout(CreateCheckoutPaymentRequest checkout) {
+    public CreatePaymentRequestBuilder checkout(Checkout checkout) {
         createPaymentRequest.setCheckout(checkout);
         return this;
     }
@@ -114,10 +96,7 @@ public class CreatePaymentRequestBuilder {
         return this;
     }
 
-    /**
-     * Customer
-     */
-    public CreatePaymentRequestBuilder customer(CreateCustomerRequest customer) {
+    public CreatePaymentRequestBuilder customer(Customer8 customer) {
         createPaymentRequest.setCustomer(customer);
         return this;
     }
@@ -130,26 +109,17 @@ public class CreatePaymentRequestBuilder {
         return this;
     }
 
-    /**
-     * Settings for cash payment
-     */
     public CreatePaymentRequestBuilder cash(CreateCashPaymentRequest cash) {
         createPaymentRequest.setCash(cash);
         return this;
     }
 
-    /**
-     * Settings for private label payment
-     */
-    public CreatePaymentRequestBuilder privateLabel(CreatePrivateLabelPaymentRequest privateLabel) {
+    public CreatePaymentRequestBuilder privateLabel(PrivateLabel privateLabel) {
         createPaymentRequest.setPrivateLabel(privateLabel);
         return this;
     }
 
-    /**
-     * Settings for pix payment
-     */
-    public CreatePaymentRequestBuilder pix(CreatePixPaymentRequest pix) {
+    public CreatePaymentRequestBuilder pix(Pix pix) {
         createPaymentRequest.setPix(pix);
         return this;
     }

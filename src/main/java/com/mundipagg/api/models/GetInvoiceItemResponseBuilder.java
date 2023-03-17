@@ -28,12 +28,12 @@ public class GetInvoiceItemResponseBuilder {
         return this;
     }
 
-    public GetInvoiceItemResponseBuilder pricingScheme(GetPricingSchemeResponse pricingScheme) {
+    public GetInvoiceItemResponseBuilder pricingScheme(PricingScheme pricingScheme) {
         getInvoiceItemResponse.setPricingScheme(pricingScheme);
         return this;
     }
 
-    public GetInvoiceItemResponseBuilder priceBracket(GetPriceBracketResponse priceBracket) {
+    public GetInvoiceItemResponseBuilder priceBracket(PriceBracket priceBracket) {
         getInvoiceItemResponse.setPriceBracket(priceBracket);
         return this;
     }

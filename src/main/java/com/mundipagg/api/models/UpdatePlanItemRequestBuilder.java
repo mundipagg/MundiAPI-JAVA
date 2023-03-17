@@ -42,10 +42,7 @@ public class UpdatePlanItemRequestBuilder {
         return this;
     }
 
-    /**
-     * Pricing scheme
-     */
-    public UpdatePlanItemRequestBuilder pricingScheme(UpdatePricingSchemeRequest pricingScheme) {
+    public UpdatePlanItemRequestBuilder pricingScheme(PricingScheme3 pricingScheme) {
         updatePlanItemRequest.setPricingScheme(pricingScheme);
         return this;
     }

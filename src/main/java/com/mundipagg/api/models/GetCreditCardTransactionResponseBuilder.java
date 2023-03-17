@@ -75,10 +75,7 @@ public class GetCreditCardTransactionResponseBuilder
         return this;
     }
 
-    /**
-     * Card data
-     */
-    public GetCreditCardTransactionResponseBuilder card(GetCardResponse card) {
+    public GetCreditCardTransactionResponseBuilder card(Card card) {
         getCreditCardTransactionResponse.setCard(card);
         return this;
     }

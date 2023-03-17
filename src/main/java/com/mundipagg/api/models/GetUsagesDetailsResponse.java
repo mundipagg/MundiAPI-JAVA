@@ -14,11 +14,11 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.ALWAYS)
 public class GetUsagesDetailsResponse 
         implements java.io.Serializable {
-    private static final long serialVersionUID = -2479942178924063525L;
+    private static final long serialVersionUID = 5396469850550889461L;
     private String subscriptionId;
     private int totalAmount;
-    private GetPeriodResponse period;
-    private ListUsagesDetailsResponse usages;
+    private Period period;
+    private Usages usages;
     private Integer totalDiscount;
     private Integer totalIncrement;
     /** GETTER
@@ -54,34 +54,34 @@ public class GetUsagesDetailsResponse
     }
  
     /** GETTER
-     * Period Details
+     * TODO: Write general description for this method
      */
     @JsonGetter("Period")
-    public GetPeriodResponse getPeriod ( ) { 
+    public Period getPeriod ( ) { 
         return this.period;
     }
     
     /** SETTER
-     * Period Details
+     * TODO: Write general description for this method
      */
     @JsonSetter("Period")
-    public void setPeriod (GetPeriodResponse value) { 
+    public void setPeriod (Period value) { 
         this.period = value;
     }
  
     /** GETTER
-     * Usages Details
+     * TODO: Write general description for this method
      */
     @JsonGetter("Usages")
-    public ListUsagesDetailsResponse getUsages ( ) { 
+    public Usages getUsages ( ) { 
         return this.usages;
     }
     
     /** SETTER
-     * Usages Details
+     * TODO: Write general description for this method
      */
     @JsonSetter("Usages")
-    public void setUsages (ListUsagesDetailsResponse value) { 
+    public void setUsages (Usages value) { 
         this.usages = value;
     }
  

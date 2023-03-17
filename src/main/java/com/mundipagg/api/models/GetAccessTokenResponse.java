@@ -18,12 +18,12 @@ import org.joda.time.DateTime;
 @JsonInclude(Include.ALWAYS)
 public class GetAccessTokenResponse 
         implements java.io.Serializable {
-    private static final long serialVersionUID = 4206722850369089623L;
+    private static final long serialVersionUID = 4206722849002609122L;
     private String id;
     private String code;
     private String status;
     private DateTime createdAt;
-    private GetCustomerResponse customer;
+    private Customer customer;
     /** GETTER
      * TODO: Write general description for this method
      */
@@ -94,7 +94,7 @@ public class GetAccessTokenResponse
      * TODO: Write general description for this method
      */
     @JsonGetter("customer")
-    public GetCustomerResponse getCustomer ( ) { 
+    public Customer getCustomer ( ) { 
         return this.customer;
     }
     
@@ -102,7 +102,7 @@ public class GetAccessTokenResponse
      * TODO: Write general description for this method
      */
     @JsonSetter("customer")
-    public void setCustomer (GetCustomerResponse value) { 
+    public void setCustomer (Customer value) { 
         this.customer = value;
     }
  

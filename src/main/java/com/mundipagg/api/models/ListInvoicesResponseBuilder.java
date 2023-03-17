@@ -26,10 +26,7 @@ public class ListInvoicesResponseBuilder {
         return this;
     }
 
-    /**
-     * Paging object
-     */
-    public ListInvoicesResponseBuilder paging(PagingResponse paging) {
+    public ListInvoicesResponseBuilder paging(Paging paging) {
         listInvoicesResponse.setPaging(paging);
         return this;
     }

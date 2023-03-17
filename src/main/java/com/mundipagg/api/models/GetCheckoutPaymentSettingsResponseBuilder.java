@@ -50,10 +50,7 @@ public class GetCheckoutPaymentSettingsResponseBuilder {
         return this;
     }
 
-    /**
-     * Customer
-     */
-    public GetCheckoutPaymentSettingsResponseBuilder customer(GetCustomerResponse customer) {
+    public GetCheckoutPaymentSettingsResponseBuilder customer(Customer customer) {
         getCheckoutPaymentSettingsResponse.setCustomer(customer);
         return this;
     }

@@ -14,10 +14,10 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.ALWAYS)
 public class CreateGooglePayRequest 
         implements java.io.Serializable {
-    private static final long serialVersionUID = 183460458106921865L;
+    private static final long serialVersionUID = 2452217290450103077L;
     private String version;
     private String data;
-    private CreateGooglePayHeaderRequest header;
+    private Header1 header;
     private String signature;
     private String merchantIdentifier;
     /** GETTER
@@ -53,18 +53,18 @@ public class CreateGooglePayRequest
     }
  
     /** GETTER
-     * The GooglePay header request
+     * TODO: Write general description for this method
      */
     @JsonGetter("header")
-    public CreateGooglePayHeaderRequest getHeader ( ) { 
+    public Header1 getHeader ( ) { 
         return this.header;
     }
     
     /** SETTER
-     * The GooglePay header request
+     * TODO: Write general description for this method
      */
     @JsonSetter("header")
-    public void setHeader (CreateGooglePayHeaderRequest value) { 
+    public void setHeader (Header1 value) { 
         this.header = value;
     }
  

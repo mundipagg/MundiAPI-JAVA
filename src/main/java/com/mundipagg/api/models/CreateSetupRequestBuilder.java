@@ -34,10 +34,7 @@ public class CreateSetupRequestBuilder {
         return this;
     }
 
-    /**
-     * Payment data
-     */
-    public CreateSetupRequestBuilder payment(CreatePaymentRequest payment) {
+    public CreateSetupRequestBuilder payment(Payment payment) {
         createSetupRequest.setPayment(payment);
         return this;
     }

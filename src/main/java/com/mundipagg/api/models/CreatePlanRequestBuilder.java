@@ -114,10 +114,7 @@ public class CreatePlanRequestBuilder {
         return this;
     }
 
-    /**
-     * Plan's pricing scheme
-     */
-    public CreatePlanRequestBuilder pricingScheme(CreatePricingSchemeRequest pricingScheme) {
+    public CreatePlanRequestBuilder pricingScheme(PricingScheme4 pricingScheme) {
         createPlanRequest.setPricingScheme(pricingScheme);
         return this;
     }

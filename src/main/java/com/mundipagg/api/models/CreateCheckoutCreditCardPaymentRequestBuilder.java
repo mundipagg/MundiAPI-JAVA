@@ -34,10 +34,7 @@ public class CreateCheckoutCreditCardPaymentRequestBuilder {
         return this;
     }
 
-    /**
-     * Creates payment authentication
-     */
-    public CreateCheckoutCreditCardPaymentRequestBuilder authentication(CreatePaymentAuthenticationRequest authentication) {
+    public CreateCheckoutCreditCardPaymentRequestBuilder authentication(Authentication2 authentication) {
         createCheckoutCreditCardPaymentRequest.setAuthentication(authentication);
         return this;
     }

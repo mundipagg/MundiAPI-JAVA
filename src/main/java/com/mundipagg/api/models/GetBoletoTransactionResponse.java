@@ -27,14 +27,14 @@ import org.joda.time.DateTime;
 @JsonInclude(Include.ALWAYS)
 public class GetBoletoTransactionResponse 
         extends GetTransactionResponse {
-    private static final long serialVersionUID = -107344441087808346L;
+    private static final long serialVersionUID = -445081920471295286L;
     private String url;
     private String barcode;
     private String nossoNumero;
     private String bank;
     private String documentNumber;
     private String instructions;
-    private GetBillingAddressResponse billingAddress;
+    private BillingAddress billingAddress;
     private DateTime dueAt;
     private String qrCode;
     private String line;
@@ -144,7 +144,7 @@ public class GetBoletoTransactionResponse
      * TODO: Write general description for this method
      */
     @JsonGetter("billing_address")
-    public GetBillingAddressResponse getBillingAddress ( ) { 
+    public BillingAddress getBillingAddress ( ) { 
         return this.billingAddress;
     }
     
@@ -152,7 +152,7 @@ public class GetBoletoTransactionResponse
      * TODO: Write general description for this method
      */
     @JsonSetter("billing_address")
-    public void setBillingAddress (GetBillingAddressResponse value) { 
+    public void setBillingAddress (BillingAddress value) { 
         this.billingAddress = value;
     }
  

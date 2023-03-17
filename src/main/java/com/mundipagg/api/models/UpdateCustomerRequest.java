@@ -14,12 +14,12 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.ALWAYS)
 public class UpdateCustomerRequest 
         implements java.io.Serializable {
-    private static final long serialVersionUID = 3419136958063508335L;
+    private static final long serialVersionUID = 7913080588350069007L;
     private String name;
     private String email;
     private String document;
     private String type;
-    private CreateAddressRequest address;
+    private Address1 address;
     private LinkedHashMap<String, String> metadata;
     private CreatePhonesRequest phones;
     private String code;
@@ -90,18 +90,18 @@ public class UpdateCustomerRequest
     }
  
     /** GETTER
-     * Address
+     * TODO: Write general description for this method
      */
     @JsonGetter("address")
-    public CreateAddressRequest getAddress ( ) { 
+    public Address1 getAddress ( ) { 
         return this.address;
     }
     
     /** SETTER
-     * Address
+     * TODO: Write general description for this method
      */
     @JsonSetter("address")
-    public void setAddress (CreateAddressRequest value) { 
+    public void setAddress (Address1 value) { 
         this.address = value;
     }
  

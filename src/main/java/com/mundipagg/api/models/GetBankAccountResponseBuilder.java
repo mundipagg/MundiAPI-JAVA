@@ -123,10 +123,7 @@ public class GetBankAccountResponseBuilder {
         return this;
     }
 
-    /**
-     * Recipient
-     */
-    public GetBankAccountResponseBuilder recipient(GetRecipientResponse recipient) {
+    public GetBankAccountResponseBuilder recipient(Recipient recipient) {
         getBankAccountResponse.setRecipient(recipient);
         return this;
     }

@@ -42,10 +42,7 @@ public class CreateVoucherPaymentRequestBuilder {
         return this;
     }
 
-    /**
-     * Card info
-     */
-    public CreateVoucherPaymentRequestBuilder card(CreateCardRequest card) {
+    public CreateVoucherPaymentRequestBuilder card(Card1 card) {
         createVoucherPaymentRequest.setCard(card);
         return this;
     }

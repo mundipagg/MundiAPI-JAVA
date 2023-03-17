@@ -46,17 +46,17 @@ public class RecipientsController extends BaseController {
     /**
      * Updates recipient metadata
      * @param    recipientId    Required parameter: Recipient id
-     * @param    request    Required parameter: Metadata
+     * @param    body    Required parameter: Metadata
      * @param    idempotencyKey    Optional parameter: Example: 
-     * @return    Returns the GetRecipientResponse response from the API call 
+     * @return    Returns the RecipientsMetadataResponse response from the API call 
      */
-    public GetRecipientResponse updateRecipientMetadata(
+    public RecipientsMetadataResponse updateRecipientMetadata(
                 final String recipientId,
-                final UpdateMetadataRequest request,
+                final RecipientsMetadataRequest body,
                 final String idempotencyKey
     ) throws Throwable {
 
-        HttpRequest _request = _buildUpdateRecipientMetadataRequest(recipientId, request, idempotencyKey);
+        HttpRequest _request = _buildUpdateRecipientMetadataRequest(recipientId, body, idempotencyKey);
         HttpResponse _response = getClientInstance().executeAsString(_request);
         HttpContext _context = new HttpContext(_request, _response);
 
@@ -66,21 +66,21 @@ public class RecipientsController extends BaseController {
     /**
      * Updates recipient metadata
      * @param    recipientId    Required parameter: Recipient id
-     * @param    request    Required parameter: Metadata
+     * @param    body    Required parameter: Metadata
      * @param    idempotencyKey    Optional parameter: Example: 
      */
     public void updateRecipientMetadataAsync(
                 final String recipientId,
-                final UpdateMetadataRequest request,
+                final RecipientsMetadataRequest body,
                 final String idempotencyKey,
-                final APICallBack<GetRecipientResponse> callBack
+                final APICallBack<RecipientsMetadataResponse> callBack
     ) {
         Runnable _responseTask = new Runnable() {
             public void run() {
 
                 HttpRequest _request;
                 try {
-                    _request = _buildUpdateRecipientMetadataRequest(recipientId, request, idempotencyKey);
+                    _request = _buildUpdateRecipientMetadataRequest(recipientId, body, idempotencyKey);
                 } catch (Exception e) {
                     callBack.onFailure(null, e);
                     return;
@@ -90,7 +90,7 @@ public class RecipientsController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            GetRecipientResponse returnValue = _handleUpdateRecipientMetadataResponse(_context);
+                            RecipientsMetadataResponse returnValue = _handleUpdateRecipientMetadataResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -114,7 +114,7 @@ public class RecipientsController extends BaseController {
      */
     private HttpRequest _buildUpdateRecipientMetadataRequest(
                 final String recipientId,
-                final UpdateMetadataRequest request,
+                final RecipientsMetadataRequest body,
                 final String idempotencyKey) throws IOException, APIException {
         //the base uri for api requests
         String _baseUri = Configuration.baseUri;
@@ -131,16 +131,16 @@ public class RecipientsController extends BaseController {
 
         //load all headers for the outgoing API request
         Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("Content-Type", "application/json");
         if (idempotencyKey != null) {
             _headers.put("idempotency-key", idempotencyKey);
         }
         _headers.put("user-agent", BaseController.userAgent);
         _headers.put("accept", "application/json");
-        _headers.put("content-type", "application/json");
 
 
         //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().patchBody(_queryUrl, _headers, APIHelper.serialize(request),
+        HttpRequest _request = getClientInstance().patchBody(_queryUrl, _headers, APIHelper.serialize(body),
                 Configuration.basicAuthUserName, Configuration.basicAuthPassword);
 
         // Invoke the callback before request if its not null
@@ -153,9 +153,9 @@ public class RecipientsController extends BaseController {
 
     /**
      * Processes the response for updateRecipientMetadata
-     * @return An object of type GetRecipientResponse
+     * @return An object of type RecipientsMetadataResponse
      */
-    private GetRecipientResponse _handleUpdateRecipientMetadataResponse(HttpContext _context)
+    private RecipientsMetadataResponse _handleUpdateRecipientMetadataResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -164,31 +164,52 @@ public class RecipientsController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
         //extract result from the http response
         String _responseBody = ((HttpStringResponse)_response).getBody();
-        GetRecipientResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<GetRecipientResponse>(){});
+        RecipientsMetadataResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<RecipientsMetadataResponse>(){});
 
         return _result;
     }
 
     /**
-     * TODO: type endpoint description here
+     * UpdateRecipientTransferSettings
      * @param    recipientId    Required parameter: Recipient Identificator
-     * @param    request    Required parameter: Example: 
+     * @param    body    Required parameter: Example: 
      * @param    idempotencyKey    Optional parameter: Example: 
-     * @return    Returns the GetRecipientResponse response from the API call 
+     * @return    Returns the RecipientsTransferSettingsResponse response from the API call 
      */
-    public GetRecipientResponse updateRecipientTransferSettings(
+    public RecipientsTransferSettingsResponse updateRecipientTransferSettings(
                 final String recipientId,
-                final UpdateTransferSettingsRequest request,
+                final UpdateTransferSettingsRequest body,
                 final String idempotencyKey
     ) throws Throwable {
 
-        HttpRequest _request = _buildUpdateRecipientTransferSettingsRequest(recipientId, request, idempotencyKey);
+        HttpRequest _request = _buildUpdateRecipientTransferSettingsRequest(recipientId, body, idempotencyKey);
         HttpResponse _response = getClientInstance().executeAsString(_request);
         HttpContext _context = new HttpContext(_request, _response);
 
@@ -196,23 +217,23 @@ public class RecipientsController extends BaseController {
     }
 
     /**
-     * TODO: type endpoint description here
+     * UpdateRecipientTransferSettings
      * @param    recipientId    Required parameter: Recipient Identificator
-     * @param    request    Required parameter: Example: 
+     * @param    body    Required parameter: Example: 
      * @param    idempotencyKey    Optional parameter: Example: 
      */
     public void updateRecipientTransferSettingsAsync(
                 final String recipientId,
-                final UpdateTransferSettingsRequest request,
+                final UpdateTransferSettingsRequest body,
                 final String idempotencyKey,
-                final APICallBack<GetRecipientResponse> callBack
+                final APICallBack<RecipientsTransferSettingsResponse> callBack
     ) {
         Runnable _responseTask = new Runnable() {
             public void run() {
 
                 HttpRequest _request;
                 try {
-                    _request = _buildUpdateRecipientTransferSettingsRequest(recipientId, request, idempotencyKey);
+                    _request = _buildUpdateRecipientTransferSettingsRequest(recipientId, body, idempotencyKey);
                 } catch (Exception e) {
                     callBack.onFailure(null, e);
                     return;
@@ -222,7 +243,7 @@ public class RecipientsController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            GetRecipientResponse returnValue = _handleUpdateRecipientTransferSettingsResponse(_context);
+                            RecipientsTransferSettingsResponse returnValue = _handleUpdateRecipientTransferSettingsResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -246,7 +267,7 @@ public class RecipientsController extends BaseController {
      */
     private HttpRequest _buildUpdateRecipientTransferSettingsRequest(
                 final String recipientId,
-                final UpdateTransferSettingsRequest request,
+                final UpdateTransferSettingsRequest body,
                 final String idempotencyKey) throws IOException, APIException {
         //the base uri for api requests
         String _baseUri = Configuration.baseUri;
@@ -263,16 +284,16 @@ public class RecipientsController extends BaseController {
 
         //load all headers for the outgoing API request
         Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("Content-Type", "application/json");
         if (idempotencyKey != null) {
             _headers.put("idempotency-key", idempotencyKey);
         }
         _headers.put("user-agent", BaseController.userAgent);
         _headers.put("accept", "application/json");
-        _headers.put("content-type", "application/json");
 
 
         //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().patchBody(_queryUrl, _headers, APIHelper.serialize(request),
+        HttpRequest _request = getClientInstance().patchBody(_queryUrl, _headers, APIHelper.serialize(body),
                 Configuration.basicAuthUserName, Configuration.basicAuthPassword);
 
         // Invoke the callback before request if its not null
@@ -285,9 +306,9 @@ public class RecipientsController extends BaseController {
 
     /**
      * Processes the response for updateRecipientTransferSettings
-     * @return An object of type GetRecipientResponse
+     * @return An object of type RecipientsTransferSettingsResponse
      */
-    private GetRecipientResponse _handleUpdateRecipientTransferSettingsResponse(HttpContext _context)
+    private RecipientsTransferSettingsResponse _handleUpdateRecipientTransferSettingsResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -296,13 +317,34 @@ public class RecipientsController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
         //extract result from the http response
         String _responseBody = ((HttpStringResponse)_response).getBody();
-        GetRecipientResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<GetRecipientResponse>(){});
+        RecipientsTransferSettingsResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<RecipientsTransferSettingsResponse>(){});
 
         return _result;
     }
@@ -311,9 +353,9 @@ public class RecipientsController extends BaseController {
      * Gets an anticipation
      * @param    recipientId    Required parameter: Recipient id
      * @param    anticipationId    Required parameter: Anticipation id
-     * @return    Returns the GetAnticipationResponse response from the API call 
+     * @return    Returns the RecipientsAnticipationsResponse response from the API call 
      */
-    public GetAnticipationResponse getAnticipation(
+    public RecipientsAnticipationsResponse getAnticipation(
                 final String recipientId,
                 final String anticipationId
     ) throws Throwable {
@@ -333,7 +375,7 @@ public class RecipientsController extends BaseController {
     public void getAnticipationAsync(
                 final String recipientId,
                 final String anticipationId,
-                final APICallBack<GetAnticipationResponse> callBack
+                final APICallBack<RecipientsAnticipationsResponse> callBack
     ) {
         Runnable _responseTask = new Runnable() {
             public void run() {
@@ -350,7 +392,7 @@ public class RecipientsController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            GetAnticipationResponse returnValue = _handleGetAnticipationResponse(_context);
+                            RecipientsAnticipationsResponse returnValue = _handleGetAnticipationResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -409,9 +451,9 @@ public class RecipientsController extends BaseController {
 
     /**
      * Processes the response for getAnticipation
-     * @return An object of type GetAnticipationResponse
+     * @return An object of type RecipientsAnticipationsResponse
      */
-    private GetAnticipationResponse _handleGetAnticipationResponse(HttpContext _context)
+    private RecipientsAnticipationsResponse _handleGetAnticipationResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -420,13 +462,34 @@ public class RecipientsController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
         //extract result from the http response
         String _responseBody = ((HttpStringResponse)_response).getBody();
-        GetAnticipationResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<GetAnticipationResponse>(){});
+        RecipientsAnticipationsResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<RecipientsAnticipationsResponse>(){});
 
         return _result;
     }
@@ -435,9 +498,9 @@ public class RecipientsController extends BaseController {
      * Retrieves paginated recipients information
      * @param    page    Optional parameter: Page number
      * @param    size    Optional parameter: Page size
-     * @return    Returns the ListRecipientResponse response from the API call 
+     * @return    Returns the RecipientsResponse response from the API call 
      */
-    public ListRecipientResponse getRecipients(
+    public RecipientsResponse getRecipients(
                 final Integer page,
                 final Integer size
     ) throws Throwable {
@@ -457,7 +520,7 @@ public class RecipientsController extends BaseController {
     public void getRecipientsAsync(
                 final Integer page,
                 final Integer size,
-                final APICallBack<ListRecipientResponse> callBack
+                final APICallBack<RecipientsResponse> callBack
     ) {
         Runnable _responseTask = new Runnable() {
             public void run() {
@@ -474,7 +537,7 @@ public class RecipientsController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            ListRecipientResponse returnValue = _handleGetRecipientsResponse(_context);
+                            RecipientsResponse returnValue = _handleGetRecipientsResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -537,9 +600,9 @@ public class RecipientsController extends BaseController {
 
     /**
      * Processes the response for getRecipients
-     * @return An object of type ListRecipientResponse
+     * @return An object of type RecipientsResponse
      */
-    private ListRecipientResponse _handleGetRecipientsResponse(HttpContext _context)
+    private RecipientsResponse _handleGetRecipientsResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -548,13 +611,177 @@ public class RecipientsController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
         //extract result from the http response
         String _responseBody = ((HttpStringResponse)_response).getBody();
-        ListRecipientResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<ListRecipientResponse>(){});
+        RecipientsResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<RecipientsResponse>(){});
+
+        return _result;
+    }
+
+    /**
+     * Creates a new recipient
+     * @param    body    Required parameter: Recipient data
+     * @param    idempotencyKey    Optional parameter: Example: 
+     * @return    Returns the RecipientsResponse1 response from the API call 
+     */
+    public RecipientsResponse1 createRecipient(
+                final RecipientsRequest body,
+                final String idempotencyKey
+    ) throws Throwable {
+
+        HttpRequest _request = _buildCreateRecipientRequest(body, idempotencyKey);
+        HttpResponse _response = getClientInstance().executeAsString(_request);
+        HttpContext _context = new HttpContext(_request, _response);
+
+        return _handleCreateRecipientResponse(_context);
+    }
+
+    /**
+     * Creates a new recipient
+     * @param    body    Required parameter: Recipient data
+     * @param    idempotencyKey    Optional parameter: Example: 
+     */
+    public void createRecipientAsync(
+                final RecipientsRequest body,
+                final String idempotencyKey,
+                final APICallBack<RecipientsResponse1> callBack
+    ) {
+        Runnable _responseTask = new Runnable() {
+            public void run() {
+
+                HttpRequest _request;
+                try {
+                    _request = _buildCreateRecipientRequest(body, idempotencyKey);
+                } catch (Exception e) {
+                    callBack.onFailure(null, e);
+                    return;
+                }
+
+                // Invoke request and get response
+                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
+                    public void onSuccess(HttpContext _context, HttpResponse _response) {
+                        try {
+                            RecipientsResponse1 returnValue = _handleCreateRecipientResponse(_context);
+                            callBack.onSuccess(_context, returnValue);
+                        } catch (Exception e) {
+                            callBack.onFailure(_context, e);
+                        }
+                    }
+
+                    public void onFailure(HttpContext _context, Throwable _exception) {
+                        // Let the caller know of the failure
+                        callBack.onFailure(_context, _exception);
+                    }
+                });
+            }
+        };
+
+        // Execute async using thread pool
+        APIHelper.getScheduler().execute(_responseTask);
+    }
+
+    /**
+     * Builds the HttpRequest object for createRecipient
+     */
+    private HttpRequest _buildCreateRecipientRequest(
+                final RecipientsRequest body,
+                final String idempotencyKey) throws IOException, APIException {
+        //the base uri for api requests
+        String _baseUri = Configuration.baseUri;
+
+        //prepare query string for API call
+        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/recipients");
+        //validate and preprocess url
+        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
+
+        //load all headers for the outgoing API request
+        Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("Content-Type", "application/json");
+        if (idempotencyKey != null) {
+            _headers.put("idempotency-key", idempotencyKey);
+        }
+        _headers.put("user-agent", BaseController.userAgent);
+        _headers.put("accept", "application/json");
+
+
+        //prepare and invoke the API call request to fetch the response
+        HttpRequest _request = getClientInstance().postBody(_queryUrl, _headers, APIHelper.serialize(body),
+                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
+
+        // Invoke the callback before request if its not null
+        if (getHttpCallBack() != null) {
+            getHttpCallBack().OnBeforeRequest(_request);
+        }
+
+        return _request;
+    }
+
+    /**
+     * Processes the response for createRecipient
+     * @return An object of type RecipientsResponse1
+     */
+    private RecipientsResponse1 _handleCreateRecipientResponse(HttpContext _context)
+            throws APIException, IOException {
+        HttpResponse _response = _context.getResponse();
+
+        //invoke the callback after response if its not null
+        if (getHttpCallBack() != null) {
+            getHttpCallBack().OnAfterResponse(_context);
+        }
+
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
+        //handle errors defined at the API level
+        validateResponse(_response, _context);
+
+        //extract result from the http response
+        String _responseBody = ((HttpStringResponse)_response).getBody();
+        RecipientsResponse1 _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<RecipientsResponse1>(){});
 
         return _result;
     }
@@ -562,9 +789,9 @@ public class RecipientsController extends BaseController {
     /**
      * Get balance information for a recipient
      * @param    recipientId    Required parameter: Recipient id
-     * @return    Returns the GetBalanceResponse response from the API call 
+     * @return    Returns the RecipientsBalanceResponse response from the API call 
      */
-    public GetBalanceResponse getBalance(
+    public RecipientsBalanceResponse getBalance(
                 final String recipientId
     ) throws Throwable {
 
@@ -581,7 +808,7 @@ public class RecipientsController extends BaseController {
      */
     public void getBalanceAsync(
                 final String recipientId,
-                final APICallBack<GetBalanceResponse> callBack
+                final APICallBack<RecipientsBalanceResponse> callBack
     ) {
         Runnable _responseTask = new Runnable() {
             public void run() {
@@ -598,7 +825,7 @@ public class RecipientsController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            GetBalanceResponse returnValue = _handleGetBalanceResponse(_context);
+                            RecipientsBalanceResponse returnValue = _handleGetBalanceResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -655,9 +882,9 @@ public class RecipientsController extends BaseController {
 
     /**
      * Processes the response for getBalance
-     * @return An object of type GetBalanceResponse
+     * @return An object of type RecipientsBalanceResponse
      */
-    private GetBalanceResponse _handleGetBalanceResponse(HttpContext _context)
+    private RecipientsBalanceResponse _handleGetBalanceResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -666,13 +893,34 @@ public class RecipientsController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
         //extract result from the http response
         String _responseBody = ((HttpStringResponse)_response).getBody();
-        GetBalanceResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<GetBalanceResponse>(){});
+        RecipientsBalanceResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<RecipientsBalanceResponse>(){});
 
         return _result;
     }
@@ -688,9 +936,9 @@ public class RecipientsController extends BaseController {
      * @param    paymentDateUntil    Optional parameter: Filter for end range for anticipation payment date
      * @param    createdSince    Optional parameter: Filter for start range for anticipation creation date
      * @param    createdUntil    Optional parameter: Filter for end range for anticipation creation date
-     * @return    Returns the ListAnticipationResponse response from the API call 
+     * @return    Returns the RecipientsAnticipationsResponse1 response from the API call 
      */
-    public ListAnticipationResponse getAnticipations(
+    public RecipientsAnticipationsResponse1 getAnticipations(
                 final String recipientId,
                 final Integer page,
                 final Integer size,
@@ -731,7 +979,7 @@ public class RecipientsController extends BaseController {
                 final DateTime paymentDateUntil,
                 final DateTime createdSince,
                 final DateTime createdUntil,
-                final APICallBack<ListAnticipationResponse> callBack
+                final APICallBack<RecipientsAnticipationsResponse1> callBack
     ) {
         Runnable _responseTask = new Runnable() {
             public void run() {
@@ -748,7 +996,7 @@ public class RecipientsController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            ListAnticipationResponse returnValue = _handleGetAnticipationsResponse(_context);
+                            RecipientsAnticipationsResponse1 returnValue = _handleGetAnticipationsResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -841,9 +1089,9 @@ public class RecipientsController extends BaseController {
 
     /**
      * Processes the response for getAnticipations
-     * @return An object of type ListAnticipationResponse
+     * @return An object of type RecipientsAnticipationsResponse1
      */
-    private ListAnticipationResponse _handleGetAnticipationsResponse(HttpContext _context)
+    private RecipientsAnticipationsResponse1 _handleGetAnticipationsResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -852,13 +1100,34 @@ public class RecipientsController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
         //extract result from the http response
         String _responseBody = ((HttpStringResponse)_response).getBody();
-        ListAnticipationResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<ListAnticipationResponse>(){});
+        RecipientsAnticipationsResponse1 _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<RecipientsAnticipationsResponse1>(){});
 
         return _result;
     }
@@ -866,17 +1135,17 @@ public class RecipientsController extends BaseController {
     /**
      * Creates an anticipation
      * @param    recipientId    Required parameter: Recipient id
-     * @param    request    Required parameter: Anticipation data
+     * @param    body    Required parameter: Anticipation data
      * @param    idempotencyKey    Optional parameter: Example: 
-     * @return    Returns the GetAnticipationResponse response from the API call 
+     * @return    Returns the RecipientsAnticipationsResponse response from the API call 
      */
-    public GetAnticipationResponse createAnticipation(
+    public RecipientsAnticipationsResponse createAnticipation(
                 final String recipientId,
-                final CreateAnticipationRequest request,
+                final RecipientsAnticipationsRequest body,
                 final String idempotencyKey
     ) throws Throwable {
 
-        HttpRequest _request = _buildCreateAnticipationRequest(recipientId, request, idempotencyKey);
+        HttpRequest _request = _buildCreateAnticipationRequest(recipientId, body, idempotencyKey);
         HttpResponse _response = getClientInstance().executeAsString(_request);
         HttpContext _context = new HttpContext(_request, _response);
 
@@ -886,21 +1155,21 @@ public class RecipientsController extends BaseController {
     /**
      * Creates an anticipation
      * @param    recipientId    Required parameter: Recipient id
-     * @param    request    Required parameter: Anticipation data
+     * @param    body    Required parameter: Anticipation data
      * @param    idempotencyKey    Optional parameter: Example: 
      */
     public void createAnticipationAsync(
                 final String recipientId,
-                final CreateAnticipationRequest request,
+                final RecipientsAnticipationsRequest body,
                 final String idempotencyKey,
-                final APICallBack<GetAnticipationResponse> callBack
+                final APICallBack<RecipientsAnticipationsResponse> callBack
     ) {
         Runnable _responseTask = new Runnable() {
             public void run() {
 
                 HttpRequest _request;
                 try {
-                    _request = _buildCreateAnticipationRequest(recipientId, request, idempotencyKey);
+                    _request = _buildCreateAnticipationRequest(recipientId, body, idempotencyKey);
                 } catch (Exception e) {
                     callBack.onFailure(null, e);
                     return;
@@ -910,7 +1179,7 @@ public class RecipientsController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            GetAnticipationResponse returnValue = _handleCreateAnticipationResponse(_context);
+                            RecipientsAnticipationsResponse returnValue = _handleCreateAnticipationResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -934,7 +1203,7 @@ public class RecipientsController extends BaseController {
      */
     private HttpRequest _buildCreateAnticipationRequest(
                 final String recipientId,
-                final CreateAnticipationRequest request,
+                final RecipientsAnticipationsRequest body,
                 final String idempotencyKey) throws IOException, APIException {
         //the base uri for api requests
         String _baseUri = Configuration.baseUri;
@@ -951,16 +1220,16 @@ public class RecipientsController extends BaseController {
 
         //load all headers for the outgoing API request
         Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("Content-Type", "application/json");
         if (idempotencyKey != null) {
             _headers.put("idempotency-key", idempotencyKey);
         }
         _headers.put("user-agent", BaseController.userAgent);
         _headers.put("accept", "application/json");
-        _headers.put("content-type", "application/json");
 
 
         //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().postBody(_queryUrl, _headers, APIHelper.serialize(request),
+        HttpRequest _request = getClientInstance().postBody(_queryUrl, _headers, APIHelper.serialize(body),
                 Configuration.basicAuthUserName, Configuration.basicAuthPassword);
 
         // Invoke the callback before request if its not null
@@ -973,9 +1242,9 @@ public class RecipientsController extends BaseController {
 
     /**
      * Processes the response for createAnticipation
-     * @return An object of type GetAnticipationResponse
+     * @return An object of type RecipientsAnticipationsResponse
      */
-    private GetAnticipationResponse _handleCreateAnticipationResponse(HttpContext _context)
+    private RecipientsAnticipationsResponse _handleCreateAnticipationResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -984,13 +1253,34 @@ public class RecipientsController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
         //extract result from the http response
         String _responseBody = ((HttpStringResponse)_response).getBody();
-        GetAnticipationResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<GetAnticipationResponse>(){});
+        RecipientsAnticipationsResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<RecipientsAnticipationsResponse>(){});
 
         return _result;
     }
@@ -998,17 +1288,17 @@ public class RecipientsController extends BaseController {
     /**
      * Updates the default bank account from a recipient
      * @param    recipientId    Required parameter: Recipient id
-     * @param    request    Required parameter: Bank account data
+     * @param    body    Required parameter: Bank account data
      * @param    idempotencyKey    Optional parameter: Example: 
-     * @return    Returns the GetRecipientResponse response from the API call 
+     * @return    Returns the RecipientsDefaultBankAccountResponse response from the API call 
      */
-    public GetRecipientResponse updateRecipientDefaultBankAccount(
+    public RecipientsDefaultBankAccountResponse updateRecipientDefaultBankAccount(
                 final String recipientId,
-                final UpdateRecipientBankAccountRequest request,
+                final RecipientsDefaultBankAccountRequest body,
                 final String idempotencyKey
     ) throws Throwable {
 
-        HttpRequest _request = _buildUpdateRecipientDefaultBankAccountRequest(recipientId, request, idempotencyKey);
+        HttpRequest _request = _buildUpdateRecipientDefaultBankAccountRequest(recipientId, body, idempotencyKey);
         HttpResponse _response = getClientInstance().executeAsString(_request);
         HttpContext _context = new HttpContext(_request, _response);
 
@@ -1018,21 +1308,21 @@ public class RecipientsController extends BaseController {
     /**
      * Updates the default bank account from a recipient
      * @param    recipientId    Required parameter: Recipient id
-     * @param    request    Required parameter: Bank account data
+     * @param    body    Required parameter: Bank account data
      * @param    idempotencyKey    Optional parameter: Example: 
      */
     public void updateRecipientDefaultBankAccountAsync(
                 final String recipientId,
-                final UpdateRecipientBankAccountRequest request,
+                final RecipientsDefaultBankAccountRequest body,
                 final String idempotencyKey,
-                final APICallBack<GetRecipientResponse> callBack
+                final APICallBack<RecipientsDefaultBankAccountResponse> callBack
     ) {
         Runnable _responseTask = new Runnable() {
             public void run() {
 
                 HttpRequest _request;
                 try {
-                    _request = _buildUpdateRecipientDefaultBankAccountRequest(recipientId, request, idempotencyKey);
+                    _request = _buildUpdateRecipientDefaultBankAccountRequest(recipientId, body, idempotencyKey);
                 } catch (Exception e) {
                     callBack.onFailure(null, e);
                     return;
@@ -1042,7 +1332,7 @@ public class RecipientsController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            GetRecipientResponse returnValue = _handleUpdateRecipientDefaultBankAccountResponse(_context);
+                            RecipientsDefaultBankAccountResponse returnValue = _handleUpdateRecipientDefaultBankAccountResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -1066,7 +1356,7 @@ public class RecipientsController extends BaseController {
      */
     private HttpRequest _buildUpdateRecipientDefaultBankAccountRequest(
                 final String recipientId,
-                final UpdateRecipientBankAccountRequest request,
+                final RecipientsDefaultBankAccountRequest body,
                 final String idempotencyKey) throws IOException, APIException {
         //the base uri for api requests
         String _baseUri = Configuration.baseUri;
@@ -1083,16 +1373,16 @@ public class RecipientsController extends BaseController {
 
         //load all headers for the outgoing API request
         Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("Content-Type", "application/json");
         if (idempotencyKey != null) {
             _headers.put("idempotency-key", idempotencyKey);
         }
         _headers.put("user-agent", BaseController.userAgent);
         _headers.put("accept", "application/json");
-        _headers.put("content-type", "application/json");
 
 
         //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().patchBody(_queryUrl, _headers, APIHelper.serialize(request),
+        HttpRequest _request = getClientInstance().patchBody(_queryUrl, _headers, APIHelper.serialize(body),
                 Configuration.basicAuthUserName, Configuration.basicAuthPassword);
 
         // Invoke the callback before request if its not null
@@ -1105,9 +1395,9 @@ public class RecipientsController extends BaseController {
 
     /**
      * Processes the response for updateRecipientDefaultBankAccount
-     * @return An object of type GetRecipientResponse
+     * @return An object of type RecipientsDefaultBankAccountResponse
      */
-    private GetRecipientResponse _handleUpdateRecipientDefaultBankAccountResponse(HttpContext _context)
+    private RecipientsDefaultBankAccountResponse _handleUpdateRecipientDefaultBankAccountResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -1116,13 +1406,34 @@ public class RecipientsController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
         //extract result from the http response
         String _responseBody = ((HttpStringResponse)_response).getBody();
-        GetRecipientResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<GetRecipientResponse>(){});
+        RecipientsDefaultBankAccountResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<RecipientsDefaultBankAccountResponse>(){});
 
         return _result;
     }
@@ -1130,9 +1441,9 @@ public class RecipientsController extends BaseController {
     /**
      * Retrieves recipient information
      * @param    recipientId    Required parameter: Recipiend id
-     * @return    Returns the GetRecipientResponse response from the API call 
+     * @return    Returns the RecipientsResponse1 response from the API call 
      */
-    public GetRecipientResponse getRecipient(
+    public RecipientsResponse1 getRecipient(
                 final String recipientId
     ) throws Throwable {
 
@@ -1149,7 +1460,7 @@ public class RecipientsController extends BaseController {
      */
     public void getRecipientAsync(
                 final String recipientId,
-                final APICallBack<GetRecipientResponse> callBack
+                final APICallBack<RecipientsResponse1> callBack
     ) {
         Runnable _responseTask = new Runnable() {
             public void run() {
@@ -1166,7 +1477,7 @@ public class RecipientsController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            GetRecipientResponse returnValue = _handleGetRecipientResponse(_context);
+                            RecipientsResponse1 returnValue = _handleGetRecipientResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -1223,9 +1534,9 @@ public class RecipientsController extends BaseController {
 
     /**
      * Processes the response for getRecipient
-     * @return An object of type GetRecipientResponse
+     * @return An object of type RecipientsResponse1
      */
-    private GetRecipientResponse _handleGetRecipientResponse(HttpContext _context)
+    private RecipientsResponse1 _handleGetRecipientResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -1234,55 +1545,76 @@ public class RecipientsController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
         //extract result from the http response
         String _responseBody = ((HttpStringResponse)_response).getBody();
-        GetRecipientResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<GetRecipientResponse>(){});
+        RecipientsResponse1 _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<RecipientsResponse1>(){});
 
         return _result;
     }
 
     /**
-     * Gets the anticipation limits for a recipient
+     * Updates a recipient
      * @param    recipientId    Required parameter: Recipient id
-     * @param    timeframe    Required parameter: Timeframe
-     * @param    paymentDate    Required parameter: Anticipation payment date
-     * @return    Returns the GetAnticipationLimitResponse response from the API call 
+     * @param    body    Required parameter: Recipient data
+     * @param    idempotencyKey    Optional parameter: Example: 
+     * @return    Returns the RecipientsResponse1 response from the API call 
      */
-    public GetAnticipationLimitResponse getAnticipationLimits(
+    public RecipientsResponse1 updateRecipient(
                 final String recipientId,
-                final String timeframe,
-                final DateTime paymentDate
+                final RecipientsRequest1 body,
+                final String idempotencyKey
     ) throws Throwable {
 
-        HttpRequest _request = _buildGetAnticipationLimitsRequest(recipientId, timeframe, paymentDate);
+        HttpRequest _request = _buildUpdateRecipientRequest(recipientId, body, idempotencyKey);
         HttpResponse _response = getClientInstance().executeAsString(_request);
         HttpContext _context = new HttpContext(_request, _response);
 
-        return _handleGetAnticipationLimitsResponse(_context);
+        return _handleUpdateRecipientResponse(_context);
     }
 
     /**
-     * Gets the anticipation limits for a recipient
+     * Updates a recipient
      * @param    recipientId    Required parameter: Recipient id
-     * @param    timeframe    Required parameter: Timeframe
-     * @param    paymentDate    Required parameter: Anticipation payment date
+     * @param    body    Required parameter: Recipient data
+     * @param    idempotencyKey    Optional parameter: Example: 
      */
-    public void getAnticipationLimitsAsync(
+    public void updateRecipientAsync(
                 final String recipientId,
-                final String timeframe,
-                final DateTime paymentDate,
-                final APICallBack<GetAnticipationLimitResponse> callBack
+                final RecipientsRequest1 body,
+                final String idempotencyKey,
+                final APICallBack<RecipientsResponse1> callBack
     ) {
         Runnable _responseTask = new Runnable() {
             public void run() {
 
                 HttpRequest _request;
                 try {
-                    _request = _buildGetAnticipationLimitsRequest(recipientId, timeframe, paymentDate);
+                    _request = _buildUpdateRecipientRequest(recipientId, body, idempotencyKey);
                 } catch (Exception e) {
                     callBack.onFailure(null, e);
                     return;
@@ -1292,7 +1624,7 @@ public class RecipientsController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            GetAnticipationLimitResponse returnValue = _handleGetAnticipationLimitsResponse(_context);
+                            RecipientsResponse1 returnValue = _handleUpdateRecipientResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -1312,39 +1644,37 @@ public class RecipientsController extends BaseController {
     }
 
     /**
-     * Builds the HttpRequest object for getAnticipationLimits
+     * Builds the HttpRequest object for updateRecipient
      */
-    private HttpRequest _buildGetAnticipationLimitsRequest(
+    private HttpRequest _buildUpdateRecipientRequest(
                 final String recipientId,
-                final String timeframe,
-                final DateTime paymentDate) throws IOException, APIException {
+                final RecipientsRequest1 body,
+                final String idempotencyKey) throws IOException, APIException {
         //the base uri for api requests
         String _baseUri = Configuration.baseUri;
 
         //prepare query string for API call
-        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/recipients/{recipient_id}/anticipation_limits");
+        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/recipients/{recipient_id}");
 
         //process template parameters
         Map<String, Object> _templateParameters = new HashMap<String, Object>();
         _templateParameters.put("recipient_id", recipientId);
         APIHelper.appendUrlWithTemplateParameters(_queryBuilder, _templateParameters);
-
-        //process query parameters
-        Map<String, Object> _queryParameters = new HashMap<String, Object>();
-        _queryParameters.put("timeframe", timeframe);
-        _queryParameters.put("payment_date", DateTimeHelper.toRfc8601DateTime(paymentDate));
-        APIHelper.appendUrlWithQueryParameters(_queryBuilder, _queryParameters);
         //validate and preprocess url
         String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
 
         //load all headers for the outgoing API request
         Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("Content-Type", "application/json");
+        if (idempotencyKey != null) {
+            _headers.put("idempotency-key", idempotencyKey);
+        }
         _headers.put("user-agent", BaseController.userAgent);
         _headers.put("accept", "application/json");
 
 
         //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().get(_queryUrl, _headers, null,
+        HttpRequest _request = getClientInstance().putBody(_queryUrl, _headers, APIHelper.serialize(body),
                 Configuration.basicAuthUserName, Configuration.basicAuthPassword);
 
         // Invoke the callback before request if its not null
@@ -1356,10 +1686,10 @@ public class RecipientsController extends BaseController {
     }
 
     /**
-     * Processes the response for getAnticipationLimits
-     * @return An object of type GetAnticipationLimitResponse
+     * Processes the response for updateRecipient
+     * @return An object of type RecipientsResponse1
      */
-    private GetAnticipationLimitResponse _handleGetAnticipationLimitsResponse(HttpContext _context)
+    private RecipientsResponse1 _handleUpdateRecipientResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -1368,13 +1698,34 @@ public class RecipientsController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
         //extract result from the http response
         String _responseBody = ((HttpStringResponse)_response).getBody();
-        GetAnticipationLimitResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<GetAnticipationLimitResponse>(){});
+        RecipientsResponse1 _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<RecipientsResponse1>(){});
 
         return _result;
     }
@@ -1383,9 +1734,9 @@ public class RecipientsController extends BaseController {
      * Gets a transfer
      * @param    recipientId    Required parameter: Recipient id
      * @param    transferId    Required parameter: Transfer id
-     * @return    Returns the GetTransferResponse response from the API call 
+     * @return    Returns the RecipientsTransfersResponse response from the API call 
      */
-    public GetTransferResponse getTransfer(
+    public RecipientsTransfersResponse getTransfer(
                 final String recipientId,
                 final String transferId
     ) throws Throwable {
@@ -1405,7 +1756,7 @@ public class RecipientsController extends BaseController {
     public void getTransferAsync(
                 final String recipientId,
                 final String transferId,
-                final APICallBack<GetTransferResponse> callBack
+                final APICallBack<RecipientsTransfersResponse> callBack
     ) {
         Runnable _responseTask = new Runnable() {
             public void run() {
@@ -1422,7 +1773,7 @@ public class RecipientsController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            GetTransferResponse returnValue = _handleGetTransferResponse(_context);
+                            RecipientsTransfersResponse returnValue = _handleGetTransferResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -1481,9 +1832,9 @@ public class RecipientsController extends BaseController {
 
     /**
      * Processes the response for getTransfer
-     * @return An object of type GetTransferResponse
+     * @return An object of type RecipientsTransfersResponse
      */
-    private GetTransferResponse _handleGetTransferResponse(HttpContext _context)
+    private RecipientsTransfersResponse _handleGetTransferResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -1492,13 +1843,34 @@ public class RecipientsController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
         //extract result from the http response
         String _responseBody = ((HttpStringResponse)_response).getBody();
-        GetTransferResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<GetTransferResponse>(){});
+        RecipientsTransfersResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<RecipientsTransfersResponse>(){});
 
         return _result;
     }
@@ -1511,9 +1883,9 @@ public class RecipientsController extends BaseController {
      * @param    status    Optional parameter: Filter for transfer status
      * @param    createdSince    Optional parameter: Filter for start range of transfer creation date
      * @param    createdUntil    Optional parameter: Filter for end range of transfer creation date
-     * @return    Returns the ListTransferResponse response from the API call 
+     * @return    Returns the RecipientsTransfersResponse1 response from the API call 
      */
-    public ListTransferResponse getTransfers(
+    public RecipientsTransfersResponse1 getTransfers(
                 final String recipientId,
                 final Integer page,
                 final Integer size,
@@ -1545,7 +1917,7 @@ public class RecipientsController extends BaseController {
                 final String status,
                 final DateTime createdSince,
                 final DateTime createdUntil,
-                final APICallBack<ListTransferResponse> callBack
+                final APICallBack<RecipientsTransfersResponse1> callBack
     ) {
         Runnable _responseTask = new Runnable() {
             public void run() {
@@ -1562,7 +1934,7 @@ public class RecipientsController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            ListTransferResponse returnValue = _handleGetTransfersResponse(_context);
+                            RecipientsTransfersResponse1 returnValue = _handleGetTransfersResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -1643,9 +2015,9 @@ public class RecipientsController extends BaseController {
 
     /**
      * Processes the response for getTransfers
-     * @return An object of type ListTransferResponse
+     * @return An object of type RecipientsTransfersResponse1
      */
-    private ListTransferResponse _handleGetTransfersResponse(HttpContext _context)
+    private RecipientsTransfersResponse1 _handleGetTransfersResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -1654,267 +2026,34 @@ public class RecipientsController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
         //extract result from the http response
         String _responseBody = ((HttpStringResponse)_response).getBody();
-        ListTransferResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<ListTransferResponse>(){});
-
-        return _result;
-    }
-
-    /**
-     * Updates a recipient
-     * @param    recipientId    Required parameter: Recipient id
-     * @param    request    Required parameter: Recipient data
-     * @param    idempotencyKey    Optional parameter: Example: 
-     * @return    Returns the GetRecipientResponse response from the API call 
-     */
-    public GetRecipientResponse updateRecipient(
-                final String recipientId,
-                final UpdateRecipientRequest request,
-                final String idempotencyKey
-    ) throws Throwable {
-
-        HttpRequest _request = _buildUpdateRecipientRequest(recipientId, request, idempotencyKey);
-        HttpResponse _response = getClientInstance().executeAsString(_request);
-        HttpContext _context = new HttpContext(_request, _response);
-
-        return _handleUpdateRecipientResponse(_context);
-    }
-
-    /**
-     * Updates a recipient
-     * @param    recipientId    Required parameter: Recipient id
-     * @param    request    Required parameter: Recipient data
-     * @param    idempotencyKey    Optional parameter: Example: 
-     */
-    public void updateRecipientAsync(
-                final String recipientId,
-                final UpdateRecipientRequest request,
-                final String idempotencyKey,
-                final APICallBack<GetRecipientResponse> callBack
-    ) {
-        Runnable _responseTask = new Runnable() {
-            public void run() {
-
-                HttpRequest _request;
-                try {
-                    _request = _buildUpdateRecipientRequest(recipientId, request, idempotencyKey);
-                } catch (Exception e) {
-                    callBack.onFailure(null, e);
-                    return;
-                }
-
-                // Invoke request and get response
-                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
-                    public void onSuccess(HttpContext _context, HttpResponse _response) {
-                        try {
-                            GetRecipientResponse returnValue = _handleUpdateRecipientResponse(_context);
-                            callBack.onSuccess(_context, returnValue);
-                        } catch (Exception e) {
-                            callBack.onFailure(_context, e);
-                        }
-                    }
-
-                    public void onFailure(HttpContext _context, Throwable _exception) {
-                        // Let the caller know of the failure
-                        callBack.onFailure(_context, _exception);
-                    }
-                });
-            }
-        };
-
-        // Execute async using thread pool
-        APIHelper.getScheduler().execute(_responseTask);
-    }
-
-    /**
-     * Builds the HttpRequest object for updateRecipient
-     */
-    private HttpRequest _buildUpdateRecipientRequest(
-                final String recipientId,
-                final UpdateRecipientRequest request,
-                final String idempotencyKey) throws IOException, APIException {
-        //the base uri for api requests
-        String _baseUri = Configuration.baseUri;
-
-        //prepare query string for API call
-        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/recipients/{recipient_id}");
-
-        //process template parameters
-        Map<String, Object> _templateParameters = new HashMap<String, Object>();
-        _templateParameters.put("recipient_id", recipientId);
-        APIHelper.appendUrlWithTemplateParameters(_queryBuilder, _templateParameters);
-        //validate and preprocess url
-        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
-
-        //load all headers for the outgoing API request
-        Map<String, String> _headers = new HashMap<String, String>();
-        if (idempotencyKey != null) {
-            _headers.put("idempotency-key", idempotencyKey);
-        }
-        _headers.put("user-agent", BaseController.userAgent);
-        _headers.put("accept", "application/json");
-        _headers.put("content-type", "application/json");
-
-
-        //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().putBody(_queryUrl, _headers, APIHelper.serialize(request),
-                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
-
-        // Invoke the callback before request if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnBeforeRequest(_request);
-        }
-
-        return _request;
-    }
-
-    /**
-     * Processes the response for updateRecipient
-     * @return An object of type GetRecipientResponse
-     */
-    private GetRecipientResponse _handleUpdateRecipientResponse(HttpContext _context)
-            throws APIException, IOException {
-        HttpResponse _response = _context.getResponse();
-
-        //invoke the callback after response if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnAfterResponse(_context);
-        }
-
-        //handle errors defined at the API level
-        validateResponse(_response, _context);
-
-        //extract result from the http response
-        String _responseBody = ((HttpStringResponse)_response).getBody();
-        GetRecipientResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<GetRecipientResponse>(){});
-
-        return _result;
-    }
-
-    /**
-     * Creates a new recipient
-     * @param    request    Required parameter: Recipient data
-     * @param    idempotencyKey    Optional parameter: Example: 
-     * @return    Returns the GetRecipientResponse response from the API call 
-     */
-    public GetRecipientResponse createRecipient(
-                final CreateRecipientRequest request,
-                final String idempotencyKey
-    ) throws Throwable {
-
-        HttpRequest _request = _buildCreateRecipientRequest(request, idempotencyKey);
-        HttpResponse _response = getClientInstance().executeAsString(_request);
-        HttpContext _context = new HttpContext(_request, _response);
-
-        return _handleCreateRecipientResponse(_context);
-    }
-
-    /**
-     * Creates a new recipient
-     * @param    request    Required parameter: Recipient data
-     * @param    idempotencyKey    Optional parameter: Example: 
-     */
-    public void createRecipientAsync(
-                final CreateRecipientRequest request,
-                final String idempotencyKey,
-                final APICallBack<GetRecipientResponse> callBack
-    ) {
-        Runnable _responseTask = new Runnable() {
-            public void run() {
-
-                HttpRequest _request;
-                try {
-                    _request = _buildCreateRecipientRequest(request, idempotencyKey);
-                } catch (Exception e) {
-                    callBack.onFailure(null, e);
-                    return;
-                }
-
-                // Invoke request and get response
-                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
-                    public void onSuccess(HttpContext _context, HttpResponse _response) {
-                        try {
-                            GetRecipientResponse returnValue = _handleCreateRecipientResponse(_context);
-                            callBack.onSuccess(_context, returnValue);
-                        } catch (Exception e) {
-                            callBack.onFailure(_context, e);
-                        }
-                    }
-
-                    public void onFailure(HttpContext _context, Throwable _exception) {
-                        // Let the caller know of the failure
-                        callBack.onFailure(_context, _exception);
-                    }
-                });
-            }
-        };
-
-        // Execute async using thread pool
-        APIHelper.getScheduler().execute(_responseTask);
-    }
-
-    /**
-     * Builds the HttpRequest object for createRecipient
-     */
-    private HttpRequest _buildCreateRecipientRequest(
-                final CreateRecipientRequest request,
-                final String idempotencyKey) throws IOException, APIException {
-        //the base uri for api requests
-        String _baseUri = Configuration.baseUri;
-
-        //prepare query string for API call
-        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/recipients");
-        //validate and preprocess url
-        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
-
-        //load all headers for the outgoing API request
-        Map<String, String> _headers = new HashMap<String, String>();
-        if (idempotencyKey != null) {
-            _headers.put("idempotency-key", idempotencyKey);
-        }
-        _headers.put("user-agent", BaseController.userAgent);
-        _headers.put("accept", "application/json");
-        _headers.put("content-type", "application/json");
-
-
-        //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().postBody(_queryUrl, _headers, APIHelper.serialize(request),
-                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
-
-        // Invoke the callback before request if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnBeforeRequest(_request);
-        }
-
-        return _request;
-    }
-
-    /**
-     * Processes the response for createRecipient
-     * @return An object of type GetRecipientResponse
-     */
-    private GetRecipientResponse _handleCreateRecipientResponse(HttpContext _context)
-            throws APIException, IOException {
-        HttpResponse _response = _context.getResponse();
-
-        //invoke the callback after response if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnAfterResponse(_context);
-        }
-
-        //handle errors defined at the API level
-        validateResponse(_response, _context);
-
-        //extract result from the http response
-        String _responseBody = ((HttpStringResponse)_response).getBody();
-        GetRecipientResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<GetRecipientResponse>(){});
+        RecipientsTransfersResponse1 _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<RecipientsTransfersResponse1>(){});
 
         return _result;
     }
@@ -1922,17 +2061,17 @@ public class RecipientsController extends BaseController {
     /**
      * Creates a transfer for a recipient
      * @param    recipientId    Required parameter: Recipient Id
-     * @param    request    Required parameter: Transfer data
+     * @param    body    Required parameter: Transfer data
      * @param    idempotencyKey    Optional parameter: Example: 
-     * @return    Returns the GetTransferResponse response from the API call 
+     * @return    Returns the RecipientsTransfersResponse response from the API call 
      */
-    public GetTransferResponse createTransfer(
+    public RecipientsTransfersResponse createTransfer(
                 final String recipientId,
-                final CreateTransferRequest request,
+                final RecipientsTransfersRequest body,
                 final String idempotencyKey
     ) throws Throwable {
 
-        HttpRequest _request = _buildCreateTransferRequest(recipientId, request, idempotencyKey);
+        HttpRequest _request = _buildCreateTransferRequest(recipientId, body, idempotencyKey);
         HttpResponse _response = getClientInstance().executeAsString(_request);
         HttpContext _context = new HttpContext(_request, _response);
 
@@ -1942,21 +2081,21 @@ public class RecipientsController extends BaseController {
     /**
      * Creates a transfer for a recipient
      * @param    recipientId    Required parameter: Recipient Id
-     * @param    request    Required parameter: Transfer data
+     * @param    body    Required parameter: Transfer data
      * @param    idempotencyKey    Optional parameter: Example: 
      */
     public void createTransferAsync(
                 final String recipientId,
-                final CreateTransferRequest request,
+                final RecipientsTransfersRequest body,
                 final String idempotencyKey,
-                final APICallBack<GetTransferResponse> callBack
+                final APICallBack<RecipientsTransfersResponse> callBack
     ) {
         Runnable _responseTask = new Runnable() {
             public void run() {
 
                 HttpRequest _request;
                 try {
-                    _request = _buildCreateTransferRequest(recipientId, request, idempotencyKey);
+                    _request = _buildCreateTransferRequest(recipientId, body, idempotencyKey);
                 } catch (Exception e) {
                     callBack.onFailure(null, e);
                     return;
@@ -1966,7 +2105,7 @@ public class RecipientsController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            GetTransferResponse returnValue = _handleCreateTransferResponse(_context);
+                            RecipientsTransfersResponse returnValue = _handleCreateTransferResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -1990,7 +2129,7 @@ public class RecipientsController extends BaseController {
      */
     private HttpRequest _buildCreateTransferRequest(
                 final String recipientId,
-                final CreateTransferRequest request,
+                final RecipientsTransfersRequest body,
                 final String idempotencyKey) throws IOException, APIException {
         //the base uri for api requests
         String _baseUri = Configuration.baseUri;
@@ -2007,16 +2146,16 @@ public class RecipientsController extends BaseController {
 
         //load all headers for the outgoing API request
         Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("Content-Type", "application/json");
         if (idempotencyKey != null) {
             _headers.put("idempotency-key", idempotencyKey);
         }
         _headers.put("user-agent", BaseController.userAgent);
         _headers.put("accept", "application/json");
-        _headers.put("content-type", "application/json");
 
 
         //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().postBody(_queryUrl, _headers, APIHelper.serialize(request),
+        HttpRequest _request = getClientInstance().postBody(_queryUrl, _headers, APIHelper.serialize(body),
                 Configuration.basicAuthUserName, Configuration.basicAuthPassword);
 
         // Invoke the callback before request if its not null
@@ -2029,9 +2168,9 @@ public class RecipientsController extends BaseController {
 
     /**
      * Processes the response for createTransfer
-     * @return An object of type GetTransferResponse
+     * @return An object of type RecipientsTransfersResponse
      */
-    private GetTransferResponse _handleCreateTransferResponse(HttpContext _context)
+    private RecipientsTransfersResponse _handleCreateTransferResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -2040,29 +2179,205 @@ public class RecipientsController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
         //extract result from the http response
         String _responseBody = ((HttpStringResponse)_response).getBody();
-        GetTransferResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<GetTransferResponse>(){});
+        RecipientsTransfersResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<RecipientsTransfersResponse>(){});
 
         return _result;
     }
 
     /**
-     * TODO: type endpoint description here
+     * Gets the anticipation limits for a recipient
+     * @param    recipientId    Required parameter: Recipient id
+     * @param    timeframe    Required parameter: Timeframe
+     * @param    paymentDate    Required parameter: Anticipation payment date
+     * @return    Returns the RecipientsAnticipationLimitsResponse response from the API call 
+     */
+    public RecipientsAnticipationLimitsResponse getAnticipationLimits(
+                final String recipientId,
+                final String timeframe,
+                final DateTime paymentDate
+    ) throws Throwable {
+
+        HttpRequest _request = _buildGetAnticipationLimitsRequest(recipientId, timeframe, paymentDate);
+        HttpResponse _response = getClientInstance().executeAsString(_request);
+        HttpContext _context = new HttpContext(_request, _response);
+
+        return _handleGetAnticipationLimitsResponse(_context);
+    }
+
+    /**
+     * Gets the anticipation limits for a recipient
+     * @param    recipientId    Required parameter: Recipient id
+     * @param    timeframe    Required parameter: Timeframe
+     * @param    paymentDate    Required parameter: Anticipation payment date
+     */
+    public void getAnticipationLimitsAsync(
+                final String recipientId,
+                final String timeframe,
+                final DateTime paymentDate,
+                final APICallBack<RecipientsAnticipationLimitsResponse> callBack
+    ) {
+        Runnable _responseTask = new Runnable() {
+            public void run() {
+
+                HttpRequest _request;
+                try {
+                    _request = _buildGetAnticipationLimitsRequest(recipientId, timeframe, paymentDate);
+                } catch (Exception e) {
+                    callBack.onFailure(null, e);
+                    return;
+                }
+
+                // Invoke request and get response
+                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
+                    public void onSuccess(HttpContext _context, HttpResponse _response) {
+                        try {
+                            RecipientsAnticipationLimitsResponse returnValue = _handleGetAnticipationLimitsResponse(_context);
+                            callBack.onSuccess(_context, returnValue);
+                        } catch (Exception e) {
+                            callBack.onFailure(_context, e);
+                        }
+                    }
+
+                    public void onFailure(HttpContext _context, Throwable _exception) {
+                        // Let the caller know of the failure
+                        callBack.onFailure(_context, _exception);
+                    }
+                });
+            }
+        };
+
+        // Execute async using thread pool
+        APIHelper.getScheduler().execute(_responseTask);
+    }
+
+    /**
+     * Builds the HttpRequest object for getAnticipationLimits
+     */
+    private HttpRequest _buildGetAnticipationLimitsRequest(
+                final String recipientId,
+                final String timeframe,
+                final DateTime paymentDate) throws IOException, APIException {
+        //the base uri for api requests
+        String _baseUri = Configuration.baseUri;
+
+        //prepare query string for API call
+        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/recipients/{recipient_id}/anticipation_limits");
+
+        //process template parameters
+        Map<String, Object> _templateParameters = new HashMap<String, Object>();
+        _templateParameters.put("recipient_id", recipientId);
+        APIHelper.appendUrlWithTemplateParameters(_queryBuilder, _templateParameters);
+
+        //process query parameters
+        Map<String, Object> _queryParameters = new HashMap<String, Object>();
+        _queryParameters.put("timeframe", timeframe);
+        _queryParameters.put("payment_date", DateTimeHelper.toRfc8601DateTime(paymentDate));
+        APIHelper.appendUrlWithQueryParameters(_queryBuilder, _queryParameters);
+        //validate and preprocess url
+        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
+
+        //load all headers for the outgoing API request
+        Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("user-agent", BaseController.userAgent);
+        _headers.put("accept", "application/json");
+
+
+        //prepare and invoke the API call request to fetch the response
+        HttpRequest _request = getClientInstance().get(_queryUrl, _headers, null,
+                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
+
+        // Invoke the callback before request if its not null
+        if (getHttpCallBack() != null) {
+            getHttpCallBack().OnBeforeRequest(_request);
+        }
+
+        return _request;
+    }
+
+    /**
+     * Processes the response for getAnticipationLimits
+     * @return An object of type RecipientsAnticipationLimitsResponse
+     */
+    private RecipientsAnticipationLimitsResponse _handleGetAnticipationLimitsResponse(HttpContext _context)
+            throws APIException, IOException {
+        HttpResponse _response = _context.getResponse();
+
+        //invoke the callback after response if its not null
+        if (getHttpCallBack() != null) {
+            getHttpCallBack().OnAfterResponse(_context);
+        }
+
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
+        //handle errors defined at the API level
+        validateResponse(_response, _context);
+
+        //extract result from the http response
+        String _responseBody = ((HttpStringResponse)_response).getBody();
+        RecipientsAnticipationLimitsResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<RecipientsAnticipationLimitsResponse>(){});
+
+        return _result;
+    }
+
+    /**
+     * CreateWithdraw
      * @param    recipientId    Required parameter: Example: 
-     * @param    request    Required parameter: Example: 
+     * @param    body    Required parameter: Example: 
      * @return    Returns the GetWithdrawResponse response from the API call 
      */
     public GetWithdrawResponse createWithdraw(
                 final String recipientId,
-                final CreateWithdrawRequest request
+                final CreateWithdrawRequest body
     ) throws Throwable {
 
-        HttpRequest _request = _buildCreateWithdrawRequest(recipientId, request);
+        HttpRequest _request = _buildCreateWithdrawRequest(recipientId, body);
         HttpResponse _response = getClientInstance().executeAsString(_request);
         HttpContext _context = new HttpContext(_request, _response);
 
@@ -2070,13 +2385,13 @@ public class RecipientsController extends BaseController {
     }
 
     /**
-     * TODO: type endpoint description here
+     * CreateWithdraw
      * @param    recipientId    Required parameter: Example: 
-     * @param    request    Required parameter: Example: 
+     * @param    body    Required parameter: Example: 
      */
     public void createWithdrawAsync(
                 final String recipientId,
-                final CreateWithdrawRequest request,
+                final CreateWithdrawRequest body,
                 final APICallBack<GetWithdrawResponse> callBack
     ) {
         Runnable _responseTask = new Runnable() {
@@ -2084,7 +2399,7 @@ public class RecipientsController extends BaseController {
 
                 HttpRequest _request;
                 try {
-                    _request = _buildCreateWithdrawRequest(recipientId, request);
+                    _request = _buildCreateWithdrawRequest(recipientId, body);
                 } catch (Exception e) {
                     callBack.onFailure(null, e);
                     return;
@@ -2118,7 +2433,7 @@ public class RecipientsController extends BaseController {
      */
     private HttpRequest _buildCreateWithdrawRequest(
                 final String recipientId,
-                final CreateWithdrawRequest request) throws IOException, APIException {
+                final CreateWithdrawRequest body) throws IOException, APIException {
         //the base uri for api requests
         String _baseUri = Configuration.baseUri;
 
@@ -2134,13 +2449,13 @@ public class RecipientsController extends BaseController {
 
         //load all headers for the outgoing API request
         Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("Content-Type", "application/json");
         _headers.put("user-agent", BaseController.userAgent);
         _headers.put("accept", "application/json");
-        _headers.put("content-type", "application/json");
 
 
         //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().postBody(_queryUrl, _headers, APIHelper.serialize(request),
+        HttpRequest _request = getClientInstance().postBody(_queryUrl, _headers, APIHelper.serialize(body),
                 Configuration.basicAuthUserName, Configuration.basicAuthPassword);
 
         // Invoke the callback before request if its not null
@@ -2164,130 +2479,27 @@ public class RecipientsController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
-        //handle errors defined at the API level
-        validateResponse(_response, _context);
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
 
-        //extract result from the http response
-        String _responseBody = ((HttpStringResponse)_response).getBody();
-        GetWithdrawResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<GetWithdrawResponse>(){});
-
-        return _result;
-    }
-
-    /**
-     * TODO: type endpoint description here
-     * @param    recipientId    Required parameter: Example: 
-     * @param    withdrawalId    Required parameter: Example: 
-     * @return    Returns the GetWithdrawResponse response from the API call 
-     */
-    public GetWithdrawResponse getWithdrawById(
-                final String recipientId,
-                final String withdrawalId
-    ) throws Throwable {
-
-        HttpRequest _request = _buildGetWithdrawByIdRequest(recipientId, withdrawalId);
-        HttpResponse _response = getClientInstance().executeAsString(_request);
-        HttpContext _context = new HttpContext(_request, _response);
-
-        return _handleGetWithdrawByIdResponse(_context);
-    }
-
-    /**
-     * TODO: type endpoint description here
-     * @param    recipientId    Required parameter: Example: 
-     * @param    withdrawalId    Required parameter: Example: 
-     */
-    public void getWithdrawByIdAsync(
-                final String recipientId,
-                final String withdrawalId,
-                final APICallBack<GetWithdrawResponse> callBack
-    ) {
-        Runnable _responseTask = new Runnable() {
-            public void run() {
-
-                HttpRequest _request;
-                try {
-                    _request = _buildGetWithdrawByIdRequest(recipientId, withdrawalId);
-                } catch (Exception e) {
-                    callBack.onFailure(null, e);
-                    return;
-                }
-
-                // Invoke request and get response
-                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
-                    public void onSuccess(HttpContext _context, HttpResponse _response) {
-                        try {
-                            GetWithdrawResponse returnValue = _handleGetWithdrawByIdResponse(_context);
-                            callBack.onSuccess(_context, returnValue);
-                        } catch (Exception e) {
-                            callBack.onFailure(_context, e);
-                        }
-                    }
-
-                    public void onFailure(HttpContext _context, Throwable _exception) {
-                        // Let the caller know of the failure
-                        callBack.onFailure(_context, _exception);
-                    }
-                });
-            }
-        };
-
-        // Execute async using thread pool
-        APIHelper.getScheduler().execute(_responseTask);
-    }
-
-    /**
-     * Builds the HttpRequest object for getWithdrawById
-     */
-    private HttpRequest _buildGetWithdrawByIdRequest(
-                final String recipientId,
-                final String withdrawalId) throws IOException, APIException {
-        //the base uri for api requests
-        String _baseUri = Configuration.baseUri;
-
-        //prepare query string for API call
-        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/recipients/{recipient_id}/withdrawals/{withdrawal_id}");
-
-        //process template parameters
-        Map<String, Object> _templateParameters = new HashMap<String, Object>();
-        _templateParameters.put("recipient_id", recipientId);
-        _templateParameters.put("withdrawal_id", withdrawalId);
-        APIHelper.appendUrlWithTemplateParameters(_queryBuilder, _templateParameters);
-        //validate and preprocess url
-        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
-
-        //load all headers for the outgoing API request
-        Map<String, String> _headers = new HashMap<String, String>();
-        _headers.put("user-agent", BaseController.userAgent);
-        _headers.put("accept", "application/json");
-
-
-        //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().get(_queryUrl, _headers, null,
-                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
-
-        // Invoke the callback before request if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnBeforeRequest(_request);
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
         }
-
-        return _request;
-    }
-
-    /**
-     * Processes the response for getWithdrawById
-     * @return An object of type GetWithdrawResponse
-     */
-    private GetWithdrawResponse _handleGetWithdrawByIdResponse(HttpContext _context)
-            throws APIException, IOException {
-        HttpResponse _response = _context.getResponse();
-
-        //invoke the callback after response if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnAfterResponse(_context);
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
         }
-
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
@@ -2450,6 +2662,27 @@ public class RecipientsController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
@@ -2462,43 +2695,39 @@ public class RecipientsController extends BaseController {
     }
 
     /**
-     * Updates recipient metadata
-     * @param    recipientId    Required parameter: Recipient id
-     * @param    request    Required parameter: Metadata
-     * @param    idempotencyKey    Optional parameter: Example: 
-     * @return    Returns the GetRecipientResponse response from the API call 
+     * GetWithdrawById
+     * @param    recipientId    Required parameter: Example: 
+     * @param    withdrawalId    Required parameter: Example: 
+     * @return    Returns the GetWithdrawResponse response from the API call 
      */
-    public GetRecipientResponse updateAutomaticAnticipationSettings(
+    public GetWithdrawResponse getWithdrawById(
                 final String recipientId,
-                final UpdateAutomaticAnticipationSettingsRequest request,
-                final String idempotencyKey
+                final String withdrawalId
     ) throws Throwable {
 
-        HttpRequest _request = _buildUpdateAutomaticAnticipationSettingsRequest(recipientId, request, idempotencyKey);
+        HttpRequest _request = _buildGetWithdrawByIdRequest(recipientId, withdrawalId);
         HttpResponse _response = getClientInstance().executeAsString(_request);
         HttpContext _context = new HttpContext(_request, _response);
 
-        return _handleUpdateAutomaticAnticipationSettingsResponse(_context);
+        return _handleGetWithdrawByIdResponse(_context);
     }
 
     /**
-     * Updates recipient metadata
-     * @param    recipientId    Required parameter: Recipient id
-     * @param    request    Required parameter: Metadata
-     * @param    idempotencyKey    Optional parameter: Example: 
+     * GetWithdrawById
+     * @param    recipientId    Required parameter: Example: 
+     * @param    withdrawalId    Required parameter: Example: 
      */
-    public void updateAutomaticAnticipationSettingsAsync(
+    public void getWithdrawByIdAsync(
                 final String recipientId,
-                final UpdateAutomaticAnticipationSettingsRequest request,
-                final String idempotencyKey,
-                final APICallBack<GetRecipientResponse> callBack
+                final String withdrawalId,
+                final APICallBack<GetWithdrawResponse> callBack
     ) {
         Runnable _responseTask = new Runnable() {
             public void run() {
 
                 HttpRequest _request;
                 try {
-                    _request = _buildUpdateAutomaticAnticipationSettingsRequest(recipientId, request, idempotencyKey);
+                    _request = _buildGetWithdrawByIdRequest(recipientId, withdrawalId);
                 } catch (Exception e) {
                     callBack.onFailure(null, e);
                     return;
@@ -2508,7 +2737,156 @@ public class RecipientsController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            GetRecipientResponse returnValue = _handleUpdateAutomaticAnticipationSettingsResponse(_context);
+                            GetWithdrawResponse returnValue = _handleGetWithdrawByIdResponse(_context);
+                            callBack.onSuccess(_context, returnValue);
+                        } catch (Exception e) {
+                            callBack.onFailure(_context, e);
+                        }
+                    }
+
+                    public void onFailure(HttpContext _context, Throwable _exception) {
+                        // Let the caller know of the failure
+                        callBack.onFailure(_context, _exception);
+                    }
+                });
+            }
+        };
+
+        // Execute async using thread pool
+        APIHelper.getScheduler().execute(_responseTask);
+    }
+
+    /**
+     * Builds the HttpRequest object for getWithdrawById
+     */
+    private HttpRequest _buildGetWithdrawByIdRequest(
+                final String recipientId,
+                final String withdrawalId) throws IOException, APIException {
+        //the base uri for api requests
+        String _baseUri = Configuration.baseUri;
+
+        //prepare query string for API call
+        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/recipients/{recipient_id}/withdrawals/{withdrawal_id}");
+
+        //process template parameters
+        Map<String, Object> _templateParameters = new HashMap<String, Object>();
+        _templateParameters.put("recipient_id", recipientId);
+        _templateParameters.put("withdrawal_id", withdrawalId);
+        APIHelper.appendUrlWithTemplateParameters(_queryBuilder, _templateParameters);
+        //validate and preprocess url
+        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
+
+        //load all headers for the outgoing API request
+        Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("user-agent", BaseController.userAgent);
+        _headers.put("accept", "application/json");
+
+
+        //prepare and invoke the API call request to fetch the response
+        HttpRequest _request = getClientInstance().get(_queryUrl, _headers, null,
+                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
+
+        // Invoke the callback before request if its not null
+        if (getHttpCallBack() != null) {
+            getHttpCallBack().OnBeforeRequest(_request);
+        }
+
+        return _request;
+    }
+
+    /**
+     * Processes the response for getWithdrawById
+     * @return An object of type GetWithdrawResponse
+     */
+    private GetWithdrawResponse _handleGetWithdrawByIdResponse(HttpContext _context)
+            throws APIException, IOException {
+        HttpResponse _response = _context.getResponse();
+
+        //invoke the callback after response if its not null
+        if (getHttpCallBack() != null) {
+            getHttpCallBack().OnAfterResponse(_context);
+        }
+
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
+        //handle errors defined at the API level
+        validateResponse(_response, _context);
+
+        //extract result from the http response
+        String _responseBody = ((HttpStringResponse)_response).getBody();
+        GetWithdrawResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<GetWithdrawResponse>(){});
+
+        return _result;
+    }
+
+    /**
+     * Updates recipient metadata
+     * @param    recipientId    Required parameter: Recipient id
+     * @param    body    Required parameter: Metadata
+     * @param    idempotencyKey    Optional parameter: Example: 
+     * @return    Returns the RecipientsAutomaticAnticipationSettingsResponse response from the API call 
+     */
+    public RecipientsAutomaticAnticipationSettingsResponse updateAutomaticAnticipationSettings(
+                final String recipientId,
+                final UpdateAutomaticAnticipationSettingsRequest body,
+                final String idempotencyKey
+    ) throws Throwable {
+
+        HttpRequest _request = _buildUpdateAutomaticAnticipationSettingsRequest(recipientId, body, idempotencyKey);
+        HttpResponse _response = getClientInstance().executeAsString(_request);
+        HttpContext _context = new HttpContext(_request, _response);
+
+        return _handleUpdateAutomaticAnticipationSettingsResponse(_context);
+    }
+
+    /**
+     * Updates recipient metadata
+     * @param    recipientId    Required parameter: Recipient id
+     * @param    body    Required parameter: Metadata
+     * @param    idempotencyKey    Optional parameter: Example: 
+     */
+    public void updateAutomaticAnticipationSettingsAsync(
+                final String recipientId,
+                final UpdateAutomaticAnticipationSettingsRequest body,
+                final String idempotencyKey,
+                final APICallBack<RecipientsAutomaticAnticipationSettingsResponse> callBack
+    ) {
+        Runnable _responseTask = new Runnable() {
+            public void run() {
+
+                HttpRequest _request;
+                try {
+                    _request = _buildUpdateAutomaticAnticipationSettingsRequest(recipientId, body, idempotencyKey);
+                } catch (Exception e) {
+                    callBack.onFailure(null, e);
+                    return;
+                }
+
+                // Invoke request and get response
+                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
+                    public void onSuccess(HttpContext _context, HttpResponse _response) {
+                        try {
+                            RecipientsAutomaticAnticipationSettingsResponse returnValue = _handleUpdateAutomaticAnticipationSettingsResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -2532,7 +2910,7 @@ public class RecipientsController extends BaseController {
      */
     private HttpRequest _buildUpdateAutomaticAnticipationSettingsRequest(
                 final String recipientId,
-                final UpdateAutomaticAnticipationSettingsRequest request,
+                final UpdateAutomaticAnticipationSettingsRequest body,
                 final String idempotencyKey) throws IOException, APIException {
         //the base uri for api requests
         String _baseUri = Configuration.baseUri;
@@ -2549,16 +2927,16 @@ public class RecipientsController extends BaseController {
 
         //load all headers for the outgoing API request
         Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("Content-Type", "application/json");
         if (idempotencyKey != null) {
             _headers.put("idempotency-key", idempotencyKey);
         }
         _headers.put("user-agent", BaseController.userAgent);
         _headers.put("accept", "application/json");
-        _headers.put("content-type", "application/json");
 
 
         //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().patchBody(_queryUrl, _headers, APIHelper.serialize(request),
+        HttpRequest _request = getClientInstance().patchBody(_queryUrl, _headers, APIHelper.serialize(body),
                 Configuration.basicAuthUserName, Configuration.basicAuthPassword);
 
         // Invoke the callback before request if its not null
@@ -2571,9 +2949,9 @@ public class RecipientsController extends BaseController {
 
     /**
      * Processes the response for updateAutomaticAnticipationSettings
-     * @return An object of type GetRecipientResponse
+     * @return An object of type RecipientsAutomaticAnticipationSettingsResponse
      */
-    private GetRecipientResponse _handleUpdateAutomaticAnticipationSettingsResponse(HttpContext _context)
+    private RecipientsAutomaticAnticipationSettingsResponse _handleUpdateAutomaticAnticipationSettingsResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -2582,13 +2960,34 @@ public class RecipientsController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
         //extract result from the http response
         String _responseBody = ((HttpStringResponse)_response).getBody();
-        GetRecipientResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<GetRecipientResponse>(){});
+        RecipientsAutomaticAnticipationSettingsResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<RecipientsAutomaticAnticipationSettingsResponse>(){});
 
         return _result;
     }
@@ -2596,9 +2995,9 @@ public class RecipientsController extends BaseController {
     /**
      * Retrieves recipient information
      * @param    code    Required parameter: Recipient code
-     * @return    Returns the GetRecipientResponse response from the API call 
+     * @return    Returns the RecipientsCodeResponse response from the API call 
      */
-    public GetRecipientResponse getRecipientByCode(
+    public RecipientsCodeResponse getRecipientByCode(
                 final String code
     ) throws Throwable {
 
@@ -2615,7 +3014,7 @@ public class RecipientsController extends BaseController {
      */
     public void getRecipientByCodeAsync(
                 final String code,
-                final APICallBack<GetRecipientResponse> callBack
+                final APICallBack<RecipientsCodeResponse> callBack
     ) {
         Runnable _responseTask = new Runnable() {
             public void run() {
@@ -2632,7 +3031,7 @@ public class RecipientsController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            GetRecipientResponse returnValue = _handleGetRecipientByCodeResponse(_context);
+                            RecipientsCodeResponse returnValue = _handleGetRecipientByCodeResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -2689,9 +3088,9 @@ public class RecipientsController extends BaseController {
 
     /**
      * Processes the response for getRecipientByCode
-     * @return An object of type GetRecipientResponse
+     * @return An object of type RecipientsCodeResponse
      */
-    private GetRecipientResponse _handleGetRecipientByCodeResponse(HttpContext _context)
+    private RecipientsCodeResponse _handleGetRecipientByCodeResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -2700,13 +3099,34 @@ public class RecipientsController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
         //extract result from the http response
         String _responseBody = ((HttpStringResponse)_response).getBody();
-        GetRecipientResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<GetRecipientResponse>(){});
+        RecipientsCodeResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<RecipientsCodeResponse>(){});
 
         return _result;
     }

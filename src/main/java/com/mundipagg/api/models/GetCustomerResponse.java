@@ -18,7 +18,7 @@ import org.joda.time.DateTime;
 @JsonInclude(Include.ALWAYS)
 public class GetCustomerResponse 
         implements java.io.Serializable {
-    private static final long serialVersionUID = 5044817949889648393L;
+    private static final long serialVersionUID = 2252304925090340571L;
     private String id;
     private String name;
     private String email;
@@ -28,7 +28,7 @@ public class GetCustomerResponse
     private String document;
     private String type;
     private String fbAccessToken;
-    private GetAddressResponse address;
+    private Address address;
     private LinkedHashMap<String, String> metadata;
     private GetPhonesResponse phones;
     private Long fbId;
@@ -186,7 +186,7 @@ public class GetCustomerResponse
      * TODO: Write general description for this method
      */
     @JsonGetter("address")
-    public GetAddressResponse getAddress ( ) { 
+    public Address getAddress ( ) { 
         return this.address;
     }
     
@@ -194,7 +194,7 @@ public class GetCustomerResponse
      * TODO: Write general description for this method
      */
     @JsonSetter("address")
-    public void setAddress (GetAddressResponse value) { 
+    public void setAddress (Address value) { 
         this.address = value;
     }
  

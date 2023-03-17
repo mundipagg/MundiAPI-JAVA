@@ -43,18 +43,12 @@ public class CreateChargeRequestBuilder {
         return this;
     }
 
-    /**
-     * Customer data
-     */
-    public CreateChargeRequestBuilder customer(CreateCustomerRequest customer) {
+    public CreateChargeRequestBuilder customer(Customer8 customer) {
         createChargeRequest.setCustomer(customer);
         return this;
     }
 
-    /**
-     * Payment data
-     */
-    public CreateChargeRequestBuilder payment(CreatePaymentRequest payment) {
+    public CreateChargeRequestBuilder payment(Payment payment) {
         createChargeRequest.setPayment(payment);
         return this;
     }

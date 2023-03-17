@@ -14,14 +14,14 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.ALWAYS)
 public class CreateDebitCardPaymentRequest 
         implements java.io.Serializable {
-    private static final long serialVersionUID = -7918472504869189950L;
+    private static final long serialVersionUID = 2937390167710173373L;
     private String statementDescriptor;
-    private CreateCardRequest card;
+    private Card1 card;
     private String cardId;
     private String cardToken;
     private Boolean recurrence;
-    private CreatePaymentAuthenticationRequest authentication;
-    private CreateCardPaymentContactlessRequest token;
+    private Authentication2 authentication;
+    private Token token;
     private String recurrencyCycle;
     /** GETTER
      * The text that will be shown on the debit card's statement
@@ -40,18 +40,18 @@ public class CreateDebitCardPaymentRequest
     }
  
     /** GETTER
-     * Debit card data
+     * TODO: Write general description for this method
      */
     @JsonGetter("card")
-    public CreateCardRequest getCard ( ) { 
+    public Card1 getCard ( ) { 
         return this.card;
     }
     
     /** SETTER
-     * Debit card data
+     * TODO: Write general description for this method
      */
     @JsonSetter("card")
-    public void setCard (CreateCardRequest value) { 
+    public void setCard (Card1 value) { 
         this.card = value;
     }
  
@@ -104,34 +104,34 @@ public class CreateDebitCardPaymentRequest
     }
  
     /** GETTER
-     * The payment authentication request
+     * TODO: Write general description for this method
      */
     @JsonGetter("authentication")
-    public CreatePaymentAuthenticationRequest getAuthentication ( ) { 
+    public Authentication2 getAuthentication ( ) { 
         return this.authentication;
     }
     
     /** SETTER
-     * The payment authentication request
+     * TODO: Write general description for this method
      */
     @JsonSetter("authentication")
-    public void setAuthentication (CreatePaymentAuthenticationRequest value) { 
+    public void setAuthentication (Authentication2 value) { 
         this.authentication = value;
     }
  
     /** GETTER
-     * The Debit card payment token request
+     * TODO: Write general description for this method
      */
     @JsonGetter("token")
-    public CreateCardPaymentContactlessRequest getToken ( ) { 
+    public Token getToken ( ) { 
         return this.token;
     }
     
     /** SETTER
-     * The Debit card payment token request
+     * TODO: Write general description for this method
      */
     @JsonSetter("token")
-    public void setToken (CreateCardPaymentContactlessRequest value) { 
+    public void setToken (Token value) { 
         this.token = value;
     }
  

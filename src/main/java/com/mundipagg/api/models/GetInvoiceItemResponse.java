@@ -14,11 +14,11 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.ALWAYS)
 public class GetInvoiceItemResponse 
         implements java.io.Serializable {
-    private static final long serialVersionUID = 2099467477990528438L;
+    private static final long serialVersionUID = 8155852992697753589L;
     private int amount;
     private String description;
-    private GetPricingSchemeResponse pricingScheme;
-    private GetPriceBracketResponse priceBracket;
+    private PricingScheme pricingScheme;
+    private PriceBracket priceBracket;
     private Integer quantity;
     private String name;
     private String subscriptionItemId;
@@ -58,7 +58,7 @@ public class GetInvoiceItemResponse
      * TODO: Write general description for this method
      */
     @JsonGetter("pricing_scheme")
-    public GetPricingSchemeResponse getPricingScheme ( ) { 
+    public PricingScheme getPricingScheme ( ) { 
         return this.pricingScheme;
     }
     
@@ -66,7 +66,7 @@ public class GetInvoiceItemResponse
      * TODO: Write general description for this method
      */
     @JsonSetter("pricing_scheme")
-    public void setPricingScheme (GetPricingSchemeResponse value) { 
+    public void setPricingScheme (PricingScheme value) { 
         this.pricingScheme = value;
     }
  
@@ -74,7 +74,7 @@ public class GetInvoiceItemResponse
      * TODO: Write general description for this method
      */
     @JsonGetter("price_bracket")
-    public GetPriceBracketResponse getPriceBracket ( ) { 
+    public PriceBracket getPriceBracket ( ) { 
         return this.priceBracket;
     }
     
@@ -82,7 +82,7 @@ public class GetInvoiceItemResponse
      * TODO: Write general description for this method
      */
     @JsonSetter("price_bracket")
-    public void setPriceBracket (GetPriceBracketResponse value) { 
+    public void setPriceBracket (PriceBracket value) { 
         this.priceBracket = value;
     }
  

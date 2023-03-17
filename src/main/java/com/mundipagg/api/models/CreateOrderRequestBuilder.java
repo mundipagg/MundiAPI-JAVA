@@ -26,10 +26,7 @@ public class CreateOrderRequestBuilder {
         return this;
     }
 
-    /**
-     * Customer
-     */
-    public CreateOrderRequestBuilder customer(CreateCustomerRequest customer) {
+    public CreateOrderRequestBuilder customer(Customer8 customer) {
         createOrderRequest.setCustomer(customer);
         return this;
     }
@@ -58,10 +55,7 @@ public class CreateOrderRequestBuilder {
         return this;
     }
 
-    /**
-     * Shipping data
-     */
-    public CreateOrderRequestBuilder shipping(CreateShippingRequest shipping) {
+    public CreateOrderRequestBuilder shipping(Shipping3 shipping) {
         createOrderRequest.setShipping(shipping);
         return this;
     }
@@ -98,18 +92,12 @@ public class CreateOrderRequestBuilder {
         return this;
     }
 
-    /**
-     * Request's location
-     */
-    public CreateOrderRequestBuilder location(CreateLocationRequest location) {
+    public CreateOrderRequestBuilder location(Location location) {
         createOrderRequest.setLocation(location);
         return this;
     }
 
-    /**
-     * Device's informations
-     */
-    public CreateOrderRequestBuilder device(CreateDeviceRequest device) {
+    public CreateOrderRequestBuilder device(Device1 device) {
         createOrderRequest.setDevice(device);
         return this;
     }
@@ -132,10 +120,7 @@ public class CreateOrderRequestBuilder {
         return this;
     }
 
-    /**
-     * SubMerchant
-     */
-    public CreateOrderRequestBuilder submerchant(CreateSubMerchantRequest submerchant) {
+    public CreateOrderRequestBuilder submerchant(Submerchant submerchant) {
         createOrderRequest.setSubmerchant(submerchant);
         return this;
     }

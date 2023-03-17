@@ -18,13 +18,13 @@ import org.joda.time.DateTime;
 @JsonInclude(Include.ALWAYS)
 public class CreateShippingRequest 
         implements java.io.Serializable {
-    private static final long serialVersionUID = 7845437958986733056L;
+    private static final long serialVersionUID = -6477587647973848992L;
     private int amount;
     private String description;
     private String recipientName;
     private String recipientPhone;
     private String addressId;
-    private CreateAddressRequest address;
+    private Address1 address;
     private DateTime maxDeliveryDate;
     private DateTime estimatedDeliveryDate;
     private String type;
@@ -109,18 +109,18 @@ public class CreateShippingRequest
     }
  
     /** GETTER
-     * Address data
+     * TODO: Write general description for this method
      */
     @JsonGetter("address")
-    public CreateAddressRequest getAddress ( ) { 
+    public Address1 getAddress ( ) { 
         return this.address;
     }
     
     /** SETTER
-     * Address data
+     * TODO: Write general description for this method
      */
     @JsonSetter("address")
-    public void setAddress (CreateAddressRequest value) { 
+    public void setAddress (Address1 value) { 
         this.address = value;
     }
  

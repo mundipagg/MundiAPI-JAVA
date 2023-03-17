@@ -14,11 +14,11 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.ALWAYS)
 public class CreateSplitRequest 
         implements java.io.Serializable {
-    private static final long serialVersionUID = -6652989674833980098L;
+    private static final long serialVersionUID = 6652989675814501512L;
     private String type;
     private int amount;
     private String recipientId;
-    private CreateSplitOptionsRequest options;
+    private Options2 options;
     /** GETTER
      * Split type
      */
@@ -68,18 +68,18 @@ public class CreateSplitRequest
     }
  
     /** GETTER
-     * The split options request
+     * TODO: Write general description for this method
      */
     @JsonGetter("options")
-    public CreateSplitOptionsRequest getOptions ( ) { 
+    public Options2 getOptions ( ) { 
         return this.options;
     }
     
     /** SETTER
-     * The split options request
+     * TODO: Write general description for this method
      */
     @JsonSetter("options")
-    public void setOptions (CreateSplitOptionsRequest value) { 
+    public void setOptions (Options2 value) { 
         this.options = value;
     }
  

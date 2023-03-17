@@ -26,10 +26,7 @@ public class ListTransfersBuilder {
         return this;
     }
 
-    /**
-     * Paging object
-     */
-    public ListTransfersBuilder paging(PagingResponse paging) {
+    public ListTransfersBuilder paging(Paging paging) {
         listTransfers.setPaging(paging);
         return this;
     }

@@ -34,10 +34,7 @@ public class GetCheckoutCreditCardPaymentResponseBuilder {
         return this;
     }
 
-    /**
-     * Payment Authentication response
-     */
-    public GetCheckoutCreditCardPaymentResponseBuilder authentication(GetPaymentAuthenticationResponse authentication) {
+    public GetCheckoutCreditCardPaymentResponseBuilder authentication(Authentication authentication) {
         getCheckoutCreditCardPaymentResponse.setAuthentication(authentication);
         return this;
     }

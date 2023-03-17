@@ -38,7 +38,7 @@ import org.joda.time.DateTime;
 @JsonInclude(Include.ALWAYS)
 public class GetTransactionResponse 
         implements java.io.Serializable {
-    private static final long serialVersionUID = 1592334950737737323L;
+    private static final long serialVersionUID = 5046217573226396486L;
     private String gatewayId;
     private int amount;
     private String status;
@@ -51,12 +51,12 @@ public class GetTransactionResponse
     private DateTime nextAttempt;
     private String transactionType;
     private String id;
-    private GetGatewayResponseResponse gatewayResponse;
+    private GatewayResponse gatewayResponse;
     private GetAntifraudResponse antifraudResponse;
     private LinkedHashMap<String, String> metadata;
     private List<GetSplitResponse> split;
-    private GetInterestResponse interest;
-    private GetFineResponse fine;
+    private Interest interest;
+    private Fine fine;
     private Integer maxDaysToPayPastDue;
     /** GETTER
      * Gateway transaction id
@@ -257,18 +257,18 @@ public class GetTransactionResponse
     }
  
     /** GETTER
-     * The Gateway Response
+     * TODO: Write general description for this method
      */
     @JsonGetter("gateway_response")
-    public GetGatewayResponseResponse getGatewayResponse ( ) { 
+    public GatewayResponse getGatewayResponse ( ) { 
         return this.gatewayResponse;
     }
     
     /** SETTER
-     * The Gateway Response
+     * TODO: Write general description for this method
      */
     @JsonSetter("gateway_response")
-    public void setGatewayResponse (GetGatewayResponseResponse value) { 
+    public void setGatewayResponse (GatewayResponse value) { 
         this.gatewayResponse = value;
     }
  
@@ -324,7 +324,7 @@ public class GetTransactionResponse
      * TODO: Write general description for this method
      */
     @JsonGetter("interest")
-    public GetInterestResponse getInterest ( ) { 
+    public Interest getInterest ( ) { 
         return this.interest;
     }
     
@@ -332,7 +332,7 @@ public class GetTransactionResponse
      * TODO: Write general description for this method
      */
     @JsonSetter("interest")
-    public void setInterest (GetInterestResponse value) { 
+    public void setInterest (Interest value) { 
         this.interest = value;
     }
  
@@ -340,7 +340,7 @@ public class GetTransactionResponse
      * TODO: Write general description for this method
      */
     @JsonGetter("fine")
-    public GetFineResponse getFine ( ) { 
+    public Fine getFine ( ) { 
         return this.fine;
     }
     
@@ -348,7 +348,7 @@ public class GetTransactionResponse
      * TODO: Write general description for this method
      */
     @JsonSetter("fine")
-    public void setFine (GetFineResponse value) { 
+    public void setFine (Fine value) { 
         this.fine = value;
     }
  
