@@ -91,10 +91,7 @@ public class GetVoucherTransactionResponseBuilder
         return this;
     }
 
-    /**
-     * Card data
-     */
-    public GetVoucherTransactionResponseBuilder card(GetCardResponse card) {
+    public GetVoucherTransactionResponseBuilder card(Card card) {
         getVoucherTransactionResponse.setCard(card);
         return this;
     }

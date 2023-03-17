@@ -50,10 +50,7 @@ public class UpdateCardRequestBuilder {
         return this;
     }
 
-    /**
-     * Billing address
-     */
-    public UpdateCardRequestBuilder billingAddress(CreateAddressRequest billingAddress) {
+    public UpdateCardRequestBuilder billingAddress(BillingAddress1 billingAddress) {
         updateCardRequest.setBillingAddress(billingAddress);
         return this;
     }

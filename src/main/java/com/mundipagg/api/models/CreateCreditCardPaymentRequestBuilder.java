@@ -34,10 +34,7 @@ public class CreateCreditCardPaymentRequestBuilder {
         return this;
     }
 
-    /**
-     * Credit card data
-     */
-    public CreateCreditCardPaymentRequestBuilder card(CreateCardRequest card) {
+    public CreateCreditCardPaymentRequestBuilder card(Card1 card) {
         createCreditCardPaymentRequest.setCard(card);
         return this;
     }
@@ -95,18 +92,12 @@ public class CreateCreditCardPaymentRequestBuilder {
         return this;
     }
 
-    /**
-     * The payment authentication request
-     */
-    public CreateCreditCardPaymentRequestBuilder authentication(CreatePaymentAuthenticationRequest authentication) {
+    public CreateCreditCardPaymentRequestBuilder authentication(Authentication2 authentication) {
         createCreditCardPaymentRequest.setAuthentication(authentication);
         return this;
     }
 
-    /**
-     * The Credit card payment contactless request
-     */
-    public CreateCreditCardPaymentRequestBuilder contactless(CreateCardPaymentContactlessRequest contactless) {
+    public CreateCreditCardPaymentRequestBuilder contactless(Contactless contactless) {
         createCreditCardPaymentRequest.setContactless(contactless);
         return this;
     }

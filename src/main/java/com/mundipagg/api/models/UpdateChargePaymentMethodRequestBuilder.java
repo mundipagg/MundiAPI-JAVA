@@ -34,55 +34,37 @@ public class UpdateChargePaymentMethodRequestBuilder {
         return this;
     }
 
-    /**
-     * Credit card data
-     */
-    public UpdateChargePaymentMethodRequestBuilder creditCard(CreateCreditCardPaymentRequest creditCard) {
+    public UpdateChargePaymentMethodRequestBuilder creditCard(CreditCard1 creditCard) {
         updateChargePaymentMethodRequest.setCreditCard(creditCard);
         return this;
     }
 
-    /**
-     * Debit card data
-     */
-    public UpdateChargePaymentMethodRequestBuilder debitCard(CreateDebitCardPaymentRequest debitCard) {
+    public UpdateChargePaymentMethodRequestBuilder debitCard(DebitCard1 debitCard) {
         updateChargePaymentMethodRequest.setDebitCard(debitCard);
         return this;
     }
 
-    /**
-     * Boleto data
-     */
-    public UpdateChargePaymentMethodRequestBuilder boleto(CreateBoletoPaymentRequest boleto) {
+    public UpdateChargePaymentMethodRequestBuilder boleto(Boleto1 boleto) {
         updateChargePaymentMethodRequest.setBoleto(boleto);
         return this;
     }
 
-    /**
-     * Voucher data
-     */
-    public UpdateChargePaymentMethodRequestBuilder voucher(CreateVoucherPaymentRequest voucher) {
+    public UpdateChargePaymentMethodRequestBuilder voucher(Voucher voucher) {
         updateChargePaymentMethodRequest.setVoucher(voucher);
         return this;
     }
 
-    /**
-     * Cash data
-     */
     public UpdateChargePaymentMethodRequestBuilder cash(CreateCashPaymentRequest cash) {
         updateChargePaymentMethodRequest.setCash(cash);
         return this;
     }
 
-    /**
-     * Bank Transfer data
-     */
-    public UpdateChargePaymentMethodRequestBuilder bankTransfer(CreateBankTransferPaymentRequest bankTransfer) {
+    public UpdateChargePaymentMethodRequestBuilder bankTransfer(BankTransfer1 bankTransfer) {
         updateChargePaymentMethodRequest.setBankTransfer(bankTransfer);
         return this;
     }
 
-    public UpdateChargePaymentMethodRequestBuilder privateLabel(CreatePrivateLabelPaymentRequest privateLabel) {
+    public UpdateChargePaymentMethodRequestBuilder privateLabel(PrivateLabel privateLabel) {
         updateChargePaymentMethodRequest.setPrivateLabel(privateLabel);
         return this;
     }

@@ -46,9 +46,9 @@ public class ChargesController extends BaseController {
     /**
      * Get a charge from its id
      * @param    chargeId    Required parameter: Charge id
-     * @return    Returns the GetChargeResponse response from the API call 
+     * @return    Returns the ChargesResponse response from the API call 
      */
-    public GetChargeResponse getCharge(
+    public ChargesResponse getCharge(
                 final String chargeId
     ) throws Throwable {
 
@@ -65,7 +65,7 @@ public class ChargesController extends BaseController {
      */
     public void getChargeAsync(
                 final String chargeId,
-                final APICallBack<GetChargeResponse> callBack
+                final APICallBack<ChargesResponse> callBack
     ) {
         Runnable _responseTask = new Runnable() {
             public void run() {
@@ -82,7 +82,7 @@ public class ChargesController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            GetChargeResponse returnValue = _handleGetChargeResponse(_context);
+                            ChargesResponse returnValue = _handleGetChargeResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -139,9 +139,9 @@ public class ChargesController extends BaseController {
 
     /**
      * Processes the response for getCharge
-     * @return An object of type GetChargeResponse
+     * @return An object of type ChargesResponse
      */
-    private GetChargeResponse _handleGetChargeResponse(HttpContext _context)
+    private ChargesResponse _handleGetChargeResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -150,55 +150,76 @@ public class ChargesController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
         //extract result from the http response
         String _responseBody = ((HttpStringResponse)_response).getBody();
-        GetChargeResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<GetChargeResponse>(){});
+        ChargesResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<ChargesResponse>(){});
 
         return _result;
     }
 
     /**
-     * TODO: type endpoint description here
-     * @param    chargeId    Required parameter: Example: 
-     * @param    request    Optional parameter: Request for confirm payment
+     * Cancel a charge
+     * @param    chargeId    Required parameter: Charge id
      * @param    idempotencyKey    Optional parameter: Example: 
-     * @return    Returns the GetChargeResponse response from the API call 
+     * @param    body    Optional parameter: Request for cancelling a charge
+     * @return    Returns the ChargesResponse response from the API call 
      */
-    public GetChargeResponse confirmPayment(
+    public ChargesResponse cancelCharge(
                 final String chargeId,
-                final CreateConfirmPaymentRequest request,
-                final String idempotencyKey
+                final String idempotencyKey,
+                final ChargesRequest body
     ) throws Throwable {
 
-        HttpRequest _request = _buildConfirmPaymentRequest(chargeId, request, idempotencyKey);
+        HttpRequest _request = _buildCancelChargeRequest(chargeId, idempotencyKey, body);
         HttpResponse _response = getClientInstance().executeAsString(_request);
         HttpContext _context = new HttpContext(_request, _response);
 
-        return _handleConfirmPaymentResponse(_context);
+        return _handleCancelChargeResponse(_context);
     }
 
     /**
-     * TODO: type endpoint description here
-     * @param    chargeId    Required parameter: Example: 
-     * @param    request    Optional parameter: Request for confirm payment
+     * Cancel a charge
+     * @param    chargeId    Required parameter: Charge id
      * @param    idempotencyKey    Optional parameter: Example: 
+     * @param    body    Optional parameter: Request for cancelling a charge
      */
-    public void confirmPaymentAsync(
+    public void cancelChargeAsync(
                 final String chargeId,
-                final CreateConfirmPaymentRequest request,
                 final String idempotencyKey,
-                final APICallBack<GetChargeResponse> callBack
+                final ChargesRequest body,
+                final APICallBack<ChargesResponse> callBack
     ) {
         Runnable _responseTask = new Runnable() {
             public void run() {
 
                 HttpRequest _request;
                 try {
-                    _request = _buildConfirmPaymentRequest(chargeId, request, idempotencyKey);
+                    _request = _buildCancelChargeRequest(chargeId, idempotencyKey, body);
                 } catch (Exception e) {
                     callBack.onFailure(null, e);
                     return;
@@ -208,7 +229,160 @@ public class ChargesController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            GetChargeResponse returnValue = _handleConfirmPaymentResponse(_context);
+                            ChargesResponse returnValue = _handleCancelChargeResponse(_context);
+                            callBack.onSuccess(_context, returnValue);
+                        } catch (Exception e) {
+                            callBack.onFailure(_context, e);
+                        }
+                    }
+
+                    public void onFailure(HttpContext _context, Throwable _exception) {
+                        // Let the caller know of the failure
+                        callBack.onFailure(_context, _exception);
+                    }
+                });
+            }
+        };
+
+        // Execute async using thread pool
+        APIHelper.getScheduler().execute(_responseTask);
+    }
+
+    /**
+     * Builds the HttpRequest object for cancelCharge
+     */
+    private HttpRequest _buildCancelChargeRequest(
+                final String chargeId,
+                final String idempotencyKey,
+                final ChargesRequest body) throws IOException, APIException {
+        //the base uri for api requests
+        String _baseUri = Configuration.baseUri;
+
+        //prepare query string for API call
+        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/charges/{charge_id}");
+
+        //process template parameters
+        Map<String, Object> _templateParameters = new HashMap<String, Object>();
+        _templateParameters.put("charge_id", chargeId);
+        APIHelper.appendUrlWithTemplateParameters(_queryBuilder, _templateParameters);
+        //validate and preprocess url
+        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
+
+        //load all headers for the outgoing API request
+        Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("Content-Type", "application/json");
+        if (idempotencyKey != null) {
+            _headers.put("idempotency-key", idempotencyKey);
+        }
+        _headers.put("user-agent", BaseController.userAgent);
+        _headers.put("accept", "application/json");
+
+
+        //prepare and invoke the API call request to fetch the response
+        HttpRequest _request = getClientInstance().deleteBody(_queryUrl, _headers, APIHelper.serialize(body),
+                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
+
+        // Invoke the callback before request if its not null
+        if (getHttpCallBack() != null) {
+            getHttpCallBack().OnBeforeRequest(_request);
+        }
+
+        return _request;
+    }
+
+    /**
+     * Processes the response for cancelCharge
+     * @return An object of type ChargesResponse
+     */
+    private ChargesResponse _handleCancelChargeResponse(HttpContext _context)
+            throws APIException, IOException {
+        HttpResponse _response = _context.getResponse();
+
+        //invoke the callback after response if its not null
+        if (getHttpCallBack() != null) {
+            getHttpCallBack().OnAfterResponse(_context);
+        }
+
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
+        //handle errors defined at the API level
+        validateResponse(_response, _context);
+
+        //extract result from the http response
+        String _responseBody = ((HttpStringResponse)_response).getBody();
+        ChargesResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<ChargesResponse>(){});
+
+        return _result;
+    }
+
+    /**
+     * ConfirmPayment
+     * @param    chargeId    Required parameter: Example: 
+     * @param    idempotencyKey    Optional parameter: Example: 
+     * @param    body    Optional parameter: Request for confirm payment
+     * @return    Returns the ChargesConfirmPaymentResponse response from the API call 
+     */
+    public ChargesConfirmPaymentResponse confirmPayment(
+                final String chargeId,
+                final String idempotencyKey,
+                final CreateConfirmPaymentRequest body
+    ) throws Throwable {
+
+        HttpRequest _request = _buildConfirmPaymentRequest(chargeId, idempotencyKey, body);
+        HttpResponse _response = getClientInstance().executeAsString(_request);
+        HttpContext _context = new HttpContext(_request, _response);
+
+        return _handleConfirmPaymentResponse(_context);
+    }
+
+    /**
+     * ConfirmPayment
+     * @param    chargeId    Required parameter: Example: 
+     * @param    idempotencyKey    Optional parameter: Example: 
+     * @param    body    Optional parameter: Request for confirm payment
+     */
+    public void confirmPaymentAsync(
+                final String chargeId,
+                final String idempotencyKey,
+                final CreateConfirmPaymentRequest body,
+                final APICallBack<ChargesConfirmPaymentResponse> callBack
+    ) {
+        Runnable _responseTask = new Runnable() {
+            public void run() {
+
+                HttpRequest _request;
+                try {
+                    _request = _buildConfirmPaymentRequest(chargeId, idempotencyKey, body);
+                } catch (Exception e) {
+                    callBack.onFailure(null, e);
+                    return;
+                }
+
+                // Invoke request and get response
+                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
+                    public void onSuccess(HttpContext _context, HttpResponse _response) {
+                        try {
+                            ChargesConfirmPaymentResponse returnValue = _handleConfirmPaymentResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -232,8 +406,8 @@ public class ChargesController extends BaseController {
      */
     private HttpRequest _buildConfirmPaymentRequest(
                 final String chargeId,
-                final CreateConfirmPaymentRequest request,
-                final String idempotencyKey) throws IOException, APIException {
+                final String idempotencyKey,
+                final CreateConfirmPaymentRequest body) throws IOException, APIException {
         //the base uri for api requests
         String _baseUri = Configuration.baseUri;
 
@@ -249,16 +423,16 @@ public class ChargesController extends BaseController {
 
         //load all headers for the outgoing API request
         Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("Content-Type", "application/json");
         if (idempotencyKey != null) {
             _headers.put("idempotency-key", idempotencyKey);
         }
         _headers.put("user-agent", BaseController.userAgent);
         _headers.put("accept", "application/json");
-        _headers.put("content-type", "application/json");
 
 
         //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().postBody(_queryUrl, _headers, APIHelper.serialize(request),
+        HttpRequest _request = getClientInstance().postBody(_queryUrl, _headers, APIHelper.serialize(body),
                 Configuration.basicAuthUserName, Configuration.basicAuthPassword);
 
         // Invoke the callback before request if its not null
@@ -271,9 +445,9 @@ public class ChargesController extends BaseController {
 
     /**
      * Processes the response for confirmPayment
-     * @return An object of type GetChargeResponse
+     * @return An object of type ChargesConfirmPaymentResponse
      */
-    private GetChargeResponse _handleConfirmPaymentResponse(HttpContext _context)
+    private ChargesConfirmPaymentResponse _handleConfirmPaymentResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -282,13 +456,34 @@ public class ChargesController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
         //extract result from the http response
         String _responseBody = ((HttpStringResponse)_response).getBody();
-        GetChargeResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<GetChargeResponse>(){});
+        ChargesConfirmPaymentResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<ChargesConfirmPaymentResponse>(){});
 
         return _result;
     }
@@ -296,17 +491,17 @@ public class ChargesController extends BaseController {
     /**
      * Updates the card from a charge
      * @param    chargeId    Required parameter: Charge id
-     * @param    request    Required parameter: Request for updating a charge's card
+     * @param    body    Required parameter: Request for updating a charge's card
      * @param    idempotencyKey    Optional parameter: Example: 
-     * @return    Returns the GetChargeResponse response from the API call 
+     * @return    Returns the ChargesCardResponse response from the API call 
      */
-    public GetChargeResponse updateChargeCard(
+    public ChargesCardResponse updateChargeCard(
                 final String chargeId,
-                final UpdateChargeCardRequest request,
+                final ChargesCardRequest body,
                 final String idempotencyKey
     ) throws Throwable {
 
-        HttpRequest _request = _buildUpdateChargeCardRequest(chargeId, request, idempotencyKey);
+        HttpRequest _request = _buildUpdateChargeCardRequest(chargeId, body, idempotencyKey);
         HttpResponse _response = getClientInstance().executeAsString(_request);
         HttpContext _context = new HttpContext(_request, _response);
 
@@ -316,21 +511,21 @@ public class ChargesController extends BaseController {
     /**
      * Updates the card from a charge
      * @param    chargeId    Required parameter: Charge id
-     * @param    request    Required parameter: Request for updating a charge's card
+     * @param    body    Required parameter: Request for updating a charge's card
      * @param    idempotencyKey    Optional parameter: Example: 
      */
     public void updateChargeCardAsync(
                 final String chargeId,
-                final UpdateChargeCardRequest request,
+                final ChargesCardRequest body,
                 final String idempotencyKey,
-                final APICallBack<GetChargeResponse> callBack
+                final APICallBack<ChargesCardResponse> callBack
     ) {
         Runnable _responseTask = new Runnable() {
             public void run() {
 
                 HttpRequest _request;
                 try {
-                    _request = _buildUpdateChargeCardRequest(chargeId, request, idempotencyKey);
+                    _request = _buildUpdateChargeCardRequest(chargeId, body, idempotencyKey);
                 } catch (Exception e) {
                     callBack.onFailure(null, e);
                     return;
@@ -340,7 +535,7 @@ public class ChargesController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            GetChargeResponse returnValue = _handleUpdateChargeCardResponse(_context);
+                            ChargesCardResponse returnValue = _handleUpdateChargeCardResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -364,7 +559,7 @@ public class ChargesController extends BaseController {
      */
     private HttpRequest _buildUpdateChargeCardRequest(
                 final String chargeId,
-                final UpdateChargeCardRequest request,
+                final ChargesCardRequest body,
                 final String idempotencyKey) throws IOException, APIException {
         //the base uri for api requests
         String _baseUri = Configuration.baseUri;
@@ -381,16 +576,16 @@ public class ChargesController extends BaseController {
 
         //load all headers for the outgoing API request
         Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("Content-Type", "application/json");
         if (idempotencyKey != null) {
             _headers.put("idempotency-key", idempotencyKey);
         }
         _headers.put("user-agent", BaseController.userAgent);
         _headers.put("accept", "application/json");
-        _headers.put("content-type", "application/json");
 
 
         //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().patchBody(_queryUrl, _headers, APIHelper.serialize(request),
+        HttpRequest _request = getClientInstance().patchBody(_queryUrl, _headers, APIHelper.serialize(body),
                 Configuration.basicAuthUserName, Configuration.basicAuthPassword);
 
         // Invoke the callback before request if its not null
@@ -403,9 +598,9 @@ public class ChargesController extends BaseController {
 
     /**
      * Processes the response for updateChargeCard
-     * @return An object of type GetChargeResponse
+     * @return An object of type ChargesCardResponse
      */
-    private GetChargeResponse _handleUpdateChargeCardResponse(HttpContext _context)
+    private ChargesCardResponse _handleUpdateChargeCardResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -414,13 +609,34 @@ public class ChargesController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
         //extract result from the http response
         String _responseBody = ((HttpStringResponse)_response).getBody();
-        GetChargeResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<GetChargeResponse>(){});
+        ChargesCardResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<ChargesCardResponse>(){});
 
         return _result;
     }
@@ -436,9 +652,9 @@ public class ChargesController extends BaseController {
      * @param    orderId    Optional parameter: Filter for charge's order id
      * @param    createdSince    Optional parameter: Filter for the beginning of the range for charge's creation
      * @param    createdUntil    Optional parameter: Filter for the end of the range for charge's creation
-     * @return    Returns the ListChargesResponse response from the API call 
+     * @return    Returns the ChargesResponse2 response from the API call 
      */
-    public ListChargesResponse getCharges(
+    public ChargesResponse2 getCharges(
                 final Integer page,
                 final Integer size,
                 final String code,
@@ -479,7 +695,7 @@ public class ChargesController extends BaseController {
                 final String orderId,
                 final DateTime createdSince,
                 final DateTime createdUntil,
-                final APICallBack<ListChargesResponse> callBack
+                final APICallBack<ChargesResponse2> callBack
     ) {
         Runnable _responseTask = new Runnable() {
             public void run() {
@@ -496,7 +712,7 @@ public class ChargesController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            ListChargesResponse returnValue = _handleGetChargesResponse(_context);
+                            ChargesResponse2 returnValue = _handleGetChargesResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -587,9 +803,9 @@ public class ChargesController extends BaseController {
 
     /**
      * Processes the response for getCharges
-     * @return An object of type ListChargesResponse
+     * @return An object of type ChargesResponse2
      */
-    private ListChargesResponse _handleGetChargesResponse(HttpContext _context)
+    private ChargesResponse2 _handleGetChargesResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -598,145 +814,34 @@ public class ChargesController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
         //extract result from the http response
         String _responseBody = ((HttpStringResponse)_response).getBody();
-        ListChargesResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<ListChargesResponse>(){});
-
-        return _result;
-    }
-
-    /**
-     * Cancel a charge
-     * @param    chargeId    Required parameter: Charge id
-     * @param    request    Optional parameter: Request for cancelling a charge
-     * @param    idempotencyKey    Optional parameter: Example: 
-     * @return    Returns the GetChargeResponse response from the API call 
-     */
-    public GetChargeResponse cancelCharge(
-                final String chargeId,
-                final CreateCancelChargeRequest request,
-                final String idempotencyKey
-    ) throws Throwable {
-
-        HttpRequest _request = _buildCancelChargeRequest(chargeId, request, idempotencyKey);
-        HttpResponse _response = getClientInstance().executeAsString(_request);
-        HttpContext _context = new HttpContext(_request, _response);
-
-        return _handleCancelChargeResponse(_context);
-    }
-
-    /**
-     * Cancel a charge
-     * @param    chargeId    Required parameter: Charge id
-     * @param    request    Optional parameter: Request for cancelling a charge
-     * @param    idempotencyKey    Optional parameter: Example: 
-     */
-    public void cancelChargeAsync(
-                final String chargeId,
-                final CreateCancelChargeRequest request,
-                final String idempotencyKey,
-                final APICallBack<GetChargeResponse> callBack
-    ) {
-        Runnable _responseTask = new Runnable() {
-            public void run() {
-
-                HttpRequest _request;
-                try {
-                    _request = _buildCancelChargeRequest(chargeId, request, idempotencyKey);
-                } catch (Exception e) {
-                    callBack.onFailure(null, e);
-                    return;
-                }
-
-                // Invoke request and get response
-                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
-                    public void onSuccess(HttpContext _context, HttpResponse _response) {
-                        try {
-                            GetChargeResponse returnValue = _handleCancelChargeResponse(_context);
-                            callBack.onSuccess(_context, returnValue);
-                        } catch (Exception e) {
-                            callBack.onFailure(_context, e);
-                        }
-                    }
-
-                    public void onFailure(HttpContext _context, Throwable _exception) {
-                        // Let the caller know of the failure
-                        callBack.onFailure(_context, _exception);
-                    }
-                });
-            }
-        };
-
-        // Execute async using thread pool
-        APIHelper.getScheduler().execute(_responseTask);
-    }
-
-    /**
-     * Builds the HttpRequest object for cancelCharge
-     */
-    private HttpRequest _buildCancelChargeRequest(
-                final String chargeId,
-                final CreateCancelChargeRequest request,
-                final String idempotencyKey) throws IOException, APIException {
-        //the base uri for api requests
-        String _baseUri = Configuration.baseUri;
-
-        //prepare query string for API call
-        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/charges/{charge_id}");
-
-        //process template parameters
-        Map<String, Object> _templateParameters = new HashMap<String, Object>();
-        _templateParameters.put("charge_id", chargeId);
-        APIHelper.appendUrlWithTemplateParameters(_queryBuilder, _templateParameters);
-        //validate and preprocess url
-        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
-
-        //load all headers for the outgoing API request
-        Map<String, String> _headers = new HashMap<String, String>();
-        if (idempotencyKey != null) {
-            _headers.put("idempotency-key", idempotencyKey);
-        }
-        _headers.put("user-agent", BaseController.userAgent);
-        _headers.put("accept", "application/json");
-        _headers.put("content-type", "application/json");
-
-
-        //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().deleteBody(_queryUrl, _headers, APIHelper.serialize(request),
-                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
-
-        // Invoke the callback before request if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnBeforeRequest(_request);
-        }
-
-        return _request;
-    }
-
-    /**
-     * Processes the response for cancelCharge
-     * @return An object of type GetChargeResponse
-     */
-    private GetChargeResponse _handleCancelChargeResponse(HttpContext _context)
-            throws APIException, IOException {
-        HttpResponse _response = _context.getResponse();
-
-        //invoke the callback after response if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnAfterResponse(_context);
-        }
-
-        //handle errors defined at the API level
-        validateResponse(_response, _context);
-
-        //extract result from the http response
-        String _responseBody = ((HttpStringResponse)_response).getBody();
-        GetChargeResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<GetChargeResponse>(){});
+        ChargesResponse2 _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<ChargesResponse2>(){});
 
         return _result;
     }
@@ -745,9 +850,9 @@ public class ChargesController extends BaseController {
      * Retries a charge
      * @param    chargeId    Required parameter: Charge id
      * @param    idempotencyKey    Optional parameter: Example: 
-     * @return    Returns the GetChargeResponse response from the API call 
+     * @return    Returns the ChargesRetryResponse response from the API call 
      */
-    public GetChargeResponse retryCharge(
+    public ChargesRetryResponse retryCharge(
                 final String chargeId,
                 final String idempotencyKey
     ) throws Throwable {
@@ -767,7 +872,7 @@ public class ChargesController extends BaseController {
     public void retryChargeAsync(
                 final String chargeId,
                 final String idempotencyKey,
-                final APICallBack<GetChargeResponse> callBack
+                final APICallBack<ChargesRetryResponse> callBack
     ) {
         Runnable _responseTask = new Runnable() {
             public void run() {
@@ -784,7 +889,7 @@ public class ChargesController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            GetChargeResponse returnValue = _handleRetryChargeResponse(_context);
+                            ChargesRetryResponse returnValue = _handleRetryChargeResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -845,9 +950,9 @@ public class ChargesController extends BaseController {
 
     /**
      * Processes the response for retryCharge
-     * @return An object of type GetChargeResponse
+     * @return An object of type ChargesRetryResponse
      */
-    private GetChargeResponse _handleRetryChargeResponse(HttpContext _context)
+    private ChargesRetryResponse _handleRetryChargeResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -856,13 +961,34 @@ public class ChargesController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
         //extract result from the http response
         String _responseBody = ((HttpStringResponse)_response).getBody();
-        GetChargeResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<GetChargeResponse>(){});
+        ChargesRetryResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<ChargesRetryResponse>(){});
 
         return _result;
     }
@@ -870,17 +996,17 @@ public class ChargesController extends BaseController {
     /**
      * Updates a charge's payment method
      * @param    chargeId    Required parameter: Charge id
-     * @param    request    Required parameter: Request for updating the payment method from a charge
+     * @param    body    Required parameter: Request for updating the payment method from a charge
      * @param    idempotencyKey    Optional parameter: Example: 
-     * @return    Returns the GetChargeResponse response from the API call 
+     * @return    Returns the ChargesPaymentMethodResponse response from the API call 
      */
-    public GetChargeResponse updateChargePaymentMethod(
+    public ChargesPaymentMethodResponse updateChargePaymentMethod(
                 final String chargeId,
-                final UpdateChargePaymentMethodRequest request,
+                final ChargesPaymentMethodRequest body,
                 final String idempotencyKey
     ) throws Throwable {
 
-        HttpRequest _request = _buildUpdateChargePaymentMethodRequest(chargeId, request, idempotencyKey);
+        HttpRequest _request = _buildUpdateChargePaymentMethodRequest(chargeId, body, idempotencyKey);
         HttpResponse _response = getClientInstance().executeAsString(_request);
         HttpContext _context = new HttpContext(_request, _response);
 
@@ -890,21 +1016,21 @@ public class ChargesController extends BaseController {
     /**
      * Updates a charge's payment method
      * @param    chargeId    Required parameter: Charge id
-     * @param    request    Required parameter: Request for updating the payment method from a charge
+     * @param    body    Required parameter: Request for updating the payment method from a charge
      * @param    idempotencyKey    Optional parameter: Example: 
      */
     public void updateChargePaymentMethodAsync(
                 final String chargeId,
-                final UpdateChargePaymentMethodRequest request,
+                final ChargesPaymentMethodRequest body,
                 final String idempotencyKey,
-                final APICallBack<GetChargeResponse> callBack
+                final APICallBack<ChargesPaymentMethodResponse> callBack
     ) {
         Runnable _responseTask = new Runnable() {
             public void run() {
 
                 HttpRequest _request;
                 try {
-                    _request = _buildUpdateChargePaymentMethodRequest(chargeId, request, idempotencyKey);
+                    _request = _buildUpdateChargePaymentMethodRequest(chargeId, body, idempotencyKey);
                 } catch (Exception e) {
                     callBack.onFailure(null, e);
                     return;
@@ -914,7 +1040,7 @@ public class ChargesController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            GetChargeResponse returnValue = _handleUpdateChargePaymentMethodResponse(_context);
+                            ChargesPaymentMethodResponse returnValue = _handleUpdateChargePaymentMethodResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -938,7 +1064,7 @@ public class ChargesController extends BaseController {
      */
     private HttpRequest _buildUpdateChargePaymentMethodRequest(
                 final String chargeId,
-                final UpdateChargePaymentMethodRequest request,
+                final ChargesPaymentMethodRequest body,
                 final String idempotencyKey) throws IOException, APIException {
         //the base uri for api requests
         String _baseUri = Configuration.baseUri;
@@ -955,16 +1081,16 @@ public class ChargesController extends BaseController {
 
         //load all headers for the outgoing API request
         Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("Content-Type", "application/json");
         if (idempotencyKey != null) {
             _headers.put("idempotency-key", idempotencyKey);
         }
         _headers.put("user-agent", BaseController.userAgent);
         _headers.put("accept", "application/json");
-        _headers.put("content-type", "application/json");
 
 
         //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().patchBody(_queryUrl, _headers, APIHelper.serialize(request),
+        HttpRequest _request = getClientInstance().patchBody(_queryUrl, _headers, APIHelper.serialize(body),
                 Configuration.basicAuthUserName, Configuration.basicAuthPassword);
 
         // Invoke the callback before request if its not null
@@ -977,9 +1103,9 @@ public class ChargesController extends BaseController {
 
     /**
      * Processes the response for updateChargePaymentMethod
-     * @return An object of type GetChargeResponse
+     * @return An object of type ChargesPaymentMethodResponse
      */
-    private GetChargeResponse _handleUpdateChargePaymentMethodResponse(HttpContext _context)
+    private ChargesPaymentMethodResponse _handleUpdateChargePaymentMethodResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -988,13 +1114,34 @@ public class ChargesController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
         //extract result from the http response
         String _responseBody = ((HttpStringResponse)_response).getBody();
-        GetChargeResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<GetChargeResponse>(){});
+        ChargesPaymentMethodResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<ChargesPaymentMethodResponse>(){});
 
         return _result;
     }
@@ -1002,17 +1149,17 @@ public class ChargesController extends BaseController {
     /**
      * Updates the metadata from a charge
      * @param    chargeId    Required parameter: The charge id
-     * @param    request    Required parameter: Request for updating the charge metadata
+     * @param    body    Required parameter: Request for updating the charge metadata
      * @param    idempotencyKey    Optional parameter: Example: 
-     * @return    Returns the GetChargeResponse response from the API call 
+     * @return    Returns the ChargesMetadataResponse response from the API call 
      */
-    public GetChargeResponse updateChargeMetadata(
+    public ChargesMetadataResponse updateChargeMetadata(
                 final String chargeId,
-                final UpdateMetadataRequest request,
+                final ChargesMetadataRequest body,
                 final String idempotencyKey
     ) throws Throwable {
 
-        HttpRequest _request = _buildUpdateChargeMetadataRequest(chargeId, request, idempotencyKey);
+        HttpRequest _request = _buildUpdateChargeMetadataRequest(chargeId, body, idempotencyKey);
         HttpResponse _response = getClientInstance().executeAsString(_request);
         HttpContext _context = new HttpContext(_request, _response);
 
@@ -1022,21 +1169,21 @@ public class ChargesController extends BaseController {
     /**
      * Updates the metadata from a charge
      * @param    chargeId    Required parameter: The charge id
-     * @param    request    Required parameter: Request for updating the charge metadata
+     * @param    body    Required parameter: Request for updating the charge metadata
      * @param    idempotencyKey    Optional parameter: Example: 
      */
     public void updateChargeMetadataAsync(
                 final String chargeId,
-                final UpdateMetadataRequest request,
+                final ChargesMetadataRequest body,
                 final String idempotencyKey,
-                final APICallBack<GetChargeResponse> callBack
+                final APICallBack<ChargesMetadataResponse> callBack
     ) {
         Runnable _responseTask = new Runnable() {
             public void run() {
 
                 HttpRequest _request;
                 try {
-                    _request = _buildUpdateChargeMetadataRequest(chargeId, request, idempotencyKey);
+                    _request = _buildUpdateChargeMetadataRequest(chargeId, body, idempotencyKey);
                 } catch (Exception e) {
                     callBack.onFailure(null, e);
                     return;
@@ -1046,7 +1193,7 @@ public class ChargesController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            GetChargeResponse returnValue = _handleUpdateChargeMetadataResponse(_context);
+                            ChargesMetadataResponse returnValue = _handleUpdateChargeMetadataResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -1070,7 +1217,7 @@ public class ChargesController extends BaseController {
      */
     private HttpRequest _buildUpdateChargeMetadataRequest(
                 final String chargeId,
-                final UpdateMetadataRequest request,
+                final ChargesMetadataRequest body,
                 final String idempotencyKey) throws IOException, APIException {
         //the base uri for api requests
         String _baseUri = Configuration.baseUri;
@@ -1087,16 +1234,16 @@ public class ChargesController extends BaseController {
 
         //load all headers for the outgoing API request
         Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("Content-Type", "application/json");
         if (idempotencyKey != null) {
             _headers.put("idempotency-key", idempotencyKey);
         }
         _headers.put("user-agent", BaseController.userAgent);
         _headers.put("accept", "application/json");
-        _headers.put("content-type", "application/json");
 
 
         //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().patchBody(_queryUrl, _headers, APIHelper.serialize(request),
+        HttpRequest _request = getClientInstance().patchBody(_queryUrl, _headers, APIHelper.serialize(body),
                 Configuration.basicAuthUserName, Configuration.basicAuthPassword);
 
         // Invoke the callback before request if its not null
@@ -1109,9 +1256,9 @@ public class ChargesController extends BaseController {
 
     /**
      * Processes the response for updateChargeMetadata
-     * @return An object of type GetChargeResponse
+     * @return An object of type ChargesMetadataResponse
      */
-    private GetChargeResponse _handleUpdateChargeMetadataResponse(HttpContext _context)
+    private ChargesMetadataResponse _handleUpdateChargeMetadataResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -1120,13 +1267,34 @@ public class ChargesController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
         //extract result from the http response
         String _responseBody = ((HttpStringResponse)_response).getBody();
-        GetChargeResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<GetChargeResponse>(){});
+        ChargesMetadataResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<ChargesMetadataResponse>(){});
 
         return _result;
     }
@@ -1134,17 +1302,17 @@ public class ChargesController extends BaseController {
     /**
      * Captures a charge
      * @param    chargeId    Required parameter: Charge id
-     * @param    request    Optional parameter: Request for capturing a charge
      * @param    idempotencyKey    Optional parameter: Example: 
-     * @return    Returns the GetChargeResponse response from the API call 
+     * @param    body    Optional parameter: Request for capturing a charge
+     * @return    Returns the ChargesCaptureResponse response from the API call 
      */
-    public GetChargeResponse captureCharge(
+    public ChargesCaptureResponse captureCharge(
                 final String chargeId,
-                final CreateCaptureChargeRequest request,
-                final String idempotencyKey
+                final String idempotencyKey,
+                final ChargesCaptureRequest body
     ) throws Throwable {
 
-        HttpRequest _request = _buildCaptureChargeRequest(chargeId, request, idempotencyKey);
+        HttpRequest _request = _buildCaptureChargeRequest(chargeId, idempotencyKey, body);
         HttpResponse _response = getClientInstance().executeAsString(_request);
         HttpContext _context = new HttpContext(_request, _response);
 
@@ -1154,21 +1322,21 @@ public class ChargesController extends BaseController {
     /**
      * Captures a charge
      * @param    chargeId    Required parameter: Charge id
-     * @param    request    Optional parameter: Request for capturing a charge
      * @param    idempotencyKey    Optional parameter: Example: 
+     * @param    body    Optional parameter: Request for capturing a charge
      */
     public void captureChargeAsync(
                 final String chargeId,
-                final CreateCaptureChargeRequest request,
                 final String idempotencyKey,
-                final APICallBack<GetChargeResponse> callBack
+                final ChargesCaptureRequest body,
+                final APICallBack<ChargesCaptureResponse> callBack
     ) {
         Runnable _responseTask = new Runnable() {
             public void run() {
 
                 HttpRequest _request;
                 try {
-                    _request = _buildCaptureChargeRequest(chargeId, request, idempotencyKey);
+                    _request = _buildCaptureChargeRequest(chargeId, idempotencyKey, body);
                 } catch (Exception e) {
                     callBack.onFailure(null, e);
                     return;
@@ -1178,7 +1346,7 @@ public class ChargesController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            GetChargeResponse returnValue = _handleCaptureChargeResponse(_context);
+                            ChargesCaptureResponse returnValue = _handleCaptureChargeResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -1202,8 +1370,8 @@ public class ChargesController extends BaseController {
      */
     private HttpRequest _buildCaptureChargeRequest(
                 final String chargeId,
-                final CreateCaptureChargeRequest request,
-                final String idempotencyKey) throws IOException, APIException {
+                final String idempotencyKey,
+                final ChargesCaptureRequest body) throws IOException, APIException {
         //the base uri for api requests
         String _baseUri = Configuration.baseUri;
 
@@ -1219,16 +1387,16 @@ public class ChargesController extends BaseController {
 
         //load all headers for the outgoing API request
         Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("Content-Type", "application/json");
         if (idempotencyKey != null) {
             _headers.put("idempotency-key", idempotencyKey);
         }
         _headers.put("user-agent", BaseController.userAgent);
         _headers.put("accept", "application/json");
-        _headers.put("content-type", "application/json");
 
 
         //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().postBody(_queryUrl, _headers, APIHelper.serialize(request),
+        HttpRequest _request = getClientInstance().postBody(_queryUrl, _headers, APIHelper.serialize(body),
                 Configuration.basicAuthUserName, Configuration.basicAuthPassword);
 
         // Invoke the callback before request if its not null
@@ -1241,9 +1409,9 @@ public class ChargesController extends BaseController {
 
     /**
      * Processes the response for captureCharge
-     * @return An object of type GetChargeResponse
+     * @return An object of type ChargesCaptureResponse
      */
-    private GetChargeResponse _handleCaptureChargeResponse(HttpContext _context)
+    private ChargesCaptureResponse _handleCaptureChargeResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -1252,13 +1420,34 @@ public class ChargesController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
         //extract result from the http response
         String _responseBody = ((HttpStringResponse)_response).getBody();
-        GetChargeResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<GetChargeResponse>(){});
+        ChargesCaptureResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<ChargesCaptureResponse>(){});
 
         return _result;
     }
@@ -1266,17 +1455,17 @@ public class ChargesController extends BaseController {
     /**
      * Updates the due date from a charge
      * @param    chargeId    Required parameter: Charge Id
-     * @param    request    Required parameter: Request for updating the due date
+     * @param    body    Required parameter: Request for updating the due date
      * @param    idempotencyKey    Optional parameter: Example: 
-     * @return    Returns the GetChargeResponse response from the API call 
+     * @return    Returns the ChargesDueDateResponse response from the API call 
      */
-    public GetChargeResponse updateChargeDueDate(
+    public ChargesDueDateResponse updateChargeDueDate(
                 final String chargeId,
-                final UpdateChargeDueDateRequest request,
+                final ChargesDueDateRequest body,
                 final String idempotencyKey
     ) throws Throwable {
 
-        HttpRequest _request = _buildUpdateChargeDueDateRequest(chargeId, request, idempotencyKey);
+        HttpRequest _request = _buildUpdateChargeDueDateRequest(chargeId, body, idempotencyKey);
         HttpResponse _response = getClientInstance().executeAsString(_request);
         HttpContext _context = new HttpContext(_request, _response);
 
@@ -1286,21 +1475,21 @@ public class ChargesController extends BaseController {
     /**
      * Updates the due date from a charge
      * @param    chargeId    Required parameter: Charge Id
-     * @param    request    Required parameter: Request for updating the due date
+     * @param    body    Required parameter: Request for updating the due date
      * @param    idempotencyKey    Optional parameter: Example: 
      */
     public void updateChargeDueDateAsync(
                 final String chargeId,
-                final UpdateChargeDueDateRequest request,
+                final ChargesDueDateRequest body,
                 final String idempotencyKey,
-                final APICallBack<GetChargeResponse> callBack
+                final APICallBack<ChargesDueDateResponse> callBack
     ) {
         Runnable _responseTask = new Runnable() {
             public void run() {
 
                 HttpRequest _request;
                 try {
-                    _request = _buildUpdateChargeDueDateRequest(chargeId, request, idempotencyKey);
+                    _request = _buildUpdateChargeDueDateRequest(chargeId, body, idempotencyKey);
                 } catch (Exception e) {
                     callBack.onFailure(null, e);
                     return;
@@ -1310,7 +1499,7 @@ public class ChargesController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            GetChargeResponse returnValue = _handleUpdateChargeDueDateResponse(_context);
+                            ChargesDueDateResponse returnValue = _handleUpdateChargeDueDateResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -1334,7 +1523,7 @@ public class ChargesController extends BaseController {
      */
     private HttpRequest _buildUpdateChargeDueDateRequest(
                 final String chargeId,
-                final UpdateChargeDueDateRequest request,
+                final ChargesDueDateRequest body,
                 final String idempotencyKey) throws IOException, APIException {
         //the base uri for api requests
         String _baseUri = Configuration.baseUri;
@@ -1351,16 +1540,16 @@ public class ChargesController extends BaseController {
 
         //load all headers for the outgoing API request
         Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("Content-Type", "application/json");
         if (idempotencyKey != null) {
             _headers.put("idempotency-key", idempotencyKey);
         }
         _headers.put("user-agent", BaseController.userAgent);
         _headers.put("accept", "application/json");
-        _headers.put("content-type", "application/json");
 
 
         //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().patchBody(_queryUrl, _headers, APIHelper.serialize(request),
+        HttpRequest _request = getClientInstance().patchBody(_queryUrl, _headers, APIHelper.serialize(body),
                 Configuration.basicAuthUserName, Configuration.basicAuthPassword);
 
         // Invoke the callback before request if its not null
@@ -1373,9 +1562,9 @@ public class ChargesController extends BaseController {
 
     /**
      * Processes the response for updateChargeDueDate
-     * @return An object of type GetChargeResponse
+     * @return An object of type ChargesDueDateResponse
      */
-    private GetChargeResponse _handleUpdateChargeDueDateResponse(HttpContext _context)
+    private ChargesDueDateResponse _handleUpdateChargeDueDateResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -1384,29 +1573,50 @@ public class ChargesController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
         //extract result from the http response
         String _responseBody = ((HttpStringResponse)_response).getBody();
-        GetChargeResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<GetChargeResponse>(){});
+        ChargesDueDateResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<ChargesDueDateResponse>(){});
 
         return _result;
     }
 
     /**
      * Creates a new charge
-     * @param    request    Required parameter: Request for creating a charge
+     * @param    body    Required parameter: Request for creating a charge
      * @param    idempotencyKey    Optional parameter: Example: 
-     * @return    Returns the GetChargeResponse response from the API call 
+     * @return    Returns the ChargesResponse response from the API call 
      */
-    public GetChargeResponse createCharge(
-                final CreateChargeRequest request,
+    public ChargesResponse createCharge(
+                final ChargesRequest1 body,
                 final String idempotencyKey
     ) throws Throwable {
 
-        HttpRequest _request = _buildCreateChargeRequest(request, idempotencyKey);
+        HttpRequest _request = _buildCreateChargeRequest(body, idempotencyKey);
         HttpResponse _response = getClientInstance().executeAsString(_request);
         HttpContext _context = new HttpContext(_request, _response);
 
@@ -1415,20 +1625,20 @@ public class ChargesController extends BaseController {
 
     /**
      * Creates a new charge
-     * @param    request    Required parameter: Request for creating a charge
+     * @param    body    Required parameter: Request for creating a charge
      * @param    idempotencyKey    Optional parameter: Example: 
      */
     public void createChargeAsync(
-                final CreateChargeRequest request,
+                final ChargesRequest1 body,
                 final String idempotencyKey,
-                final APICallBack<GetChargeResponse> callBack
+                final APICallBack<ChargesResponse> callBack
     ) {
         Runnable _responseTask = new Runnable() {
             public void run() {
 
                 HttpRequest _request;
                 try {
-                    _request = _buildCreateChargeRequest(request, idempotencyKey);
+                    _request = _buildCreateChargeRequest(body, idempotencyKey);
                 } catch (Exception e) {
                     callBack.onFailure(null, e);
                     return;
@@ -1438,7 +1648,7 @@ public class ChargesController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            GetChargeResponse returnValue = _handleCreateChargeResponse(_context);
+                            ChargesResponse returnValue = _handleCreateChargeResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -1461,7 +1671,7 @@ public class ChargesController extends BaseController {
      * Builds the HttpRequest object for createCharge
      */
     private HttpRequest _buildCreateChargeRequest(
-                final CreateChargeRequest request,
+                final ChargesRequest1 body,
                 final String idempotencyKey) throws IOException, APIException {
         //the base uri for api requests
         String _baseUri = Configuration.baseUri;
@@ -1473,16 +1683,16 @@ public class ChargesController extends BaseController {
 
         //load all headers for the outgoing API request
         Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("Content-Type", "application/json");
         if (idempotencyKey != null) {
             _headers.put("idempotency-key", idempotencyKey);
         }
         _headers.put("user-agent", BaseController.userAgent);
         _headers.put("accept", "application/json");
-        _headers.put("content-type", "application/json");
 
 
         //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().postBody(_queryUrl, _headers, APIHelper.serialize(request),
+        HttpRequest _request = getClientInstance().postBody(_queryUrl, _headers, APIHelper.serialize(body),
                 Configuration.basicAuthUserName, Configuration.basicAuthPassword);
 
         // Invoke the callback before request if its not null
@@ -1495,9 +1705,9 @@ public class ChargesController extends BaseController {
 
     /**
      * Processes the response for createCharge
-     * @return An object of type GetChargeResponse
+     * @return An object of type ChargesResponse
      */
-    private GetChargeResponse _handleCreateChargeResponse(HttpContext _context)
+    private ChargesResponse _handleCreateChargeResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -1506,25 +1716,46 @@ public class ChargesController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
         //extract result from the http response
         String _responseBody = ((HttpStringResponse)_response).getBody();
-        GetChargeResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<GetChargeResponse>(){});
+        ChargesResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<ChargesResponse>(){});
 
         return _result;
     }
 
     /**
-     * TODO: type endpoint description here
+     * GetChargeTransactions
      * @param    chargeId    Required parameter: Charge Id
      * @param    page    Optional parameter: Page number
      * @param    size    Optional parameter: Page size
-     * @return    Returns the ListChargeTransactionsResponse response from the API call 
+     * @return    Returns the ChargesTransactionsResponse response from the API call 
      */
-    public ListChargeTransactionsResponse getChargeTransactions(
+    public ChargesTransactionsResponse getChargeTransactions(
                 final String chargeId,
                 final Integer page,
                 final Integer size
@@ -1538,7 +1769,7 @@ public class ChargesController extends BaseController {
     }
 
     /**
-     * TODO: type endpoint description here
+     * GetChargeTransactions
      * @param    chargeId    Required parameter: Charge Id
      * @param    page    Optional parameter: Page number
      * @param    size    Optional parameter: Page size
@@ -1547,7 +1778,7 @@ public class ChargesController extends BaseController {
                 final String chargeId,
                 final Integer page,
                 final Integer size,
-                final APICallBack<ListChargeTransactionsResponse> callBack
+                final APICallBack<ChargesTransactionsResponse> callBack
     ) {
         Runnable _responseTask = new Runnable() {
             public void run() {
@@ -1564,7 +1795,7 @@ public class ChargesController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            ListChargeTransactionsResponse returnValue = _handleGetChargeTransactionsResponse(_context);
+                            ChargesTransactionsResponse returnValue = _handleGetChargeTransactionsResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -1633,9 +1864,9 @@ public class ChargesController extends BaseController {
 
     /**
      * Processes the response for getChargeTransactions
-     * @return An object of type ListChargeTransactionsResponse
+     * @return An object of type ChargesTransactionsResponse
      */
-    private ListChargeTransactionsResponse _handleGetChargeTransactionsResponse(HttpContext _context)
+    private ChargesTransactionsResponse _handleGetChargeTransactionsResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -1644,19 +1875,40 @@ public class ChargesController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
         //extract result from the http response
         String _responseBody = ((HttpStringResponse)_response).getBody();
-        ListChargeTransactionsResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<ListChargeTransactionsResponse>(){});
+        ChargesTransactionsResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<ChargesTransactionsResponse>(){});
 
         return _result;
     }
 
     /**
-     * TODO: type endpoint description here
+     * GetChargesSummary
      * @param    status    Required parameter: Example: 
      * @param    createdSince    Optional parameter: Example: 
      * @param    createdUntil    Optional parameter: Example: 
@@ -1676,7 +1928,7 @@ public class ChargesController extends BaseController {
     }
 
     /**
-     * TODO: type endpoint description here
+     * GetChargesSummary
      * @param    status    Required parameter: Example: 
      * @param    createdSince    Optional parameter: Example: 
      * @param    createdUntil    Optional parameter: Example: 
@@ -1778,6 +2030,27 @@ public class ChargesController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 

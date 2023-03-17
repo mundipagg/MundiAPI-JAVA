@@ -34,10 +34,7 @@ public class GetSplitResponseBuilder {
         return this;
     }
 
-    /**
-     * Recipient
-     */
-    public GetSplitResponseBuilder recipient(GetRecipientResponse recipient) {
+    public GetSplitResponseBuilder recipient(Recipient recipient) {
         getSplitResponse.setRecipient(recipient);
         return this;
     }

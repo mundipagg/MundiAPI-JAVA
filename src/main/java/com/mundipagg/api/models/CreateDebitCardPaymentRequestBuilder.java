@@ -26,10 +26,7 @@ public class CreateDebitCardPaymentRequestBuilder {
         return this;
     }
 
-    /**
-     * Debit card data
-     */
-    public CreateDebitCardPaymentRequestBuilder card(CreateCardRequest card) {
+    public CreateDebitCardPaymentRequestBuilder card(Card1 card) {
         createDebitCardPaymentRequest.setCard(card);
         return this;
     }
@@ -58,18 +55,12 @@ public class CreateDebitCardPaymentRequestBuilder {
         return this;
     }
 
-    /**
-     * The payment authentication request
-     */
-    public CreateDebitCardPaymentRequestBuilder authentication(CreatePaymentAuthenticationRequest authentication) {
+    public CreateDebitCardPaymentRequestBuilder authentication(Authentication2 authentication) {
         createDebitCardPaymentRequest.setAuthentication(authentication);
         return this;
     }
 
-    /**
-     * The Debit card payment token request
-     */
-    public CreateDebitCardPaymentRequestBuilder token(CreateCardPaymentContactlessRequest token) {
+    public CreateDebitCardPaymentRequestBuilder token(Token token) {
         createDebitCardPaymentRequest.setToken(token);
         return this;
     }

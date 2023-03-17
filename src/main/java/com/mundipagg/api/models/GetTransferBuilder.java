@@ -74,12 +74,12 @@ public class GetTransferBuilder {
         return this;
     }
 
-    public GetTransferBuilder source(GetTransferSourceResponse source) {
+    public GetTransferBuilder source(GetWithdrawSourceResponse source) {
         getTransfer.setSource(source);
         return this;
     }
 
-    public GetTransferBuilder target(GetTransferTargetResponse target) {
+    public GetTransferBuilder target(GetWithdrawTargetResponse target) {
         getTransfer.setTarget(target);
         return this;
     }

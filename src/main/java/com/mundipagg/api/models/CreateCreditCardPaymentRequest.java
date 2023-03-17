@@ -14,10 +14,10 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.ALWAYS)
 public class CreateCreditCardPaymentRequest 
         implements java.io.Serializable {
-    private static final long serialVersionUID = -7868693511401519544L;
+    private static final long serialVersionUID = 7362469964401467139L;
     private Integer installments = 1;
     private String statementDescriptor;
-    private CreateCardRequest card;
+    private Card1 card;
     private String cardId;
     private String cardToken;
     private Boolean recurrence;
@@ -25,8 +25,8 @@ public class CreateCreditCardPaymentRequest
     private Boolean extendedLimitEnabled;
     private String extendedLimitCode;
     private Long merchantCategoryCode;
-    private CreatePaymentAuthenticationRequest authentication;
-    private CreateCardPaymentContactlessRequest contactless;
+    private Authentication2 authentication;
+    private Contactless contactless;
     private Boolean autoRecovery;
     private String operationType;
     private String recurrencyCycle;
@@ -63,18 +63,18 @@ public class CreateCreditCardPaymentRequest
     }
  
     /** GETTER
-     * Credit card data
+     * TODO: Write general description for this method
      */
     @JsonGetter("card")
-    public CreateCardRequest getCard ( ) { 
+    public Card1 getCard ( ) { 
         return this.card;
     }
     
     /** SETTER
-     * Credit card data
+     * TODO: Write general description for this method
      */
     @JsonSetter("card")
-    public void setCard (CreateCardRequest value) { 
+    public void setCard (Card1 value) { 
         this.card = value;
     }
  
@@ -191,34 +191,34 @@ public class CreateCreditCardPaymentRequest
     }
  
     /** GETTER
-     * The payment authentication request
+     * TODO: Write general description for this method
      */
     @JsonGetter("authentication")
-    public CreatePaymentAuthenticationRequest getAuthentication ( ) { 
+    public Authentication2 getAuthentication ( ) { 
         return this.authentication;
     }
     
     /** SETTER
-     * The payment authentication request
+     * TODO: Write general description for this method
      */
     @JsonSetter("authentication")
-    public void setAuthentication (CreatePaymentAuthenticationRequest value) { 
+    public void setAuthentication (Authentication2 value) { 
         this.authentication = value;
     }
  
     /** GETTER
-     * The Credit card payment contactless request
+     * TODO: Write general description for this method
      */
     @JsonGetter("contactless")
-    public CreateCardPaymentContactlessRequest getContactless ( ) { 
+    public Contactless getContactless ( ) { 
         return this.contactless;
     }
     
     /** SETTER
-     * The Credit card payment contactless request
+     * TODO: Write general description for this method
      */
     @JsonSetter("contactless")
-    public void setContactless (CreateCardPaymentContactlessRequest value) { 
+    public void setContactless (Contactless value) { 
         this.contactless = value;
     }
  

@@ -14,24 +14,24 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.ALWAYS)
 public class CreatePaymentRequest 
         implements java.io.Serializable {
-    private static final long serialVersionUID = -4738634314378595801L;
+    private static final long serialVersionUID = -1536488016895474624L;
     private String paymentMethod;
-    private CreateCreditCardPaymentRequest creditCard;
-    private CreateDebitCardPaymentRequest debitCard;
-    private CreateBoletoPaymentRequest boleto;
+    private CreditCard1 creditCard;
+    private DebitCard1 debitCard;
+    private Boleto1 boleto;
     private String currency;
-    private CreateVoucherPaymentRequest voucher;
+    private Voucher voucher;
     private List<CreateSplitRequest> split;
-    private CreateBankTransferPaymentRequest bankTransfer;
+    private BankTransfer1 bankTransfer;
     private String gatewayAffiliationId;
     private Integer amount;
-    private CreateCheckoutPaymentRequest checkout;
+    private Checkout checkout;
     private String customerId;
-    private CreateCustomerRequest customer;
+    private Customer8 customer;
     private LinkedHashMap<String, String> metadata;
     private CreateCashPaymentRequest cash;
-    private CreatePrivateLabelPaymentRequest privateLabel;
-    private CreatePixPaymentRequest pix;
+    private PrivateLabel privateLabel;
+    private Pix pix;
     /** GETTER
      * Payment method
      */
@@ -49,50 +49,50 @@ public class CreatePaymentRequest
     }
  
     /** GETTER
-     * Settings for credit card payment
+     * TODO: Write general description for this method
      */
     @JsonGetter("credit_card")
-    public CreateCreditCardPaymentRequest getCreditCard ( ) { 
+    public CreditCard1 getCreditCard ( ) { 
         return this.creditCard;
     }
     
     /** SETTER
-     * Settings for credit card payment
+     * TODO: Write general description for this method
      */
     @JsonSetter("credit_card")
-    public void setCreditCard (CreateCreditCardPaymentRequest value) { 
+    public void setCreditCard (CreditCard1 value) { 
         this.creditCard = value;
     }
  
     /** GETTER
-     * Settings for debit card payment
+     * TODO: Write general description for this method
      */
     @JsonGetter("debit_card")
-    public CreateDebitCardPaymentRequest getDebitCard ( ) { 
+    public DebitCard1 getDebitCard ( ) { 
         return this.debitCard;
     }
     
     /** SETTER
-     * Settings for debit card payment
+     * TODO: Write general description for this method
      */
     @JsonSetter("debit_card")
-    public void setDebitCard (CreateDebitCardPaymentRequest value) { 
+    public void setDebitCard (DebitCard1 value) { 
         this.debitCard = value;
     }
  
     /** GETTER
-     * Settings for boleto payment
+     * TODO: Write general description for this method
      */
     @JsonGetter("boleto")
-    public CreateBoletoPaymentRequest getBoleto ( ) { 
+    public Boleto1 getBoleto ( ) { 
         return this.boleto;
     }
     
     /** SETTER
-     * Settings for boleto payment
+     * TODO: Write general description for this method
      */
     @JsonSetter("boleto")
-    public void setBoleto (CreateBoletoPaymentRequest value) { 
+    public void setBoleto (Boleto1 value) { 
         this.boleto = value;
     }
  
@@ -113,18 +113,18 @@ public class CreatePaymentRequest
     }
  
     /** GETTER
-     * Settings for voucher payment
+     * TODO: Write general description for this method
      */
     @JsonGetter("voucher")
-    public CreateVoucherPaymentRequest getVoucher ( ) { 
+    public Voucher getVoucher ( ) { 
         return this.voucher;
     }
     
     /** SETTER
-     * Settings for voucher payment
+     * TODO: Write general description for this method
      */
     @JsonSetter("voucher")
-    public void setVoucher (CreateVoucherPaymentRequest value) { 
+    public void setVoucher (Voucher value) { 
         this.voucher = value;
     }
  
@@ -145,18 +145,18 @@ public class CreatePaymentRequest
     }
  
     /** GETTER
-     * Settings for bank transfer payment
+     * TODO: Write general description for this method
      */
     @JsonGetter("bank_transfer")
-    public CreateBankTransferPaymentRequest getBankTransfer ( ) { 
+    public BankTransfer1 getBankTransfer ( ) { 
         return this.bankTransfer;
     }
     
     /** SETTER
-     * Settings for bank transfer payment
+     * TODO: Write general description for this method
      */
     @JsonSetter("bank_transfer")
-    public void setBankTransfer (CreateBankTransferPaymentRequest value) { 
+    public void setBankTransfer (BankTransfer1 value) { 
         this.bankTransfer = value;
     }
  
@@ -193,18 +193,18 @@ public class CreatePaymentRequest
     }
  
     /** GETTER
-     * Settings for checkout payment
+     * TODO: Write general description for this method
      */
     @JsonGetter("checkout")
-    public CreateCheckoutPaymentRequest getCheckout ( ) { 
+    public Checkout getCheckout ( ) { 
         return this.checkout;
     }
     
     /** SETTER
-     * Settings for checkout payment
+     * TODO: Write general description for this method
      */
     @JsonSetter("checkout")
-    public void setCheckout (CreateCheckoutPaymentRequest value) { 
+    public void setCheckout (Checkout value) { 
         this.checkout = value;
     }
  
@@ -225,18 +225,18 @@ public class CreatePaymentRequest
     }
  
     /** GETTER
-     * Customer
+     * TODO: Write general description for this method
      */
     @JsonGetter("customer")
-    public CreateCustomerRequest getCustomer ( ) { 
+    public Customer8 getCustomer ( ) { 
         return this.customer;
     }
     
     /** SETTER
-     * Customer
+     * TODO: Write general description for this method
      */
     @JsonSetter("customer")
-    public void setCustomer (CreateCustomerRequest value) { 
+    public void setCustomer (Customer8 value) { 
         this.customer = value;
     }
  
@@ -257,7 +257,7 @@ public class CreatePaymentRequest
     }
  
     /** GETTER
-     * Settings for cash payment
+     * TODO: Write general description for this method
      */
     @JsonGetter("cash")
     public CreateCashPaymentRequest getCash ( ) { 
@@ -265,7 +265,7 @@ public class CreatePaymentRequest
     }
     
     /** SETTER
-     * Settings for cash payment
+     * TODO: Write general description for this method
      */
     @JsonSetter("cash")
     public void setCash (CreateCashPaymentRequest value) { 
@@ -273,34 +273,34 @@ public class CreatePaymentRequest
     }
  
     /** GETTER
-     * Settings for private label payment
+     * TODO: Write general description for this method
      */
     @JsonGetter("private_label")
-    public CreatePrivateLabelPaymentRequest getPrivateLabel ( ) { 
+    public PrivateLabel getPrivateLabel ( ) { 
         return this.privateLabel;
     }
     
     /** SETTER
-     * Settings for private label payment
+     * TODO: Write general description for this method
      */
     @JsonSetter("private_label")
-    public void setPrivateLabel (CreatePrivateLabelPaymentRequest value) { 
+    public void setPrivateLabel (PrivateLabel value) { 
         this.privateLabel = value;
     }
  
     /** GETTER
-     * Settings for pix payment
+     * TODO: Write general description for this method
      */
     @JsonGetter("pix")
-    public CreatePixPaymentRequest getPix ( ) { 
+    public Pix getPix ( ) { 
         return this.pix;
     }
     
     /** SETTER
-     * Settings for pix payment
+     * TODO: Write general description for this method
      */
     @JsonSetter("pix")
-    public void setPix (CreatePixPaymentRequest value) { 
+    public void setPix (Pix value) { 
         this.pix = value;
     }
  

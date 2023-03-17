@@ -66,18 +66,12 @@ public class CreateSubMerchantRequestBuilder {
         return this;
     }
 
-    /**
-     * Phone
-     */
-    public CreateSubMerchantRequestBuilder phone(CreatePhoneRequest phone) {
+    public CreateSubMerchantRequestBuilder phone(GetPhoneResponse phone) {
         createSubMerchantRequest.setPhone(phone);
         return this;
     }
 
-    /**
-     * Address
-     */
-    public CreateSubMerchantRequestBuilder address(CreateAddressRequest address) {
+    public CreateSubMerchantRequestBuilder address(Address1 address) {
         createSubMerchantRequest.setAddress(address);
         return this;
     }

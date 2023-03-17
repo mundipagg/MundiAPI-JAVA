@@ -18,24 +18,24 @@ import org.joda.time.DateTime;
 @JsonInclude(Include.ALWAYS)
 public class GetOrderResponse 
         implements java.io.Serializable {
-    private static final long serialVersionUID = 6882688645881334535L;
+    private static final long serialVersionUID = 7218606229010703845L;
     private String id;
     private String code;
     private String currency;
     private List<GetOrderItemResponse> items;
-    private GetCustomerResponse customer;
+    private Customer customer;
     private String status;
     private DateTime createdAt;
     private DateTime updatedAt;
     private List<GetChargeResponse> charges;
     private String invoiceUrl;
-    private GetShippingResponse shipping;
+    private Shipping shipping;
     private LinkedHashMap<String, String> metadata;
     private List<GetCheckoutPaymentResponse> checkouts;
     private String ip;
     private String sessionId;
-    private GetLocationResponse location;
-    private GetDeviceResponse device;
+    private Location location;
+    private Device device;
     private boolean closed;
     /** GETTER
      * TODO: Write general description for this method
@@ -105,7 +105,7 @@ public class GetOrderResponse
      * TODO: Write general description for this method
      */
     @JsonGetter("customer")
-    public GetCustomerResponse getCustomer ( ) { 
+    public Customer getCustomer ( ) { 
         return this.customer;
     }
     
@@ -113,7 +113,7 @@ public class GetOrderResponse
      * TODO: Write general description for this method
      */
     @JsonSetter("customer")
-    public void setCustomer (GetCustomerResponse value) { 
+    public void setCustomer (Customer value) { 
         this.customer = value;
     }
  
@@ -205,7 +205,7 @@ public class GetOrderResponse
      * TODO: Write general description for this method
      */
     @JsonGetter("shipping")
-    public GetShippingResponse getShipping ( ) { 
+    public Shipping getShipping ( ) { 
         return this.shipping;
     }
     
@@ -213,7 +213,7 @@ public class GetOrderResponse
      * TODO: Write general description for this method
      */
     @JsonSetter("shipping")
-    public void setShipping (GetShippingResponse value) { 
+    public void setShipping (Shipping value) { 
         this.shipping = value;
     }
  
@@ -282,34 +282,34 @@ public class GetOrderResponse
     }
  
     /** GETTER
-     * Location
+     * TODO: Write general description for this method
      */
     @JsonGetter("location")
-    public GetLocationResponse getLocation ( ) { 
+    public Location getLocation ( ) { 
         return this.location;
     }
     
     /** SETTER
-     * Location
+     * TODO: Write general description for this method
      */
     @JsonSetter("location")
-    public void setLocation (GetLocationResponse value) { 
+    public void setLocation (Location value) { 
         this.location = value;
     }
  
     /** GETTER
-     * Device's informations
+     * TODO: Write general description for this method
      */
     @JsonGetter("device")
-    public GetDeviceResponse getDevice ( ) { 
+    public Device getDevice ( ) { 
         return this.device;
     }
     
     /** SETTER
-     * Device's informations
+     * TODO: Write general description for this method
      */
     @JsonSetter("device")
-    public void setDevice (GetDeviceResponse value) { 
+    public void setDevice (Device value) { 
         this.device = value;
     }
  

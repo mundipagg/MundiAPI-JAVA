@@ -14,9 +14,9 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.ALWAYS)
 public class ListUsagesDetailsResponse 
         implements java.io.Serializable {
-    private static final long serialVersionUID = 5489787417170910522L;
+    private static final long serialVersionUID = -5489787416916465204L;
     private List<GetUsageResponse> data;
-    private PagingResponse paging;
+    private Paging paging;
     /** GETTER
      * The usage objects
      */
@@ -34,18 +34,18 @@ public class ListUsagesDetailsResponse
     }
  
     /** GETTER
-     * paging object
+     * TODO: Write general description for this method
      */
     @JsonGetter("paging")
-    public PagingResponse getPaging ( ) { 
+    public Paging getPaging ( ) { 
         return this.paging;
     }
     
     /** SETTER
-     * paging object
+     * TODO: Write general description for this method
      */
     @JsonSetter("paging")
-    public void setPaging (PagingResponse value) { 
+    public void setPaging (Paging value) { 
         this.paging = value;
     }
  

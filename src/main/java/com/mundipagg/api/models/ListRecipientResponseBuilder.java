@@ -26,10 +26,7 @@ public class ListRecipientResponseBuilder {
         return this;
     }
 
-    /**
-     * Paging
-     */
-    public ListRecipientResponseBuilder paging(PagingResponse paging) {
+    public ListRecipientResponseBuilder paging(Paging paging) {
         listRecipientResponse.setPaging(paging);
         return this;
     }

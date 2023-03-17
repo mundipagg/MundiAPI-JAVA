@@ -14,10 +14,10 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.ALWAYS)
 public class CreatePrivateLabelPaymentRequest 
         implements java.io.Serializable {
-    private static final long serialVersionUID = -5469498202997975957L;
+    private static final long serialVersionUID = -4129377299772323524L;
     private Integer installments = 1;
     private String statementDescriptor;
-    private CreateCardRequest card;
+    private Card1 card;
     private String cardId;
     private String cardToken;
     private Boolean recurrence;
@@ -58,18 +58,18 @@ public class CreatePrivateLabelPaymentRequest
     }
  
     /** GETTER
-     * Card data
+     * TODO: Write general description for this method
      */
     @JsonGetter("card")
-    public CreateCardRequest getCard ( ) { 
+    public Card1 getCard ( ) { 
         return this.card;
     }
     
     /** SETTER
-     * Card data
+     * TODO: Write general description for this method
      */
     @JsonSetter("card")
-    public void setCard (CreateCardRequest value) { 
+    public void setCard (Card1 value) { 
         this.card = value;
     }
  

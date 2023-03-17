@@ -18,11 +18,11 @@ import org.joda.time.DateTime;
 @JsonInclude(Include.ALWAYS)
 public class GetAnticipationResponse 
         implements java.io.Serializable {
-    private static final long serialVersionUID = -7879369665481855732L;
+    private static final long serialVersionUID = 447443754953052756L;
     private String id;
     private int requestedAmount;
     private int approvedAmount;
-    private GetRecipientResponse recipient;
+    private Recipient recipient;
     private String pgid;
     private DateTime createdAt;
     private DateTime updatedAt;
@@ -78,18 +78,18 @@ public class GetAnticipationResponse
     }
  
     /** GETTER
-     * Recipient
+     * TODO: Write general description for this method
      */
     @JsonGetter("recipient")
-    public GetRecipientResponse getRecipient ( ) { 
+    public Recipient getRecipient ( ) { 
         return this.recipient;
     }
     
     /** SETTER
-     * Recipient
+     * TODO: Write general description for this method
      */
     @JsonSetter("recipient")
-    public void setRecipient (GetRecipientResponse value) { 
+    public void setRecipient (Recipient value) { 
         this.recipient = value;
     }
  

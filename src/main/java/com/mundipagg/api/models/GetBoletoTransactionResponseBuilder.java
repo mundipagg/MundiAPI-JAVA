@@ -50,7 +50,7 @@ public class GetBoletoTransactionResponseBuilder
         return this;
     }
 
-    public GetBoletoTransactionResponseBuilder billingAddress(GetBillingAddressResponse billingAddress) {
+    public GetBoletoTransactionResponseBuilder billingAddress(BillingAddress billingAddress) {
         getBoletoTransactionResponse.setBillingAddress(billingAddress);
         return this;
     }

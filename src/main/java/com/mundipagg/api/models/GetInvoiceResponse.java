@@ -18,7 +18,7 @@ import org.joda.time.DateTime;
 @JsonInclude(Include.ALWAYS)
 public class GetInvoiceResponse 
         implements java.io.Serializable {
-    private static final long serialVersionUID = -6943366487619134206L;
+    private static final long serialVersionUID = 8180576566256946673L;
     private String id;
     private String code;
     private String url;
@@ -27,13 +27,13 @@ public class GetInvoiceResponse
     private String paymentMethod;
     private DateTime createdAt;
     private List<GetInvoiceItemResponse> items;
-    private GetCustomerResponse customer;
-    private GetChargeResponse charge;
+    private Customer customer;
+    private Charge charge;
     private int installments;
-    private GetBillingAddressResponse billingAddress;
+    private BillingAddress billingAddress;
     private GetSubscriptionResponse subscription;
-    private GetPeriodResponse cycle;
-    private GetShippingResponse shipping;
+    private Cycle cycle;
+    private Shipping shipping;
     private LinkedHashMap<String, String> metadata;
     private DateTime dueAt;
     private DateTime canceledAt;
@@ -176,7 +176,7 @@ public class GetInvoiceResponse
      * TODO: Write general description for this method
      */
     @JsonGetter("customer")
-    public GetCustomerResponse getCustomer ( ) { 
+    public Customer getCustomer ( ) { 
         return this.customer;
     }
     
@@ -184,7 +184,7 @@ public class GetInvoiceResponse
      * TODO: Write general description for this method
      */
     @JsonSetter("customer")
-    public void setCustomer (GetCustomerResponse value) { 
+    public void setCustomer (Customer value) { 
         this.customer = value;
     }
  
@@ -192,7 +192,7 @@ public class GetInvoiceResponse
      * TODO: Write general description for this method
      */
     @JsonGetter("charge")
-    public GetChargeResponse getCharge ( ) { 
+    public Charge getCharge ( ) { 
         return this.charge;
     }
     
@@ -200,7 +200,7 @@ public class GetInvoiceResponse
      * TODO: Write general description for this method
      */
     @JsonSetter("charge")
-    public void setCharge (GetChargeResponse value) { 
+    public void setCharge (Charge value) { 
         this.charge = value;
     }
  
@@ -224,7 +224,7 @@ public class GetInvoiceResponse
      * TODO: Write general description for this method
      */
     @JsonGetter("billing_address")
-    public GetBillingAddressResponse getBillingAddress ( ) { 
+    public BillingAddress getBillingAddress ( ) { 
         return this.billingAddress;
     }
     
@@ -232,7 +232,7 @@ public class GetInvoiceResponse
      * TODO: Write general description for this method
      */
     @JsonSetter("billing_address")
-    public void setBillingAddress (GetBillingAddressResponse value) { 
+    public void setBillingAddress (BillingAddress value) { 
         this.billingAddress = value;
     }
  
@@ -256,7 +256,7 @@ public class GetInvoiceResponse
      * TODO: Write general description for this method
      */
     @JsonGetter("cycle")
-    public GetPeriodResponse getCycle ( ) { 
+    public Cycle getCycle ( ) { 
         return this.cycle;
     }
     
@@ -264,7 +264,7 @@ public class GetInvoiceResponse
      * TODO: Write general description for this method
      */
     @JsonSetter("cycle")
-    public void setCycle (GetPeriodResponse value) { 
+    public void setCycle (Cycle value) { 
         this.cycle = value;
     }
  
@@ -272,7 +272,7 @@ public class GetInvoiceResponse
      * TODO: Write general description for this method
      */
     @JsonGetter("shipping")
-    public GetShippingResponse getShipping ( ) { 
+    public Shipping getShipping ( ) { 
         return this.shipping;
     }
     
@@ -280,7 +280,7 @@ public class GetInvoiceResponse
      * TODO: Write general description for this method
      */
     @JsonSetter("shipping")
-    public void setShipping (GetShippingResponse value) { 
+    public void setShipping (Shipping value) { 
         this.shipping = value;
     }
  

@@ -14,11 +14,11 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.ALWAYS)
 public class CreateVoucherPaymentRequest 
         implements java.io.Serializable {
-    private static final long serialVersionUID = 7167208725666231437L;
+    private static final long serialVersionUID = 7167238968058473506L;
     private String statementDescriptor;
     private String cardId;
     private String cardToken;
-    private CreateCardRequest card;
+    private Card1 card;
     private String recurrencyCycle;
     /** GETTER
      * The text that will be shown on the voucher's statement
@@ -69,18 +69,18 @@ public class CreateVoucherPaymentRequest
     }
  
     /** GETTER
-     * Card info
+     * TODO: Write general description for this method
      */
     @JsonGetter("Card")
-    public CreateCardRequest getCard ( ) { 
+    public Card1 getCard ( ) { 
         return this.card;
     }
     
     /** SETTER
-     * Card info
+     * TODO: Write general description for this method
      */
     @JsonSetter("Card")
-    public void setCard (CreateCardRequest value) { 
+    public void setCard (Card1 value) { 
         this.card = value;
     }
  

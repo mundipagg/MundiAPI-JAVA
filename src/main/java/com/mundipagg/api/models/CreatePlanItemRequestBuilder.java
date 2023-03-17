@@ -26,10 +26,7 @@ public class CreatePlanItemRequestBuilder {
         return this;
     }
 
-    /**
-     * Item's pricing scheme
-     */
-    public CreatePlanItemRequestBuilder pricingScheme(CreatePricingSchemeRequest pricingScheme) {
+    public CreatePlanItemRequestBuilder pricingScheme(PricingScheme4 pricingScheme) {
         createPlanItemRequest.setPricingScheme(pricingScheme);
         return this;
     }

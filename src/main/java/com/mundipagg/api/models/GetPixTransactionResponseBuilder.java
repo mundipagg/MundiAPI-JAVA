@@ -40,7 +40,7 @@ public class GetPixTransactionResponseBuilder
         return this;
     }
 
-    public GetPixTransactionResponseBuilder payer(GetPixPayerResponse payer) {
+    public GetPixTransactionResponseBuilder payer(Object payer) {
         getPixTransactionResponse.setPayer(payer);
         return this;
     }

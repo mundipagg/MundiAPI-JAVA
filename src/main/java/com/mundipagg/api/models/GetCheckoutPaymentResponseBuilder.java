@@ -120,33 +120,21 @@ public class GetCheckoutPaymentResponseBuilder {
         return this;
     }
 
-    /**
-     * Dados do comprador
-     */
-    public GetCheckoutPaymentResponseBuilder customer(GetCustomerResponse customer) {
+    public GetCheckoutPaymentResponseBuilder customer(Customer customer) {
         getCheckoutPaymentResponse.setCustomer(customer);
         return this;
     }
 
-    /**
-     * Dados do endereço de cobrança
-     */
-    public GetCheckoutPaymentResponseBuilder billingaddress(GetAddressResponse billingaddress) {
+    public GetCheckoutPaymentResponseBuilder billingaddress(Billingaddress3 billingaddress) {
         getCheckoutPaymentResponse.setBillingaddress(billingaddress);
         return this;
     }
 
-    /**
-     * Configurações de cartão de crédito
-     */
     public GetCheckoutPaymentResponseBuilder creditCard(GetCheckoutCreditCardPaymentResponse creditCard) {
         getCheckoutPaymentResponse.setCreditCard(creditCard);
         return this;
     }
 
-    /**
-     * Configurações de boleto
-     */
     public GetCheckoutPaymentResponseBuilder boleto(GetCheckoutBoletoPaymentResponse boleto) {
         getCheckoutPaymentResponse.setBoleto(boleto);
         return this;
@@ -160,10 +148,7 @@ public class GetCheckoutPaymentResponseBuilder {
         return this;
     }
 
-    /**
-     * Configurações  de entrega
-     */
-    public GetCheckoutPaymentResponseBuilder shipping(GetShippingResponse shipping) {
+    public GetCheckoutPaymentResponseBuilder shipping(Shipping shipping) {
         getCheckoutPaymentResponse.setShipping(shipping);
         return this;
     }
@@ -200,18 +185,12 @@ public class GetCheckoutPaymentResponseBuilder {
         return this;
     }
 
-    /**
-     * Configurações de cartão de débito
-     */
     public GetCheckoutPaymentResponseBuilder debitCard(GetCheckoutDebitCardPaymentResponse debitCard) {
         getCheckoutPaymentResponse.setDebitCard(debitCard);
         return this;
     }
 
-    /**
-     * Bank transfer payment response
-     */
-    public GetCheckoutPaymentResponseBuilder bankTransfer(GetCheckoutBankTransferPaymentResponse bankTransfer) {
+    public GetCheckoutPaymentResponseBuilder bankTransfer(BankTransfer bankTransfer) {
         getCheckoutPaymentResponse.setBankTransfer(bankTransfer);
         return this;
     }

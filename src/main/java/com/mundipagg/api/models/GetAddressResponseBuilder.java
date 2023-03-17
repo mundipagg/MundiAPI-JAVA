@@ -79,7 +79,7 @@ public class GetAddressResponseBuilder {
         return this;
     }
 
-    public GetAddressResponseBuilder customer(GetCustomerResponse customer) {
+    public GetAddressResponseBuilder customer(Customer customer) {
         getAddressResponse.setCustomer(customer);
         return this;
     }

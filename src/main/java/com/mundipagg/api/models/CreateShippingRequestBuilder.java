@@ -59,10 +59,7 @@ public class CreateShippingRequestBuilder {
         return this;
     }
 
-    /**
-     * Address data
-     */
-    public CreateShippingRequestBuilder address(CreateAddressRequest address) {
+    public CreateShippingRequestBuilder address(Address1 address) {
         createShippingRequest.setAddress(address);
         return this;
     }

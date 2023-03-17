@@ -18,17 +18,17 @@ import org.joda.time.DateTime;
 @JsonInclude(Include.ALWAYS)
 public class CreateBoletoPaymentRequest 
         implements java.io.Serializable {
-    private static final long serialVersionUID = -1002509533058346405L;
+    private static final long serialVersionUID = -6580561506200169045L;
     private int retries;
     private String bank;
     private String instructions;
     private DateTime dueAt;
-    private CreateAddressRequest billingAddress;
+    private BillingAddress1 billingAddress;
     private String billingAddressId;
     private String nossoNumero;
     private String documentNumber;
-    private CreateInterestRequest interest;
-    private CreateFineRequest fine;
+    private Interest interest;
+    private Fine fine;
     private Integer maxDaysToPayPastDue;
     /** GETTER
      * Number of retries
@@ -97,18 +97,18 @@ public class CreateBoletoPaymentRequest
     }
  
     /** GETTER
-     * Card's billing address
+     * TODO: Write general description for this method
      */
     @JsonGetter("billing_address")
-    public CreateAddressRequest getBillingAddress ( ) { 
+    public BillingAddress1 getBillingAddress ( ) { 
         return this.billingAddress;
     }
     
     /** SETTER
-     * Card's billing address
+     * TODO: Write general description for this method
      */
     @JsonSetter("billing_address")
-    public void setBillingAddress (CreateAddressRequest value) { 
+    public void setBillingAddress (BillingAddress1 value) { 
         this.billingAddress = value;
     }
  
@@ -164,7 +164,7 @@ public class CreateBoletoPaymentRequest
      * TODO: Write general description for this method
      */
     @JsonGetter("interest")
-    public CreateInterestRequest getInterest ( ) { 
+    public Interest getInterest ( ) { 
         return this.interest;
     }
     
@@ -172,7 +172,7 @@ public class CreateBoletoPaymentRequest
      * TODO: Write general description for this method
      */
     @JsonSetter("interest")
-    public void setInterest (CreateInterestRequest value) { 
+    public void setInterest (Interest value) { 
         this.interest = value;
     }
  
@@ -180,7 +180,7 @@ public class CreateBoletoPaymentRequest
      * TODO: Write general description for this method
      */
     @JsonGetter("fine")
-    public CreateFineRequest getFine ( ) { 
+    public Fine getFine ( ) { 
         return this.fine;
     }
     
@@ -188,7 +188,7 @@ public class CreateBoletoPaymentRequest
      * TODO: Write general description for this method
      */
     @JsonSetter("fine")
-    public void setFine (CreateFineRequest value) { 
+    public void setFine (Fine value) { 
         this.fine = value;
     }
  

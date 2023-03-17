@@ -18,7 +18,7 @@ import org.joda.time.DateTime;
 @JsonInclude(Include.ALWAYS)
 public class GetRecipientResponse 
         implements java.io.Serializable {
-    private static final long serialVersionUID = -6991273281546934244L;
+    private static final long serialVersionUID = 1116035159131436513L;
     private String id;
     private String name;
     private String email;
@@ -29,13 +29,13 @@ public class GetRecipientResponse
     private DateTime createdAt;
     private DateTime updatedAt;
     private DateTime deletedAt;
-    private GetBankAccountResponse defaultBankAccount;
+    private DefaultBankAccount defaultBankAccount;
     private List<GetGatewayRecipientResponse> gatewayRecipients;
     private LinkedHashMap<String, String> metadata;
-    private GetAutomaticAnticipationResponse automaticAnticipationSettings;
+    private CreateAutomaticAnticipationSettingsRequest automaticAnticipationSettings;
     private GetTransferSettingsResponse transferSettings;
     private String code;
-    private String paymentMode = "bank_transfer";
+    private String paymentMode;
     /** GETTER
      * Id
      */
@@ -203,18 +203,18 @@ public class GetRecipientResponse
     }
  
     /** GETTER
-     * Default bank account
+     * TODO: Write general description for this method
      */
     @JsonGetter("default_bank_account")
-    public GetBankAccountResponse getDefaultBankAccount ( ) { 
+    public DefaultBankAccount getDefaultBankAccount ( ) { 
         return this.defaultBankAccount;
     }
     
     /** SETTER
-     * Default bank account
+     * TODO: Write general description for this method
      */
     @JsonSetter("default_bank_account")
-    public void setDefaultBankAccount (GetBankAccountResponse value) { 
+    public void setDefaultBankAccount (DefaultBankAccount value) { 
         this.defaultBankAccount = value;
     }
  
@@ -254,7 +254,7 @@ public class GetRecipientResponse
      * TODO: Write general description for this method
      */
     @JsonGetter("automatic_anticipation_settings")
-    public GetAutomaticAnticipationResponse getAutomaticAnticipationSettings ( ) { 
+    public CreateAutomaticAnticipationSettingsRequest getAutomaticAnticipationSettings ( ) { 
         return this.automaticAnticipationSettings;
     }
     
@@ -262,7 +262,7 @@ public class GetRecipientResponse
      * TODO: Write general description for this method
      */
     @JsonSetter("automatic_anticipation_settings")
-    public void setAutomaticAnticipationSettings (GetAutomaticAnticipationResponse value) { 
+    public void setAutomaticAnticipationSettings (CreateAutomaticAnticipationSettingsRequest value) { 
         this.automaticAnticipationSettings = value;
     }
  

@@ -18,12 +18,12 @@ import org.joda.time.DateTime;
 @JsonInclude(Include.ALWAYS)
 public class GetTokenResponse 
         implements java.io.Serializable {
-    private static final long serialVersionUID = 5589504862326006996L;
+    private static final long serialVersionUID = -5589504861803428670L;
     private String id;
     private String type;
     private DateTime createdAt;
     private String expiresAt;
-    private GetCardTokenResponse card;
+    private Card9 card;
     /** GETTER
      * TODO: Write general description for this method
      */
@@ -94,7 +94,7 @@ public class GetTokenResponse
      * TODO: Write general description for this method
      */
     @JsonGetter("card")
-    public GetCardTokenResponse getCard ( ) { 
+    public Card9 getCard ( ) { 
         return this.card;
     }
     
@@ -102,7 +102,7 @@ public class GetTokenResponse
      * TODO: Write general description for this method
      */
     @JsonSetter("card")
-    public void setCard (GetCardTokenResponse value) { 
+    public void setCard (Card9 value) { 
         this.card = value;
     }
  

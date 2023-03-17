@@ -39,7 +39,7 @@ public class GetShippingResponseBuilder {
         return this;
     }
 
-    public GetShippingResponseBuilder address(GetAddressResponse address) {
+    public GetShippingResponseBuilder address(Address address) {
         getShippingResponse.setAddress(address);
         return this;
     }

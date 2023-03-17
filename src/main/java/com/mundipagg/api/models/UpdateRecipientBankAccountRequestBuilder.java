@@ -18,10 +18,7 @@ public class UpdateRecipientBankAccountRequestBuilder {
         updateRecipientBankAccountRequest = new UpdateRecipientBankAccountRequest();
     }
 
-    /**
-     * Bank account
-     */
-    public UpdateRecipientBankAccountRequestBuilder bankAccount(CreateBankAccountRequest bankAccount) {
+    public UpdateRecipientBankAccountRequestBuilder bankAccount(BankAccount1 bankAccount) {
         updateRecipientBankAccountRequest.setBankAccount(bankAccount);
         return this;
     }

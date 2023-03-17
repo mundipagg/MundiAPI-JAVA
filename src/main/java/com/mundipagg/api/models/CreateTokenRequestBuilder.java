@@ -26,10 +26,7 @@ public class CreateTokenRequestBuilder {
         return this;
     }
 
-    /**
-     * Card data
-     */
-    public CreateTokenRequestBuilder card(CreateCardTokenRequest card) {
+    public CreateTokenRequestBuilder card(Card11 card) {
         createTokenRequest.setCard(card);
         return this;
     }

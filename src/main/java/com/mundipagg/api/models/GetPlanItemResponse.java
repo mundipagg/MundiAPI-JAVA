@@ -18,15 +18,15 @@ import org.joda.time.DateTime;
 @JsonInclude(Include.ALWAYS)
 public class GetPlanItemResponse 
         implements java.io.Serializable {
-    private static final long serialVersionUID = -5089717622571294156L;
+    private static final long serialVersionUID = 6141916257499515747L;
     private String id;
     private String name;
     private String status;
     private DateTime createdAt;
     private DateTime updatedAt;
-    private GetPricingSchemeResponse pricingScheme;
+    private PricingScheme pricingScheme;
     private String description;
-    private GetPlanResponse plan;
+    private Plan plan;
     private Integer quantity;
     private Integer cycles;
     private DateTime deletedAt;
@@ -118,7 +118,7 @@ public class GetPlanItemResponse
      * TODO: Write general description for this method
      */
     @JsonGetter("pricing_scheme")
-    public GetPricingSchemeResponse getPricingScheme ( ) { 
+    public PricingScheme getPricingScheme ( ) { 
         return this.pricingScheme;
     }
     
@@ -126,7 +126,7 @@ public class GetPlanItemResponse
      * TODO: Write general description for this method
      */
     @JsonSetter("pricing_scheme")
-    public void setPricingScheme (GetPricingSchemeResponse value) { 
+    public void setPricingScheme (PricingScheme value) { 
         this.pricingScheme = value;
     }
  
@@ -150,7 +150,7 @@ public class GetPlanItemResponse
      * TODO: Write general description for this method
      */
     @JsonGetter("plan")
-    public GetPlanResponse getPlan ( ) { 
+    public Plan getPlan ( ) { 
         return this.plan;
     }
     
@@ -158,7 +158,7 @@ public class GetPlanItemResponse
      * TODO: Write general description for this method
      */
     @JsonSetter("plan")
-    public void setPlan (GetPlanResponse value) { 
+    public void setPlan (Plan value) { 
         this.plan = value;
     }
  

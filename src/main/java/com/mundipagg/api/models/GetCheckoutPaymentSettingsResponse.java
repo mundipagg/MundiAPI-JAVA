@@ -14,12 +14,12 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.ALWAYS)
 public class GetCheckoutPaymentSettingsResponse 
         implements java.io.Serializable {
-    private static final long serialVersionUID = 4146944205884031851L;
+    private static final long serialVersionUID = -6216934268351814818L;
     private String successUrl;
     private String paymentUrl;
     private List<String> acceptedPaymentMethods;
     private String status;
-    private GetCustomerResponse customer;
+    private Customer customer;
     private Integer amount;
     private String defaultPaymentMethod;
     private String gatewayAffiliationId;
@@ -88,18 +88,18 @@ public class GetCheckoutPaymentSettingsResponse
     }
  
     /** GETTER
-     * Customer
+     * TODO: Write general description for this method
      */
     @JsonGetter("customer")
-    public GetCustomerResponse getCustomer ( ) { 
+    public Customer getCustomer ( ) { 
         return this.customer;
     }
     
     /** SETTER
-     * Customer
+     * TODO: Write general description for this method
      */
     @JsonSetter("customer")
-    public void setCustomer (GetCustomerResponse value) { 
+    public void setCustomer (Customer value) { 
         this.customer = value;
     }
  

@@ -14,9 +14,9 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.ALWAYS)
 public class CreatePlanItemRequest 
         implements java.io.Serializable {
-    private static final long serialVersionUID = -5416106780360274995L;
+    private static final long serialVersionUID = -8485263965566652438L;
     private String name;
-    private CreatePricingSchemeRequest pricingScheme;
+    private PricingScheme4 pricingScheme;
     private String id;
     private String description;
     private Integer cycles;
@@ -38,18 +38,18 @@ public class CreatePlanItemRequest
     }
  
     /** GETTER
-     * Item's pricing scheme
+     * TODO: Write general description for this method
      */
     @JsonGetter("pricing_scheme")
-    public CreatePricingSchemeRequest getPricingScheme ( ) { 
+    public PricingScheme4 getPricingScheme ( ) { 
         return this.pricingScheme;
     }
     
     /** SETTER
-     * Item's pricing scheme
+     * TODO: Write general description for this method
      */
     @JsonSetter("pricing_scheme")
-    public void setPricingScheme (CreatePricingSchemeRequest value) { 
+    public void setPricingScheme (PricingScheme4 value) { 
         this.pricingScheme = value;
     }
  

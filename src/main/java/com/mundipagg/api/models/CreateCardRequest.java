@@ -14,18 +14,18 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.ALWAYS)
 public class CreateCardRequest 
         implements java.io.Serializable {
-    private static final long serialVersionUID = 7821242550836897166L;
+    private static final long serialVersionUID = -4239790323169857590L;
     private String number;
     private String holderName;
     private int expMonth;
     private int expYear;
     private String cvv;
-    private CreateAddressRequest billingAddress;
+    private BillingAddress1 billingAddress;
     private String brand;
     private String billingAddressId;
     private LinkedHashMap<String, String> metadata;
-    private String type = "credit";
-    private CreateCardOptionsRequest options;
+    private String type;
+    private Options1 options;
     private String holderDocument;
     private boolean privateLabel;
     private String label;
@@ -112,18 +112,18 @@ public class CreateCardRequest
     }
  
     /** GETTER
-     * Card's billing address
+     * TODO: Write general description for this method
      */
     @JsonGetter("billing_address")
-    public CreateAddressRequest getBillingAddress ( ) { 
+    public BillingAddress1 getBillingAddress ( ) { 
         return this.billingAddress;
     }
     
     /** SETTER
-     * Card's billing address
+     * TODO: Write general description for this method
      */
     @JsonSetter("billing_address")
-    public void setBillingAddress (CreateAddressRequest value) { 
+    public void setBillingAddress (BillingAddress1 value) { 
         this.billingAddress = value;
     }
  
@@ -192,18 +192,18 @@ public class CreateCardRequest
     }
  
     /** GETTER
-     * Options for creating the card
+     * TODO: Write general description for this method
      */
     @JsonGetter("options")
-    public CreateCardOptionsRequest getOptions ( ) { 
+    public Options1 getOptions ( ) { 
         return this.options;
     }
     
     /** SETTER
-     * Options for creating the card
+     * TODO: Write general description for this method
      */
     @JsonSetter("options")
-    public void setOptions (CreateCardOptionsRequest value) { 
+    public void setOptions (Options1 value) { 
         this.options = value;
     }
  

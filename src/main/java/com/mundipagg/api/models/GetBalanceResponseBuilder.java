@@ -34,10 +34,7 @@ public class GetBalanceResponseBuilder {
         return this;
     }
 
-    /**
-     * Recipient
-     */
-    public GetBalanceResponseBuilder recipient(GetRecipientResponse recipient) {
+    public GetBalanceResponseBuilder recipient(Recipient recipient) {
         getBalanceResponse.setRecipient(recipient);
         return this;
     }

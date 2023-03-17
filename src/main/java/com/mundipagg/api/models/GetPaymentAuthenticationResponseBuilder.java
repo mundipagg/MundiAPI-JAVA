@@ -23,10 +23,7 @@ public class GetPaymentAuthenticationResponseBuilder {
         return this;
     }
 
-    /**
-     * 3D-S payment authentication response
-     */
-    public GetPaymentAuthenticationResponseBuilder threedSecure(GetThreeDSecureResponse threedSecure) {
+    public GetPaymentAuthenticationResponseBuilder threedSecure(ThreedSecure threedSecure) {
         getPaymentAuthenticationResponse.setThreedSecure(threedSecure);
         return this;
     }

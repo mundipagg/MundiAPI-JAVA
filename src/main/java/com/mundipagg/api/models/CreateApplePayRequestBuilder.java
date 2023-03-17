@@ -34,10 +34,7 @@ public class CreateApplePayRequestBuilder {
         return this;
     }
 
-    /**
-     * The ApplePay header request
-     */
-    public CreateApplePayRequestBuilder header(CreateApplePayHeaderRequest header) {
+    public CreateApplePayRequestBuilder header(Header header) {
         createApplePayRequest.setHeader(header);
         return this;
     }

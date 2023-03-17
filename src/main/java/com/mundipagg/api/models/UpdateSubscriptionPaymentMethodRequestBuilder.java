@@ -34,10 +34,7 @@ public class UpdateSubscriptionPaymentMethodRequestBuilder {
         return this;
     }
 
-    /**
-     * Card data
-     */
-    public UpdateSubscriptionPaymentMethodRequestBuilder card(CreateCardRequest card) {
+    public UpdateSubscriptionPaymentMethodRequestBuilder card(Card1 card) {
         updateSubscriptionPaymentMethodRequest.setCard(card);
         return this;
     }

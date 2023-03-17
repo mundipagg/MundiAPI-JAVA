@@ -59,12 +59,12 @@ public class GetInvoiceResponseBuilder {
         return this;
     }
 
-    public GetInvoiceResponseBuilder customer(GetCustomerResponse customer) {
+    public GetInvoiceResponseBuilder customer(Customer customer) {
         getInvoiceResponse.setCustomer(customer);
         return this;
     }
 
-    public GetInvoiceResponseBuilder charge(GetChargeResponse charge) {
+    public GetInvoiceResponseBuilder charge(Charge charge) {
         getInvoiceResponse.setCharge(charge);
         return this;
     }
@@ -74,7 +74,7 @@ public class GetInvoiceResponseBuilder {
         return this;
     }
 
-    public GetInvoiceResponseBuilder billingAddress(GetBillingAddressResponse billingAddress) {
+    public GetInvoiceResponseBuilder billingAddress(BillingAddress billingAddress) {
         getInvoiceResponse.setBillingAddress(billingAddress);
         return this;
     }
@@ -84,12 +84,12 @@ public class GetInvoiceResponseBuilder {
         return this;
     }
 
-    public GetInvoiceResponseBuilder cycle(GetPeriodResponse cycle) {
+    public GetInvoiceResponseBuilder cycle(Cycle cycle) {
         getInvoiceResponse.setCycle(cycle);
         return this;
     }
 
-    public GetInvoiceResponseBuilder shipping(GetShippingResponse shipping) {
+    public GetInvoiceResponseBuilder shipping(Shipping shipping) {
         getInvoiceResponse.setShipping(shipping);
         return this;
     }

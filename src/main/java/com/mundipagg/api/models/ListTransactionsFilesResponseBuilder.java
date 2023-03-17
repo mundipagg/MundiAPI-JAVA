@@ -23,10 +23,7 @@ public class ListTransactionsFilesResponseBuilder {
         return this;
     }
 
-    /**
-     * Paging object
-     */
-    public ListTransactionsFilesResponseBuilder paging(PagingResponse paging) {
+    public ListTransactionsFilesResponseBuilder paging(Paging paging) {
         listTransactionsFilesResponse.setPaging(paging);
         return this;
     }

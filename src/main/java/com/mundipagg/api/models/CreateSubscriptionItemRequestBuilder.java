@@ -26,10 +26,7 @@ public class CreateSubscriptionItemRequestBuilder {
         return this;
     }
 
-    /**
-     * Pricing scheme
-     */
-    public CreateSubscriptionItemRequestBuilder pricingScheme(CreatePricingSchemeRequest pricingScheme) {
+    public CreateSubscriptionItemRequestBuilder pricingScheme(PricingScheme4 pricingScheme) {
         createSubscriptionItemRequest.setPricingScheme(pricingScheme);
         return this;
     }

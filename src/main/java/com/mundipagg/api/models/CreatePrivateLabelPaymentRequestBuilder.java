@@ -34,10 +34,7 @@ public class CreatePrivateLabelPaymentRequestBuilder {
         return this;
     }
 
-    /**
-     * Card data
-     */
-    public CreatePrivateLabelPaymentRequestBuilder card(CreateCardRequest card) {
+    public CreatePrivateLabelPaymentRequestBuilder card(Card1 card) {
         createPrivateLabelPaymentRequest.setCard(card);
         return this;
     }

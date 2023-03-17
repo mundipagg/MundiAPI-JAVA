@@ -18,9 +18,9 @@ import org.joda.time.DateTime;
 @JsonInclude(Include.ALWAYS)
 public class CreateSubscriptionRequest 
         implements java.io.Serializable {
-    private static final long serialVersionUID = 3108784382816184255L;
-    private CreateCustomerRequest customer;
-    private CreateCardRequest card;
+    private static final long serialVersionUID = 1727872342619967381L;
+    private Customer8 customer;
+    private Card1 card;
     private String code;
     private String paymentMethod;
     private String billingType;
@@ -29,12 +29,12 @@ public class CreateSubscriptionRequest
     private String currency;
     private String interval;
     private int intervalCount;
-    private CreatePricingSchemeRequest pricingScheme;
+    private PricingScheme4 pricingScheme;
     private List<CreateSubscriptionItemRequest> items;
-    private CreateShippingRequest shipping;
+    private Shipping3 shipping;
     private List<CreateDiscountRequest> discounts;
     private LinkedHashMap<String, String> metadata;
-    private CreateSetupRequest setup;
+    private Setup1 setup;
     private String planId;
     private String customerId;
     private String cardId;
@@ -49,37 +49,37 @@ public class CreateSubscriptionRequest
     private Integer boletoDueDays;
     private List<CreateIncrementRequest> increments;
     private CreatePeriodRequest period;
-    private CreateSubMerchantRequest submerchant;
-    private CreateSubscriptionSplitRequest split;
+    private Submerchant submerchant;
+    private UpdateSubscriptionSplitRequest split;
     /** GETTER
-     * Customer
+     * TODO: Write general description for this method
      */
     @JsonGetter("customer")
-    public CreateCustomerRequest getCustomer ( ) { 
+    public Customer8 getCustomer ( ) { 
         return this.customer;
     }
     
     /** SETTER
-     * Customer
+     * TODO: Write general description for this method
      */
     @JsonSetter("customer")
-    public void setCustomer (CreateCustomerRequest value) { 
+    public void setCustomer (Customer8 value) { 
         this.customer = value;
     }
  
     /** GETTER
-     * Card
+     * TODO: Write general description for this method
      */
     @JsonGetter("card")
-    public CreateCardRequest getCard ( ) { 
+    public Card1 getCard ( ) { 
         return this.card;
     }
     
     /** SETTER
-     * Card
+     * TODO: Write general description for this method
      */
     @JsonSetter("card")
-    public void setCard (CreateCardRequest value) { 
+    public void setCard (Card1 value) { 
         this.card = value;
     }
  
@@ -212,18 +212,18 @@ public class CreateSubscriptionRequest
     }
  
     /** GETTER
-     * Subscription pricing scheme
+     * TODO: Write general description for this method
      */
     @JsonGetter("pricing_scheme")
-    public CreatePricingSchemeRequest getPricingScheme ( ) { 
+    public PricingScheme4 getPricingScheme ( ) { 
         return this.pricingScheme;
     }
     
     /** SETTER
-     * Subscription pricing scheme
+     * TODO: Write general description for this method
      */
     @JsonSetter("pricing_scheme")
-    public void setPricingScheme (CreatePricingSchemeRequest value) { 
+    public void setPricingScheme (PricingScheme4 value) { 
         this.pricingScheme = value;
     }
  
@@ -244,18 +244,18 @@ public class CreateSubscriptionRequest
     }
  
     /** GETTER
-     * Shipping
+     * TODO: Write general description for this method
      */
     @JsonGetter("shipping")
-    public CreateShippingRequest getShipping ( ) { 
+    public Shipping3 getShipping ( ) { 
         return this.shipping;
     }
     
     /** SETTER
-     * Shipping
+     * TODO: Write general description for this method
      */
     @JsonSetter("shipping")
-    public void setShipping (CreateShippingRequest value) { 
+    public void setShipping (Shipping3 value) { 
         this.shipping = value;
     }
  
@@ -292,18 +292,18 @@ public class CreateSubscriptionRequest
     }
  
     /** GETTER
-     * Setup data
+     * TODO: Write general description for this method
      */
     @JsonGetter("setup")
-    public CreateSetupRequest getSetup ( ) { 
+    public Setup1 getSetup ( ) { 
         return this.setup;
     }
     
     /** SETTER
-     * Setup data
+     * TODO: Write general description for this method
      */
     @JsonSetter("setup")
-    public void setSetup (CreateSetupRequest value) { 
+    public void setSetup (Setup1 value) { 
         this.setup = value;
     }
  
@@ -534,34 +534,34 @@ public class CreateSubscriptionRequest
     }
  
     /** GETTER
-     * SubMerchant
+     * TODO: Write general description for this method
      */
     @JsonGetter("submerchant")
-    public CreateSubMerchantRequest getSubmerchant ( ) { 
+    public Submerchant getSubmerchant ( ) { 
         return this.submerchant;
     }
     
     /** SETTER
-     * SubMerchant
+     * TODO: Write general description for this method
      */
     @JsonSetter("submerchant")
-    public void setSubmerchant (CreateSubMerchantRequest value) { 
+    public void setSubmerchant (Submerchant value) { 
         this.submerchant = value;
     }
  
     /** GETTER
-     * Subscription's split
+     * TODO: Write general description for this method
      */
     @JsonGetter("split")
-    public CreateSubscriptionSplitRequest getSplit ( ) { 
+    public UpdateSubscriptionSplitRequest getSplit ( ) { 
         return this.split;
     }
     
     /** SETTER
-     * Subscription's split
+     * TODO: Write general description for this method
      */
     @JsonSetter("split")
-    public void setSplit (CreateSubscriptionSplitRequest value) { 
+    public void setSplit (UpdateSubscriptionSplitRequest value) { 
         this.split = value;
     }
  

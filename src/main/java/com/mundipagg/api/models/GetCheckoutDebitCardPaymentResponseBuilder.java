@@ -26,10 +26,7 @@ public class GetCheckoutDebitCardPaymentResponseBuilder {
         return this;
     }
 
-    /**
-     * Payment Authentication response object data
-     */
-    public GetCheckoutDebitCardPaymentResponseBuilder authentication(GetPaymentAuthenticationResponse authentication) {
+    public GetCheckoutDebitCardPaymentResponseBuilder authentication(Authentication authentication) {
         getCheckoutDebitCardPaymentResponse.setAuthentication(authentication);
         return this;
     }

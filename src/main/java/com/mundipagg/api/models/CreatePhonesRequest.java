@@ -14,14 +14,14 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.ALWAYS)
 public class CreatePhonesRequest 
         implements java.io.Serializable {
-    private static final long serialVersionUID = -3027421794223735855L;
-    private CreatePhoneRequest homePhone;
-    private CreatePhoneRequest mobilePhone;
+    private static final long serialVersionUID = -3027505959437417087L;
+    private GetPhoneResponse homePhone;
+    private GetPhoneResponse mobilePhone;
     /** GETTER
      * TODO: Write general description for this method
      */
     @JsonGetter("home_phone")
-    public CreatePhoneRequest getHomePhone ( ) { 
+    public GetPhoneResponse getHomePhone ( ) { 
         return this.homePhone;
     }
     
@@ -29,7 +29,7 @@ public class CreatePhonesRequest
      * TODO: Write general description for this method
      */
     @JsonSetter("home_phone")
-    public void setHomePhone (CreatePhoneRequest value) { 
+    public void setHomePhone (GetPhoneResponse value) { 
         this.homePhone = value;
     }
  
@@ -37,7 +37,7 @@ public class CreatePhonesRequest
      * TODO: Write general description for this method
      */
     @JsonGetter("mobile_phone")
-    public CreatePhoneRequest getMobilePhone ( ) { 
+    public GetPhoneResponse getMobilePhone ( ) { 
         return this.mobilePhone;
     }
     
@@ -45,7 +45,7 @@ public class CreatePhonesRequest
      * TODO: Write general description for this method
      */
     @JsonSetter("mobile_phone")
-    public void setMobilePhone (CreatePhoneRequest value) { 
+    public void setMobilePhone (GetPhoneResponse value) { 
         this.mobilePhone = value;
     }
  

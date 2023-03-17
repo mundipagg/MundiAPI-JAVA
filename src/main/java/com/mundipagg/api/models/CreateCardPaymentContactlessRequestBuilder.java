@@ -26,25 +26,16 @@ public class CreateCardPaymentContactlessRequestBuilder {
         return this;
     }
 
-    /**
-     * The ApplePay encrypted request
-     */
-    public CreateCardPaymentContactlessRequestBuilder applePay(CreateApplePayRequest applePay) {
+    public CreateCardPaymentContactlessRequestBuilder applePay(ApplePay applePay) {
         createCardPaymentContactlessRequest.setApplePay(applePay);
         return this;
     }
 
-    /**
-     * The GooglePay encrypted request
-     */
-    public CreateCardPaymentContactlessRequestBuilder googlePay(CreateGooglePayRequest googlePay) {
+    public CreateCardPaymentContactlessRequestBuilder googlePay(GooglePay googlePay) {
         createCardPaymentContactlessRequest.setGooglePay(googlePay);
         return this;
     }
 
-    /**
-     * The Emv encrypted request
-     */
     public CreateCardPaymentContactlessRequestBuilder emv(CreateEmvDecryptRequest emv) {
         createCardPaymentContactlessRequest.setEmv(emv);
         return this;

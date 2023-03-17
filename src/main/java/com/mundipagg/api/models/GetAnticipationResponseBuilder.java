@@ -43,10 +43,7 @@ public class GetAnticipationResponseBuilder {
         return this;
     }
 
-    /**
-     * Recipient
-     */
-    public GetAnticipationResponseBuilder recipient(GetRecipientResponse recipient) {
+    public GetAnticipationResponseBuilder recipient(Recipient recipient) {
         getAnticipationResponse.setRecipient(recipient);
         return this;
     }

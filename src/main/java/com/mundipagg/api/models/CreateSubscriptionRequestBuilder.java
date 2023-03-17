@@ -19,18 +19,12 @@ public class CreateSubscriptionRequestBuilder {
         createSubscriptionRequest = new CreateSubscriptionRequest();
     }
 
-    /**
-     * Customer
-     */
-    public CreateSubscriptionRequestBuilder customer(CreateCustomerRequest customer) {
+    public CreateSubscriptionRequestBuilder customer(Customer8 customer) {
         createSubscriptionRequest.setCustomer(customer);
         return this;
     }
 
-    /**
-     * Card
-     */
-    public CreateSubscriptionRequestBuilder card(CreateCardRequest card) {
+    public CreateSubscriptionRequestBuilder card(Card1 card) {
         createSubscriptionRequest.setCard(card);
         return this;
     }
@@ -99,10 +93,7 @@ public class CreateSubscriptionRequestBuilder {
         return this;
     }
 
-    /**
-     * Subscription pricing scheme
-     */
-    public CreateSubscriptionRequestBuilder pricingScheme(CreatePricingSchemeRequest pricingScheme) {
+    public CreateSubscriptionRequestBuilder pricingScheme(PricingScheme4 pricingScheme) {
         createSubscriptionRequest.setPricingScheme(pricingScheme);
         return this;
     }
@@ -115,10 +106,7 @@ public class CreateSubscriptionRequestBuilder {
         return this;
     }
 
-    /**
-     * Shipping
-     */
-    public CreateSubscriptionRequestBuilder shipping(CreateShippingRequest shipping) {
+    public CreateSubscriptionRequestBuilder shipping(Shipping3 shipping) {
         createSubscriptionRequest.setShipping(shipping);
         return this;
     }
@@ -139,10 +127,7 @@ public class CreateSubscriptionRequestBuilder {
         return this;
     }
 
-    /**
-     * Setup data
-     */
-    public CreateSubscriptionRequestBuilder setup(CreateSetupRequest setup) {
+    public CreateSubscriptionRequestBuilder setup(Setup1 setup) {
         createSubscriptionRequest.setSetup(setup);
         return this;
     }
@@ -256,18 +241,12 @@ public class CreateSubscriptionRequestBuilder {
         return this;
     }
 
-    /**
-     * SubMerchant
-     */
-    public CreateSubscriptionRequestBuilder submerchant(CreateSubMerchantRequest submerchant) {
+    public CreateSubscriptionRequestBuilder submerchant(Submerchant submerchant) {
         createSubscriptionRequest.setSubmerchant(submerchant);
         return this;
     }
 
-    /**
-     * Subscription's split
-     */
-    public CreateSubscriptionRequestBuilder split(CreateSubscriptionSplitRequest split) {
+    public CreateSubscriptionRequestBuilder split(UpdateSubscriptionSplitRequest split) {
         createSubscriptionRequest.setSplit(split);
         return this;
     }

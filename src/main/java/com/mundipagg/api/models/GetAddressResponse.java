@@ -18,7 +18,7 @@ import org.joda.time.DateTime;
 @JsonInclude(Include.ALWAYS)
 public class GetAddressResponse 
         implements java.io.Serializable {
-    private static final long serialVersionUID = -3319179416415317563L;
+    private static final long serialVersionUID = 39190314424819488L;
     private String id;
     private String street;
     private String number;
@@ -31,7 +31,7 @@ public class GetAddressResponse
     private String status;
     private DateTime createdAt;
     private DateTime updatedAt;
-    private GetCustomerResponse customer;
+    private Customer customer;
     private LinkedHashMap<String, String> metadata;
     private String line1;
     private String line2;
@@ -236,7 +236,7 @@ public class GetAddressResponse
      * TODO: Write general description for this method
      */
     @JsonGetter("customer")
-    public GetCustomerResponse getCustomer ( ) { 
+    public Customer getCustomer ( ) { 
         return this.customer;
     }
     
@@ -244,7 +244,7 @@ public class GetAddressResponse
      * TODO: Write general description for this method
      */
     @JsonSetter("customer")
-    public void setCustomer (GetCustomerResponse value) { 
+    public void setCustomer (Customer value) { 
         this.customer = value;
     }
  

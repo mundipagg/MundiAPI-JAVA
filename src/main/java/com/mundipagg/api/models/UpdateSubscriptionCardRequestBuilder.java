@@ -18,10 +18,7 @@ public class UpdateSubscriptionCardRequestBuilder {
         updateSubscriptionCardRequest = new UpdateSubscriptionCardRequest();
     }
 
-    /**
-     * Credit card data
-     */
-    public UpdateSubscriptionCardRequestBuilder card(CreateCardRequest card) {
+    public UpdateSubscriptionCardRequestBuilder card(Card1 card) {
         updateSubscriptionCardRequest.setCard(card);
         return this;
     }

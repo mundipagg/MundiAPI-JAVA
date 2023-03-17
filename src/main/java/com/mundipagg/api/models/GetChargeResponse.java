@@ -18,7 +18,7 @@ import org.joda.time.DateTime;
 @JsonInclude(Include.ALWAYS)
 public class GetChargeResponse 
         implements java.io.Serializable {
-    private static final long serialVersionUID = -305036994272917284L;
+    private static final long serialVersionUID = -2705799926292196581L;
     private String id;
     private String code;
     private String gatewayId;
@@ -30,9 +30,9 @@ public class GetChargeResponse
     private DateTime createdAt;
     private DateTime updatedAt;
     private GetTransactionResponse lastTransaction;
-    private GetInvoiceResponse invoice;
-    private GetOrderResponse order;
-    private GetCustomerResponse customer;
+    private Invoice invoice;
+    private Order order;
+    private Customer customer;
     private LinkedHashMap<String, String> metadata;
     private DateTime paidAt;
     private DateTime canceledAt;
@@ -226,7 +226,7 @@ public class GetChargeResponse
      * TODO: Write general description for this method
      */
     @JsonGetter("invoice")
-    public GetInvoiceResponse getInvoice ( ) { 
+    public Invoice getInvoice ( ) { 
         return this.invoice;
     }
     
@@ -234,7 +234,7 @@ public class GetChargeResponse
      * TODO: Write general description for this method
      */
     @JsonSetter("invoice")
-    public void setInvoice (GetInvoiceResponse value) { 
+    public void setInvoice (Invoice value) { 
         this.invoice = value;
     }
  
@@ -242,7 +242,7 @@ public class GetChargeResponse
      * TODO: Write general description for this method
      */
     @JsonGetter("order")
-    public GetOrderResponse getOrder ( ) { 
+    public Order getOrder ( ) { 
         return this.order;
     }
     
@@ -250,7 +250,7 @@ public class GetChargeResponse
      * TODO: Write general description for this method
      */
     @JsonSetter("order")
-    public void setOrder (GetOrderResponse value) { 
+    public void setOrder (Order value) { 
         this.order = value;
     }
  
@@ -258,7 +258,7 @@ public class GetChargeResponse
      * TODO: Write general description for this method
      */
     @JsonGetter("customer")
-    public GetCustomerResponse getCustomer ( ) { 
+    public Customer getCustomer ( ) { 
         return this.customer;
     }
     
@@ -266,7 +266,7 @@ public class GetChargeResponse
      * TODO: Write general description for this method
      */
     @JsonSetter("customer")
-    public void setCustomer (GetCustomerResponse value) { 
+    public void setCustomer (Customer value) { 
         this.customer = value;
     }
  

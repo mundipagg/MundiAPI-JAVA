@@ -18,7 +18,7 @@ import org.joda.time.DateTime;
 @JsonInclude(Include.ALWAYS)
 public class GetBankAccountResponse 
         implements java.io.Serializable {
-    private static final long serialVersionUID = -2023987735065665589L;
+    private static final long serialVersionUID = -832678148618521293L;
     private String id;
     private String holderName;
     private String holderType;
@@ -32,7 +32,7 @@ public class GetBankAccountResponse
     private DateTime createdAt;
     private DateTime updatedAt;
     private DateTime deletedAt;
-    private GetRecipientResponse recipient;
+    private Recipient recipient;
     private LinkedHashMap<String, String> metadata;
     private String pixKey;
     /** GETTER
@@ -250,18 +250,18 @@ public class GetBankAccountResponse
     }
  
     /** GETTER
-     * Recipient
+     * TODO: Write general description for this method
      */
     @JsonGetter("recipient")
-    public GetRecipientResponse getRecipient ( ) { 
+    public Recipient getRecipient ( ) { 
         return this.recipient;
     }
     
     /** SETTER
-     * Recipient
+     * TODO: Write general description for this method
      */
     @JsonSetter("recipient")
-    public void setRecipient (GetRecipientResponse value) { 
+    public void setRecipient (Recipient value) { 
         this.recipient = value;
     }
  

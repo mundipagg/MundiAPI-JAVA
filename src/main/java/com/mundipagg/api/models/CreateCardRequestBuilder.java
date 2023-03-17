@@ -58,10 +58,7 @@ public class CreateCardRequestBuilder {
         return this;
     }
 
-    /**
-     * Card's billing address
-     */
-    public CreateCardRequestBuilder billingAddress(CreateAddressRequest billingAddress) {
+    public CreateCardRequestBuilder billingAddress(BillingAddress1 billingAddress) {
         createCardRequest.setBillingAddress(billingAddress);
         return this;
     }
@@ -98,10 +95,7 @@ public class CreateCardRequestBuilder {
         return this;
     }
 
-    /**
-     * Options for creating the card
-     */
-    public CreateCardRequestBuilder options(CreateCardOptionsRequest options) {
+    public CreateCardRequestBuilder options(Options1 options) {
         createCardRequest.setOptions(options);
         return this;
     }

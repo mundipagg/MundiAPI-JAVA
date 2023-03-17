@@ -18,7 +18,7 @@ import org.joda.time.DateTime;
 @JsonInclude(Include.ALWAYS)
 public class GetCardResponse 
         implements java.io.Serializable {
-    private static final long serialVersionUID = 8171376221344186379L;
+    private static final long serialVersionUID = 3397586769370049522L;
     private String id;
     private String lastFourDigits;
     private String brand;
@@ -28,8 +28,8 @@ public class GetCardResponse
     private String status;
     private DateTime createdAt;
     private DateTime updatedAt;
-    private GetBillingAddressResponse billingAddress;
-    private GetCustomerResponse customer;
+    private BillingAddress billingAddress;
+    private Customer customer;
     private LinkedHashMap<String, String> metadata;
     private String type;
     private String holderDocument;
@@ -188,7 +188,7 @@ public class GetCardResponse
      * TODO: Write general description for this method
      */
     @JsonGetter("billing_address")
-    public GetBillingAddressResponse getBillingAddress ( ) { 
+    public BillingAddress getBillingAddress ( ) { 
         return this.billingAddress;
     }
     
@@ -196,7 +196,7 @@ public class GetCardResponse
      * TODO: Write general description for this method
      */
     @JsonSetter("billing_address")
-    public void setBillingAddress (GetBillingAddressResponse value) { 
+    public void setBillingAddress (BillingAddress value) { 
         this.billingAddress = value;
     }
  
@@ -204,7 +204,7 @@ public class GetCardResponse
      * TODO: Write general description for this method
      */
     @JsonGetter("customer")
-    public GetCustomerResponse getCustomer ( ) { 
+    public Customer getCustomer ( ) { 
         return this.customer;
     }
     
@@ -212,7 +212,7 @@ public class GetCardResponse
      * TODO: Write general description for this method
      */
     @JsonSetter("customer")
-    public void setCustomer (GetCustomerResponse value) { 
+    public void setCustomer (Customer value) { 
         this.customer = value;
     }
  

@@ -64,7 +64,7 @@ public class GetCustomerResponseBuilder {
         return this;
     }
 
-    public GetCustomerResponseBuilder address(GetAddressResponse address) {
+    public GetCustomerResponseBuilder address(Address address) {
         getCustomerResponse.setAddress(address);
         return this;
     }

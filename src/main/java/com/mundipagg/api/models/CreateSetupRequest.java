@@ -14,10 +14,10 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.ALWAYS)
 public class CreateSetupRequest 
         implements java.io.Serializable {
-    private static final long serialVersionUID = 3493521914178852758L;
+    private static final long serialVersionUID = -3493521912984008948L;
     private int amount;
     private String description;
-    private CreatePaymentRequest payment;
+    private Payment payment;
     /** GETTER
      * Setup amount
      */
@@ -51,18 +51,18 @@ public class CreateSetupRequest
     }
  
     /** GETTER
-     * Payment data
+     * TODO: Write general description for this method
      */
     @JsonGetter("payment")
-    public CreatePaymentRequest getPayment ( ) { 
+    public Payment getPayment ( ) { 
         return this.payment;
     }
     
     /** SETTER
-     * Payment data
+     * TODO: Write general description for this method
      */
     @JsonSetter("payment")
-    public void setPayment (CreatePaymentRequest value) { 
+    public void setPayment (Payment value) { 
         this.payment = value;
     }
  

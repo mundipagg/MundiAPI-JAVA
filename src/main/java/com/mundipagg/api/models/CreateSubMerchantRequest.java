@@ -14,15 +14,15 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.ALWAYS)
 public class CreateSubMerchantRequest 
         implements java.io.Serializable {
-    private static final long serialVersionUID = 3393544641583123737L;
+    private static final long serialVersionUID = -3393459409985774310L;
     private String paymentFacilitatorCode;
     private String code;
     private String name;
     private String merchantCategoryCode;
     private String document;
     private String type;
-    private CreatePhoneRequest phone;
-    private CreateAddressRequest address;
+    private GetPhoneResponse phone;
+    private Address1 address;
     /** GETTER
      * Payment Facilitator Code
      */
@@ -120,34 +120,34 @@ public class CreateSubMerchantRequest
     }
  
     /** GETTER
-     * Phone
+     * TODO: Write general description for this method
      */
     @JsonGetter("phone")
-    public CreatePhoneRequest getPhone ( ) { 
+    public GetPhoneResponse getPhone ( ) { 
         return this.phone;
     }
     
     /** SETTER
-     * Phone
+     * TODO: Write general description for this method
      */
     @JsonSetter("phone")
-    public void setPhone (CreatePhoneRequest value) { 
+    public void setPhone (GetPhoneResponse value) { 
         this.phone = value;
     }
  
     /** GETTER
-     * Address
+     * TODO: Write general description for this method
      */
     @JsonGetter("address")
-    public CreateAddressRequest getAddress ( ) { 
+    public Address1 getAddress ( ) { 
         return this.address;
     }
     
     /** SETTER
-     * Address
+     * TODO: Write general description for this method
      */
     @JsonSetter("address")
-    public void setAddress (CreateAddressRequest value) { 
+    public void setAddress (Address1 value) { 
         this.address = value;
     }
  

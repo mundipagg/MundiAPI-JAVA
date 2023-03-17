@@ -14,11 +14,11 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.ALWAYS)
 public class GetPixPayerResponse 
         implements java.io.Serializable {
-    private static final long serialVersionUID = -2292733899278426883L;
+    private static final long serialVersionUID = -2292733898433458442L;
     private String name;
     private String document;
     private String documentType;
-    private GetPixBankAccountResponse bankAccount;
+    private Object bankAccount;
     /** GETTER
      * TODO: Write general description for this method
      */
@@ -71,7 +71,7 @@ public class GetPixPayerResponse
      * TODO: Write general description for this method
      */
     @JsonGetter("bank_account")
-    public GetPixBankAccountResponse getBankAccount ( ) { 
+    public Object getBankAccount ( ) { 
         return this.bankAccount;
     }
     
@@ -79,7 +79,7 @@ public class GetPixPayerResponse
      * TODO: Write general description for this method
      */
     @JsonSetter("bank_account")
-    public void setBankAccount (GetPixBankAccountResponse value) { 
+    public void setBankAccount (Object value) { 
         this.bankAccount = value;
     }
  

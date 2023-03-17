@@ -14,10 +14,10 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.ALWAYS)
 public class GetBalanceResponse 
         implements java.io.Serializable {
-    private static final long serialVersionUID = -6074693924236159066L;
+    private static final long serialVersionUID = 706550775820059198L;
     private String currency;
     private long availableAmount;
-    private GetRecipientResponse recipient;
+    private Recipient recipient;
     private long waitingFundsAmount;
     private long transferredAmount;
     /** GETTER
@@ -53,18 +53,18 @@ public class GetBalanceResponse
     }
  
     /** GETTER
-     * Recipient
+     * TODO: Write general description for this method
      */
     @JsonGetter("recipient")
-    public GetRecipientResponse getRecipient ( ) { 
+    public Recipient getRecipient ( ) { 
         return this.recipient;
     }
     
     /** SETTER
-     * Recipient
+     * TODO: Write general description for this method
      */
     @JsonSetter("recipient")
-    public void setRecipient (GetRecipientResponse value) { 
+    public void setRecipient (Recipient value) { 
         this.recipient = value;
     }
  

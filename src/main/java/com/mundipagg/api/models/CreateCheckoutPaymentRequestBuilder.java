@@ -58,25 +58,16 @@ public class CreateCheckoutPaymentRequestBuilder {
         return this;
     }
 
-    /**
-     * Credit Card payment request
-     */
-    public CreateCheckoutPaymentRequestBuilder creditCard(CreateCheckoutCreditCardPaymentRequest creditCard) {
+    public CreateCheckoutPaymentRequestBuilder creditCard(CreditCard2 creditCard) {
         createCheckoutPaymentRequest.setCreditCard(creditCard);
         return this;
     }
 
-    /**
-     * Debit Card payment request
-     */
-    public CreateCheckoutPaymentRequestBuilder debitCard(CreateCheckoutDebitCardPaymentRequest debitCard) {
+    public CreateCheckoutPaymentRequestBuilder debitCard(DebitCard2 debitCard) {
         createCheckoutPaymentRequest.setDebitCard(debitCard);
         return this;
     }
 
-    /**
-     * Boleto payment request
-     */
     public CreateCheckoutPaymentRequestBuilder boleto(CreateCheckoutBoletoPaymentRequest boleto) {
         createCheckoutPaymentRequest.setBoleto(boleto);
         return this;
@@ -114,18 +105,12 @@ public class CreateCheckoutPaymentRequestBuilder {
         return this;
     }
 
-    /**
-     * Billing Address
-     */
-    public CreateCheckoutPaymentRequestBuilder billingAddress(CreateAddressRequest billingAddress) {
+    public CreateCheckoutPaymentRequestBuilder billingAddress(BillingAddress1 billingAddress) {
         createCheckoutPaymentRequest.setBillingAddress(billingAddress);
         return this;
     }
 
-    /**
-     * Bank Transfer payment request
-     */
-    public CreateCheckoutPaymentRequestBuilder bankTransfer(CreateCheckoutBankTransferRequest bankTransfer) {
+    public CreateCheckoutPaymentRequestBuilder bankTransfer(BankTransfer2 bankTransfer) {
         createCheckoutPaymentRequest.setBankTransfer(bankTransfer);
         return this;
     }

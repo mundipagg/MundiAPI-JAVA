@@ -26,10 +26,7 @@ public class ListChargeTransactionsResponseBuilder {
         return this;
     }
 
-    /**
-     * Paging object
-     */
-    public ListChargeTransactionsResponseBuilder paging(PagingResponse paging) {
+    public ListChargeTransactionsResponseBuilder paging(Paging paging) {
         listChargeTransactionsResponse.setPaging(paging);
         return this;
     }

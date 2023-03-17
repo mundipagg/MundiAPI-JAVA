@@ -34,10 +34,7 @@ public class CreateGooglePayRequestBuilder {
         return this;
     }
 
-    /**
-     * The GooglePay header request
-     */
-    public CreateGooglePayRequestBuilder header(CreateGooglePayHeaderRequest header) {
+    public CreateGooglePayRequestBuilder header(Header1 header) {
         createGooglePayRequest.setHeader(header);
         return this;
     }

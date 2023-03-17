@@ -14,9 +14,9 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.ALWAYS)
 public class CreateCheckoutDebitCardPaymentRequest 
         implements java.io.Serializable {
-    private static final long serialVersionUID = 6023346449062375754L;
+    private static final long serialVersionUID = 6023346448370920102L;
     private String statementDescriptor;
-    private CreatePaymentAuthenticationRequest authentication;
+    private Authentication2 authentication;
     /** GETTER
      * Card invoice text descriptor
      */
@@ -34,18 +34,18 @@ public class CreateCheckoutDebitCardPaymentRequest
     }
  
     /** GETTER
-     * Creates payment authentication
+     * TODO: Write general description for this method
      */
     @JsonGetter("authentication")
-    public CreatePaymentAuthenticationRequest getAuthentication ( ) { 
+    public Authentication2 getAuthentication ( ) { 
         return this.authentication;
     }
     
     /** SETTER
-     * Creates payment authentication
+     * TODO: Write general description for this method
      */
     @JsonSetter("authentication")
-    public void setAuthentication (CreatePaymentAuthenticationRequest value) { 
+    public void setAuthentication (Authentication2 value) { 
         this.authentication = value;
     }
  

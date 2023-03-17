@@ -14,10 +14,10 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.ALWAYS)
 public class UpdateChargeCardRequest 
         implements java.io.Serializable {
-    private static final long serialVersionUID = -1838617267933971318L;
+    private static final long serialVersionUID = -1838606361632437251L;
     private boolean updateSubscription;
     private String cardId;
-    private CreateCardRequest card;
+    private Card1 card;
     private boolean recurrence;
     /** GETTER
      * Indicates if the subscriptions using this card must also be updated
@@ -52,18 +52,18 @@ public class UpdateChargeCardRequest
     }
  
     /** GETTER
-     * Card data
+     * TODO: Write general description for this method
      */
     @JsonGetter("card")
-    public CreateCardRequest getCard ( ) { 
+    public Card1 getCard ( ) { 
         return this.card;
     }
     
     /** SETTER
-     * Card data
+     * TODO: Write general description for this method
      */
     @JsonSetter("card")
-    public void setCard (CreateCardRequest value) { 
+    public void setCard (Card1 value) { 
         this.card = value;
     }
  

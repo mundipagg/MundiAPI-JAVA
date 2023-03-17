@@ -14,10 +14,10 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.ALWAYS)
 public class CreateCardPaymentContactlessRequest 
         implements java.io.Serializable {
-    private static final long serialVersionUID = -1739099960915993977L;
+    private static final long serialVersionUID = 2495422326067411809L;
     private String type;
-    private CreateApplePayRequest applePay;
-    private CreateGooglePayRequest googlePay;
+    private ApplePay applePay;
+    private GooglePay googlePay;
     private CreateEmvDecryptRequest emv;
     /** GETTER
      * The authentication type
@@ -36,39 +36,39 @@ public class CreateCardPaymentContactlessRequest
     }
  
     /** GETTER
-     * The ApplePay encrypted request
+     * TODO: Write general description for this method
      */
     @JsonGetter("apple_pay")
-    public CreateApplePayRequest getApplePay ( ) { 
+    public ApplePay getApplePay ( ) { 
         return this.applePay;
     }
     
     /** SETTER
-     * The ApplePay encrypted request
+     * TODO: Write general description for this method
      */
     @JsonSetter("apple_pay")
-    public void setApplePay (CreateApplePayRequest value) { 
+    public void setApplePay (ApplePay value) { 
         this.applePay = value;
     }
  
     /** GETTER
-     * The GooglePay encrypted request
+     * TODO: Write general description for this method
      */
     @JsonGetter("google_pay")
-    public CreateGooglePayRequest getGooglePay ( ) { 
+    public GooglePay getGooglePay ( ) { 
         return this.googlePay;
     }
     
     /** SETTER
-     * The GooglePay encrypted request
+     * TODO: Write general description for this method
      */
     @JsonSetter("google_pay")
-    public void setGooglePay (CreateGooglePayRequest value) { 
+    public void setGooglePay (GooglePay value) { 
         this.googlePay = value;
     }
  
     /** GETTER
-     * The Emv encrypted request
+     * TODO: Write general description for this method
      */
     @JsonGetter("emv")
     public CreateEmvDecryptRequest getEmv ( ) { 
@@ -76,7 +76,7 @@ public class CreateCardPaymentContactlessRequest
     }
     
     /** SETTER
-     * The Emv encrypted request
+     * TODO: Write general description for this method
      */
     @JsonSetter("emv")
     public void setEmv (CreateEmvDecryptRequest value) { 

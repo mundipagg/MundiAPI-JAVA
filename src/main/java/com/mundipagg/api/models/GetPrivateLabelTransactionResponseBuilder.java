@@ -75,10 +75,7 @@ public class GetPrivateLabelTransactionResponseBuilder
         return this;
     }
 
-    /**
-     * Card data
-     */
-    public GetPrivateLabelTransactionResponseBuilder card(GetCardResponse card) {
+    public GetPrivateLabelTransactionResponseBuilder card(Card card) {
         getPrivateLabelTransactionResponse.setCard(card);
         return this;
     }

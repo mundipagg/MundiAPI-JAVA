@@ -112,10 +112,7 @@ public class GetTransactionResponseBuilder {
         return this;
     }
 
-    /**
-     * The Gateway Response
-     */
-    public GetTransactionResponseBuilder gatewayResponse(GetGatewayResponseResponse gatewayResponse) {
+    public GetTransactionResponseBuilder gatewayResponse(GatewayResponse gatewayResponse) {
         getTransactionResponse.setGatewayResponse(gatewayResponse);
         return this;
     }
@@ -135,12 +132,12 @@ public class GetTransactionResponseBuilder {
         return this;
     }
 
-    public GetTransactionResponseBuilder interest(GetInterestResponse interest) {
+    public GetTransactionResponseBuilder interest(Interest interest) {
         getTransactionResponse.setInterest(interest);
         return this;
     }
 
-    public GetTransactionResponseBuilder fine(GetFineResponse fine) {
+    public GetTransactionResponseBuilder fine(Fine fine) {
         getTransactionResponse.setFine(fine);
         return this;
     }

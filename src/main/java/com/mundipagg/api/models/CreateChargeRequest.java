@@ -18,12 +18,12 @@ import org.joda.time.DateTime;
 @JsonInclude(Include.ALWAYS)
 public class CreateChargeRequest 
         implements java.io.Serializable {
-    private static final long serialVersionUID = -393861842257300667L;
+    private static final long serialVersionUID = 5041720234206082935L;
     private String code;
     private int amount;
     private String customerId;
-    private CreateCustomerRequest customer;
-    private CreatePaymentRequest payment;
+    private Customer8 customer;
+    private Payment payment;
     private LinkedHashMap<String, String> metadata;
     private DateTime dueAt;
     private CreateAntifraudRequest antifraud;
@@ -77,34 +77,34 @@ public class CreateChargeRequest
     }
  
     /** GETTER
-     * Customer data
+     * TODO: Write general description for this method
      */
     @JsonGetter("customer")
-    public CreateCustomerRequest getCustomer ( ) { 
+    public Customer8 getCustomer ( ) { 
         return this.customer;
     }
     
     /** SETTER
-     * Customer data
+     * TODO: Write general description for this method
      */
     @JsonSetter("customer")
-    public void setCustomer (CreateCustomerRequest value) { 
+    public void setCustomer (Customer8 value) { 
         this.customer = value;
     }
  
     /** GETTER
-     * Payment data
+     * TODO: Write general description for this method
      */
     @JsonGetter("payment")
-    public CreatePaymentRequest getPayment ( ) { 
+    public Payment getPayment ( ) { 
         return this.payment;
     }
     
     /** SETTER
-     * Payment data
+     * TODO: Write general description for this method
      */
     @JsonSetter("payment")
-    public void setPayment (CreatePaymentRequest value) { 
+    public void setPayment (Payment value) { 
         this.payment = value;
     }
  

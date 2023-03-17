@@ -23,7 +23,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.ALWAYS)
 public class GetPrivateLabelTransactionResponse 
         extends GetTransactionResponse {
-    private static final long serialVersionUID = 8680095227294046182L;
+    private static final long serialVersionUID = -824318897696286263L;
     private String statementDescriptor;
     private String acquirerName;
     private String acquirerAffiliationCode;
@@ -31,7 +31,7 @@ public class GetPrivateLabelTransactionResponse
     private String acquirerNsu;
     private String acquirerAuthCode;
     private String operationType;
-    private GetCardResponse card;
+    private Card card;
     private String acquirerMessage;
     private String acquirerReturnCode;
     private Integer installments;
@@ -148,18 +148,18 @@ public class GetPrivateLabelTransactionResponse
     }
  
     /** GETTER
-     * Card data
+     * TODO: Write general description for this method
      */
     @JsonGetter("card")
-    public GetCardResponse getCard ( ) { 
+    public Card getCard ( ) { 
         return this.card;
     }
     
     /** SETTER
-     * Card data
+     * TODO: Write general description for this method
      */
     @JsonSetter("card")
-    public void setCard (GetCardResponse value) { 
+    public void setCard (Card value) { 
         this.card = value;
     }
  

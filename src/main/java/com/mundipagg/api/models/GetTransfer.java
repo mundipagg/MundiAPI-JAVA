@@ -18,7 +18,7 @@ import org.joda.time.DateTime;
 @JsonInclude(Include.ALWAYS)
 public class GetTransfer 
         implements java.io.Serializable {
-    private static final long serialVersionUID = -3608848033731145618L;
+    private static final long serialVersionUID = 3608842762055124377L;
     private String id;
     private String gatewayId;
     private int amount;
@@ -30,8 +30,8 @@ public class GetTransfer
     private DateTime fundingDate;
     private DateTime fundingEstimatedDate;
     private String type;
-    private GetTransferSourceResponse source;
-    private GetTransferTargetResponse target;
+    private GetWithdrawSourceResponse source;
+    private GetWithdrawTargetResponse target;
     /** GETTER
      * TODO: Write general description for this method
      */
@@ -220,7 +220,7 @@ public class GetTransfer
      * TODO: Write general description for this method
      */
     @JsonGetter("source")
-    public GetTransferSourceResponse getSource ( ) { 
+    public GetWithdrawSourceResponse getSource ( ) { 
         return this.source;
     }
     
@@ -228,7 +228,7 @@ public class GetTransfer
      * TODO: Write general description for this method
      */
     @JsonSetter("source")
-    public void setSource (GetTransferSourceResponse value) { 
+    public void setSource (GetWithdrawSourceResponse value) { 
         this.source = value;
     }
  
@@ -236,7 +236,7 @@ public class GetTransfer
      * TODO: Write general description for this method
      */
     @JsonGetter("target")
-    public GetTransferTargetResponse getTarget ( ) { 
+    public GetWithdrawTargetResponse getTarget ( ) { 
         return this.target;
     }
     
@@ -244,7 +244,7 @@ public class GetTransfer
      * TODO: Write general description for this method
      */
     @JsonSetter("target")
-    public void setTarget (GetTransferTargetResponse value) { 
+    public void setTarget (GetWithdrawTargetResponse value) { 
         this.target = value;
     }
  

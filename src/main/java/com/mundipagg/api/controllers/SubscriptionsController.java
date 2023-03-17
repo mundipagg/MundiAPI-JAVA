@@ -46,17 +46,17 @@ public class SubscriptionsController extends BaseController {
     /**
      * Creates a discount
      * @param    subscriptionId    Required parameter: Subscription id
-     * @param    request    Required parameter: Request for creating a discount
+     * @param    body    Required parameter: Request for creating a discount
      * @param    idempotencyKey    Optional parameter: Example: 
-     * @return    Returns the GetDiscountResponse response from the API call 
+     * @return    Returns the SubscriptionsDiscountsResponse response from the API call 
      */
-    public GetDiscountResponse createDiscount(
+    public SubscriptionsDiscountsResponse createDiscount(
                 final String subscriptionId,
-                final CreateDiscountRequest request,
+                final SubscriptionsDiscountsRequest body,
                 final String idempotencyKey
     ) throws Throwable {
 
-        HttpRequest _request = _buildCreateDiscountRequest(subscriptionId, request, idempotencyKey);
+        HttpRequest _request = _buildCreateDiscountRequest(subscriptionId, body, idempotencyKey);
         HttpResponse _response = getClientInstance().executeAsString(_request);
         HttpContext _context = new HttpContext(_request, _response);
 
@@ -66,21 +66,21 @@ public class SubscriptionsController extends BaseController {
     /**
      * Creates a discount
      * @param    subscriptionId    Required parameter: Subscription id
-     * @param    request    Required parameter: Request for creating a discount
+     * @param    body    Required parameter: Request for creating a discount
      * @param    idempotencyKey    Optional parameter: Example: 
      */
     public void createDiscountAsync(
                 final String subscriptionId,
-                final CreateDiscountRequest request,
+                final SubscriptionsDiscountsRequest body,
                 final String idempotencyKey,
-                final APICallBack<GetDiscountResponse> callBack
+                final APICallBack<SubscriptionsDiscountsResponse> callBack
     ) {
         Runnable _responseTask = new Runnable() {
             public void run() {
 
                 HttpRequest _request;
                 try {
-                    _request = _buildCreateDiscountRequest(subscriptionId, request, idempotencyKey);
+                    _request = _buildCreateDiscountRequest(subscriptionId, body, idempotencyKey);
                 } catch (Exception e) {
                     callBack.onFailure(null, e);
                     return;
@@ -90,7 +90,7 @@ public class SubscriptionsController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            GetDiscountResponse returnValue = _handleCreateDiscountResponse(_context);
+                            SubscriptionsDiscountsResponse returnValue = _handleCreateDiscountResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -114,7 +114,7 @@ public class SubscriptionsController extends BaseController {
      */
     private HttpRequest _buildCreateDiscountRequest(
                 final String subscriptionId,
-                final CreateDiscountRequest request,
+                final SubscriptionsDiscountsRequest body,
                 final String idempotencyKey) throws IOException, APIException {
         //the base uri for api requests
         String _baseUri = Configuration.baseUri;
@@ -131,16 +131,16 @@ public class SubscriptionsController extends BaseController {
 
         //load all headers for the outgoing API request
         Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("Content-Type", "application/json");
         if (idempotencyKey != null) {
             _headers.put("idempotency-key", idempotencyKey);
         }
         _headers.put("user-agent", BaseController.userAgent);
         _headers.put("accept", "application/json");
-        _headers.put("content-type", "application/json");
 
 
         //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().postBody(_queryUrl, _headers, APIHelper.serialize(request),
+        HttpRequest _request = getClientInstance().postBody(_queryUrl, _headers, APIHelper.serialize(body),
                 Configuration.basicAuthUserName, Configuration.basicAuthPassword);
 
         // Invoke the callback before request if its not null
@@ -153,9 +153,9 @@ public class SubscriptionsController extends BaseController {
 
     /**
      * Processes the response for createDiscount
-     * @return An object of type GetDiscountResponse
+     * @return An object of type SubscriptionsDiscountsResponse
      */
-    private GetDiscountResponse _handleCreateDiscountResponse(HttpContext _context)
+    private SubscriptionsDiscountsResponse _handleCreateDiscountResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -164,13 +164,34 @@ public class SubscriptionsController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
         //extract result from the http response
         String _responseBody = ((HttpStringResponse)_response).getBody();
-        GetDiscountResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<GetDiscountResponse>(){});
+        SubscriptionsDiscountsResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<SubscriptionsDiscountsResponse>(){});
 
         return _result;
     }
@@ -288,6 +309,186 @@ public class SubscriptionsController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
+        //handle errors defined at the API level
+        validateResponse(_response, _context);
+
+        //extract result from the http response
+        String _responseBody = ((HttpStringResponse)_response).getBody();
+        GetSubscriptionItemResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<GetSubscriptionItemResponse>(){});
+
+        return _result;
+    }
+
+    /**
+     * Updates a subscription item
+     * @param    subscriptionId    Required parameter: Subscription Id
+     * @param    itemId    Required parameter: Item id
+     * @param    body    Required parameter: Request for updating a subscription item
+     * @param    idempotencyKey    Optional parameter: Example: 
+     * @return    Returns the GetSubscriptionItemResponse response from the API call 
+     */
+    public GetSubscriptionItemResponse updateSubscriptionItem(
+                final String subscriptionId,
+                final String itemId,
+                final SubscriptionsItemsRequest body,
+                final String idempotencyKey
+    ) throws Throwable {
+
+        HttpRequest _request = _buildUpdateSubscriptionItemRequest(subscriptionId, itemId, body, idempotencyKey);
+        HttpResponse _response = getClientInstance().executeAsString(_request);
+        HttpContext _context = new HttpContext(_request, _response);
+
+        return _handleUpdateSubscriptionItemResponse(_context);
+    }
+
+    /**
+     * Updates a subscription item
+     * @param    subscriptionId    Required parameter: Subscription Id
+     * @param    itemId    Required parameter: Item id
+     * @param    body    Required parameter: Request for updating a subscription item
+     * @param    idempotencyKey    Optional parameter: Example: 
+     */
+    public void updateSubscriptionItemAsync(
+                final String subscriptionId,
+                final String itemId,
+                final SubscriptionsItemsRequest body,
+                final String idempotencyKey,
+                final APICallBack<GetSubscriptionItemResponse> callBack
+    ) {
+        Runnable _responseTask = new Runnable() {
+            public void run() {
+
+                HttpRequest _request;
+                try {
+                    _request = _buildUpdateSubscriptionItemRequest(subscriptionId, itemId, body, idempotencyKey);
+                } catch (Exception e) {
+                    callBack.onFailure(null, e);
+                    return;
+                }
+
+                // Invoke request and get response
+                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
+                    public void onSuccess(HttpContext _context, HttpResponse _response) {
+                        try {
+                            GetSubscriptionItemResponse returnValue = _handleUpdateSubscriptionItemResponse(_context);
+                            callBack.onSuccess(_context, returnValue);
+                        } catch (Exception e) {
+                            callBack.onFailure(_context, e);
+                        }
+                    }
+
+                    public void onFailure(HttpContext _context, Throwable _exception) {
+                        // Let the caller know of the failure
+                        callBack.onFailure(_context, _exception);
+                    }
+                });
+            }
+        };
+
+        // Execute async using thread pool
+        APIHelper.getScheduler().execute(_responseTask);
+    }
+
+    /**
+     * Builds the HttpRequest object for updateSubscriptionItem
+     */
+    private HttpRequest _buildUpdateSubscriptionItemRequest(
+                final String subscriptionId,
+                final String itemId,
+                final SubscriptionsItemsRequest body,
+                final String idempotencyKey) throws IOException, APIException {
+        //the base uri for api requests
+        String _baseUri = Configuration.baseUri;
+
+        //prepare query string for API call
+        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/subscriptions/{subscription_id}/items/{item_id}");
+
+        //process template parameters
+        Map<String, Object> _templateParameters = new HashMap<String, Object>();
+        _templateParameters.put("subscription_id", subscriptionId);
+        _templateParameters.put("item_id", itemId);
+        APIHelper.appendUrlWithTemplateParameters(_queryBuilder, _templateParameters);
+        //validate and preprocess url
+        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
+
+        //load all headers for the outgoing API request
+        Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("Content-Type", "application/json");
+        if (idempotencyKey != null) {
+            _headers.put("idempotency-key", idempotencyKey);
+        }
+        _headers.put("user-agent", BaseController.userAgent);
+        _headers.put("accept", "application/json");
+
+
+        //prepare and invoke the API call request to fetch the response
+        HttpRequest _request = getClientInstance().putBody(_queryUrl, _headers, APIHelper.serialize(body),
+                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
+
+        // Invoke the callback before request if its not null
+        if (getHttpCallBack() != null) {
+            getHttpCallBack().OnBeforeRequest(_request);
+        }
+
+        return _request;
+    }
+
+    /**
+     * Processes the response for updateSubscriptionItem
+     * @return An object of type GetSubscriptionItemResponse
+     */
+    private GetSubscriptionItemResponse _handleUpdateSubscriptionItemResponse(HttpContext _context)
+            throws APIException, IOException {
+        HttpResponse _response = _context.getResponse();
+
+        //invoke the callback after response if its not null
+        if (getHttpCallBack() != null) {
+            getHttpCallBack().OnAfterResponse(_context);
+        }
+
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
@@ -305,9 +506,9 @@ public class SubscriptionsController extends BaseController {
      * @param    itemId    Required parameter: The subscription item id
      * @param    usageId    Required parameter: The usage id
      * @param    idempotencyKey    Optional parameter: Example: 
-     * @return    Returns the GetUsageResponse response from the API call 
+     * @return    Returns the SubscriptionsItemsUsagesUsageIdResponse response from the API call 
      */
-    public GetUsageResponse deleteUsage(
+    public SubscriptionsItemsUsagesUsageIdResponse deleteUsage(
                 final String subscriptionId,
                 final String itemId,
                 final String usageId,
@@ -333,7 +534,7 @@ public class SubscriptionsController extends BaseController {
                 final String itemId,
                 final String usageId,
                 final String idempotencyKey,
-                final APICallBack<GetUsageResponse> callBack
+                final APICallBack<SubscriptionsItemsUsagesUsageIdResponse> callBack
     ) {
         Runnable _responseTask = new Runnable() {
             public void run() {
@@ -350,7 +551,7 @@ public class SubscriptionsController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            GetUsageResponse returnValue = _handleDeleteUsageResponse(_context);
+                            SubscriptionsItemsUsagesUsageIdResponse returnValue = _handleDeleteUsageResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -415,9 +616,9 @@ public class SubscriptionsController extends BaseController {
 
     /**
      * Processes the response for deleteUsage
-     * @return An object of type GetUsageResponse
+     * @return An object of type SubscriptionsItemsUsagesUsageIdResponse
      */
-    private GetUsageResponse _handleDeleteUsageResponse(HttpContext _context)
+    private SubscriptionsItemsUsagesUsageIdResponse _handleDeleteUsageResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -426,13 +627,34 @@ public class SubscriptionsController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
         //extract result from the http response
         String _responseBody = ((HttpStringResponse)_response).getBody();
-        GetUsageResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<GetUsageResponse>(){});
+        SubscriptionsItemsUsagesUsageIdResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<SubscriptionsItemsUsagesUsageIdResponse>(){});
 
         return _result;
     }
@@ -440,17 +662,17 @@ public class SubscriptionsController extends BaseController {
     /**
      * Cancels a subscription
      * @param    subscriptionId    Required parameter: Subscription id
-     * @param    request    Optional parameter: Request for cancelling a subscription
      * @param    idempotencyKey    Optional parameter: Example: 
+     * @param    body    Optional parameter: Request for cancelling a subscription
      * @return    Returns the GetSubscriptionResponse response from the API call 
      */
     public GetSubscriptionResponse cancelSubscription(
                 final String subscriptionId,
-                final CreateCancelSubscriptionRequest request,
-                final String idempotencyKey
+                final String idempotencyKey,
+                final SubscriptionsRequest body
     ) throws Throwable {
 
-        HttpRequest _request = _buildCancelSubscriptionRequest(subscriptionId, request, idempotencyKey);
+        HttpRequest _request = _buildCancelSubscriptionRequest(subscriptionId, idempotencyKey, body);
         HttpResponse _response = getClientInstance().executeAsString(_request);
         HttpContext _context = new HttpContext(_request, _response);
 
@@ -460,13 +682,13 @@ public class SubscriptionsController extends BaseController {
     /**
      * Cancels a subscription
      * @param    subscriptionId    Required parameter: Subscription id
-     * @param    request    Optional parameter: Request for cancelling a subscription
      * @param    idempotencyKey    Optional parameter: Example: 
+     * @param    body    Optional parameter: Request for cancelling a subscription
      */
     public void cancelSubscriptionAsync(
                 final String subscriptionId,
-                final CreateCancelSubscriptionRequest request,
                 final String idempotencyKey,
+                final SubscriptionsRequest body,
                 final APICallBack<GetSubscriptionResponse> callBack
     ) {
         Runnable _responseTask = new Runnable() {
@@ -474,7 +696,7 @@ public class SubscriptionsController extends BaseController {
 
                 HttpRequest _request;
                 try {
-                    _request = _buildCancelSubscriptionRequest(subscriptionId, request, idempotencyKey);
+                    _request = _buildCancelSubscriptionRequest(subscriptionId, idempotencyKey, body);
                 } catch (Exception e) {
                     callBack.onFailure(null, e);
                     return;
@@ -508,8 +730,8 @@ public class SubscriptionsController extends BaseController {
      */
     private HttpRequest _buildCancelSubscriptionRequest(
                 final String subscriptionId,
-                final CreateCancelSubscriptionRequest request,
-                final String idempotencyKey) throws IOException, APIException {
+                final String idempotencyKey,
+                final SubscriptionsRequest body) throws IOException, APIException {
         //the base uri for api requests
         String _baseUri = Configuration.baseUri;
 
@@ -525,16 +747,16 @@ public class SubscriptionsController extends BaseController {
 
         //load all headers for the outgoing API request
         Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("Content-Type", "application/json");
         if (idempotencyKey != null) {
             _headers.put("idempotency-key", idempotencyKey);
         }
         _headers.put("user-agent", BaseController.userAgent);
         _headers.put("accept", "application/json");
-        _headers.put("content-type", "application/json");
 
 
         //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().deleteBody(_queryUrl, _headers, APIHelper.serialize(request),
+        HttpRequest _request = getClientInstance().deleteBody(_queryUrl, _headers, APIHelper.serialize(body),
                 Configuration.basicAuthUserName, Configuration.basicAuthPassword);
 
         // Invoke the callback before request if its not null
@@ -558,6 +780,166 @@ public class SubscriptionsController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
+        //handle errors defined at the API level
+        validateResponse(_response, _context);
+
+        //extract result from the http response
+        String _responseBody = ((HttpStringResponse)_response).getBody();
+        GetSubscriptionResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<GetSubscriptionResponse>(){});
+
+        return _result;
+    }
+
+    /**
+     * Gets a subscription
+     * @param    subscriptionId    Required parameter: Subscription id
+     * @return    Returns the GetSubscriptionResponse response from the API call 
+     */
+    public GetSubscriptionResponse getSubscription(
+                final String subscriptionId
+    ) throws Throwable {
+
+        HttpRequest _request = _buildGetSubscriptionRequest(subscriptionId);
+        HttpResponse _response = getClientInstance().executeAsString(_request);
+        HttpContext _context = new HttpContext(_request, _response);
+
+        return _handleGetSubscriptionResponse(_context);
+    }
+
+    /**
+     * Gets a subscription
+     * @param    subscriptionId    Required parameter: Subscription id
+     */
+    public void getSubscriptionAsync(
+                final String subscriptionId,
+                final APICallBack<GetSubscriptionResponse> callBack
+    ) {
+        Runnable _responseTask = new Runnable() {
+            public void run() {
+
+                HttpRequest _request;
+                try {
+                    _request = _buildGetSubscriptionRequest(subscriptionId);
+                } catch (Exception e) {
+                    callBack.onFailure(null, e);
+                    return;
+                }
+
+                // Invoke request and get response
+                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
+                    public void onSuccess(HttpContext _context, HttpResponse _response) {
+                        try {
+                            GetSubscriptionResponse returnValue = _handleGetSubscriptionResponse(_context);
+                            callBack.onSuccess(_context, returnValue);
+                        } catch (Exception e) {
+                            callBack.onFailure(_context, e);
+                        }
+                    }
+
+                    public void onFailure(HttpContext _context, Throwable _exception) {
+                        // Let the caller know of the failure
+                        callBack.onFailure(_context, _exception);
+                    }
+                });
+            }
+        };
+
+        // Execute async using thread pool
+        APIHelper.getScheduler().execute(_responseTask);
+    }
+
+    /**
+     * Builds the HttpRequest object for getSubscription
+     */
+    private HttpRequest _buildGetSubscriptionRequest(
+                final String subscriptionId) throws IOException, APIException {
+        //the base uri for api requests
+        String _baseUri = Configuration.baseUri;
+
+        //prepare query string for API call
+        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/subscriptions/{subscription_id}");
+
+        //process template parameters
+        Map<String, Object> _templateParameters = new HashMap<String, Object>();
+        _templateParameters.put("subscription_id", subscriptionId);
+        APIHelper.appendUrlWithTemplateParameters(_queryBuilder, _templateParameters);
+        //validate and preprocess url
+        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
+
+        //load all headers for the outgoing API request
+        Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("user-agent", BaseController.userAgent);
+        _headers.put("accept", "application/json");
+
+
+        //prepare and invoke the API call request to fetch the response
+        HttpRequest _request = getClientInstance().get(_queryUrl, _headers, null,
+                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
+
+        // Invoke the callback before request if its not null
+        if (getHttpCallBack() != null) {
+            getHttpCallBack().OnBeforeRequest(_request);
+        }
+
+        return _request;
+    }
+
+    /**
+     * Processes the response for getSubscription
+     * @return An object of type GetSubscriptionResponse
+     */
+    private GetSubscriptionResponse _handleGetSubscriptionResponse(HttpContext _context)
+            throws APIException, IOException {
+        HttpResponse _response = _context.getResponse();
+
+        //invoke the callback after response if its not null
+        if (getHttpCallBack() != null) {
+            getHttpCallBack().OnAfterResponse(_context);
+        }
+
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
@@ -574,9 +956,9 @@ public class SubscriptionsController extends BaseController {
      * @param    subscriptionId    Required parameter: Subscription id
      * @param    incrementId    Required parameter: Increment id
      * @param    idempotencyKey    Optional parameter: Example: 
-     * @return    Returns the GetIncrementResponse response from the API call 
+     * @return    Returns the SubscriptionsIncrementsResponse response from the API call 
      */
-    public GetIncrementResponse deleteIncrement(
+    public SubscriptionsIncrementsResponse deleteIncrement(
                 final String subscriptionId,
                 final String incrementId,
                 final String idempotencyKey
@@ -599,7 +981,7 @@ public class SubscriptionsController extends BaseController {
                 final String subscriptionId,
                 final String incrementId,
                 final String idempotencyKey,
-                final APICallBack<GetIncrementResponse> callBack
+                final APICallBack<SubscriptionsIncrementsResponse> callBack
     ) {
         Runnable _responseTask = new Runnable() {
             public void run() {
@@ -616,7 +998,7 @@ public class SubscriptionsController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            GetIncrementResponse returnValue = _handleDeleteIncrementResponse(_context);
+                            SubscriptionsIncrementsResponse returnValue = _handleDeleteIncrementResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -679,9 +1061,9 @@ public class SubscriptionsController extends BaseController {
 
     /**
      * Processes the response for deleteIncrement
-     * @return An object of type GetIncrementResponse
+     * @return An object of type SubscriptionsIncrementsResponse
      */
-    private GetIncrementResponse _handleDeleteIncrementResponse(HttpContext _context)
+    private SubscriptionsIncrementsResponse _handleDeleteIncrementResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -690,24 +1072,190 @@ public class SubscriptionsController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
         //extract result from the http response
         String _responseBody = ((HttpStringResponse)_response).getBody();
-        GetIncrementResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<GetIncrementResponse>(){});
+        SubscriptionsIncrementsResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<SubscriptionsIncrementsResponse>(){});
 
         return _result;
     }
 
     /**
-     * TODO: type endpoint description here
+     * GetIncrementById
+     * @param    subscriptionId    Required parameter: The subscription Id
+     * @param    incrementId    Required parameter: The increment Id
+     * @return    Returns the SubscriptionsIncrementsResponse response from the API call 
+     */
+    public SubscriptionsIncrementsResponse getIncrementById(
+                final String subscriptionId,
+                final String incrementId
+    ) throws Throwable {
+
+        HttpRequest _request = _buildGetIncrementByIdRequest(subscriptionId, incrementId);
+        HttpResponse _response = getClientInstance().executeAsString(_request);
+        HttpContext _context = new HttpContext(_request, _response);
+
+        return _handleGetIncrementByIdResponse(_context);
+    }
+
+    /**
+     * GetIncrementById
+     * @param    subscriptionId    Required parameter: The subscription Id
+     * @param    incrementId    Required parameter: The increment Id
+     */
+    public void getIncrementByIdAsync(
+                final String subscriptionId,
+                final String incrementId,
+                final APICallBack<SubscriptionsIncrementsResponse> callBack
+    ) {
+        Runnable _responseTask = new Runnable() {
+            public void run() {
+
+                HttpRequest _request;
+                try {
+                    _request = _buildGetIncrementByIdRequest(subscriptionId, incrementId);
+                } catch (Exception e) {
+                    callBack.onFailure(null, e);
+                    return;
+                }
+
+                // Invoke request and get response
+                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
+                    public void onSuccess(HttpContext _context, HttpResponse _response) {
+                        try {
+                            SubscriptionsIncrementsResponse returnValue = _handleGetIncrementByIdResponse(_context);
+                            callBack.onSuccess(_context, returnValue);
+                        } catch (Exception e) {
+                            callBack.onFailure(_context, e);
+                        }
+                    }
+
+                    public void onFailure(HttpContext _context, Throwable _exception) {
+                        // Let the caller know of the failure
+                        callBack.onFailure(_context, _exception);
+                    }
+                });
+            }
+        };
+
+        // Execute async using thread pool
+        APIHelper.getScheduler().execute(_responseTask);
+    }
+
+    /**
+     * Builds the HttpRequest object for getIncrementById
+     */
+    private HttpRequest _buildGetIncrementByIdRequest(
+                final String subscriptionId,
+                final String incrementId) throws IOException, APIException {
+        //the base uri for api requests
+        String _baseUri = Configuration.baseUri;
+
+        //prepare query string for API call
+        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/subscriptions/{subscription_id}/increments/{increment_id}");
+
+        //process template parameters
+        Map<String, Object> _templateParameters = new HashMap<String, Object>();
+        _templateParameters.put("subscription_id", subscriptionId);
+        _templateParameters.put("increment_id", incrementId);
+        APIHelper.appendUrlWithTemplateParameters(_queryBuilder, _templateParameters);
+        //validate and preprocess url
+        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
+
+        //load all headers for the outgoing API request
+        Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("user-agent", BaseController.userAgent);
+        _headers.put("accept", "application/json");
+
+
+        //prepare and invoke the API call request to fetch the response
+        HttpRequest _request = getClientInstance().get(_queryUrl, _headers, null,
+                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
+
+        // Invoke the callback before request if its not null
+        if (getHttpCallBack() != null) {
+            getHttpCallBack().OnBeforeRequest(_request);
+        }
+
+        return _request;
+    }
+
+    /**
+     * Processes the response for getIncrementById
+     * @return An object of type SubscriptionsIncrementsResponse
+     */
+    private SubscriptionsIncrementsResponse _handleGetIncrementByIdResponse(HttpContext _context)
+            throws APIException, IOException {
+        HttpResponse _response = _context.getResponse();
+
+        //invoke the callback after response if its not null
+        if (getHttpCallBack() != null) {
+            getHttpCallBack().OnAfterResponse(_context);
+        }
+
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
+        //handle errors defined at the API level
+        validateResponse(_response, _context);
+
+        //extract result from the http response
+        String _responseBody = ((HttpStringResponse)_response).getBody();
+        SubscriptionsIncrementsResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<SubscriptionsIncrementsResponse>(){});
+
+        return _result;
+    }
+
+    /**
+     * GetSubscriptionCycleById
      * @param    subscriptionId    Required parameter: The subscription id
      * @param    cycleId    Required parameter: Example: 
-     * @return    Returns the GetPeriodResponse response from the API call 
+     * @return    Returns the SubscriptionsCyclesResponse response from the API call 
      */
-    public GetPeriodResponse getSubscriptionCycleById(
+    public SubscriptionsCyclesResponse getSubscriptionCycleById(
                 final String subscriptionId,
                 final String cycleId
     ) throws Throwable {
@@ -720,14 +1268,14 @@ public class SubscriptionsController extends BaseController {
     }
 
     /**
-     * TODO: type endpoint description here
+     * GetSubscriptionCycleById
      * @param    subscriptionId    Required parameter: The subscription id
      * @param    cycleId    Required parameter: Example: 
      */
     public void getSubscriptionCycleByIdAsync(
                 final String subscriptionId,
                 final String cycleId,
-                final APICallBack<GetPeriodResponse> callBack
+                final APICallBack<SubscriptionsCyclesResponse> callBack
     ) {
         Runnable _responseTask = new Runnable() {
             public void run() {
@@ -744,7 +1292,7 @@ public class SubscriptionsController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            GetPeriodResponse returnValue = _handleGetSubscriptionCycleByIdResponse(_context);
+                            SubscriptionsCyclesResponse returnValue = _handleGetSubscriptionCycleByIdResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -803,9 +1351,9 @@ public class SubscriptionsController extends BaseController {
 
     /**
      * Processes the response for getSubscriptionCycleById
-     * @return An object of type GetPeriodResponse
+     * @return An object of type SubscriptionsCyclesResponse
      */
-    private GetPeriodResponse _handleGetSubscriptionCycleByIdResponse(HttpContext _context)
+    private SubscriptionsCyclesResponse _handleGetSubscriptionCycleByIdResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -814,13 +1362,34 @@ public class SubscriptionsController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
         //extract result from the http response
         String _responseBody = ((HttpStringResponse)_response).getBody();
-        GetPeriodResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<GetPeriodResponse>(){});
+        SubscriptionsCyclesResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<SubscriptionsCyclesResponse>(){});
 
         return _result;
     }
@@ -828,17 +1397,17 @@ public class SubscriptionsController extends BaseController {
     /**
      * Updates the start at date from a subscription
      * @param    subscriptionId    Required parameter: The subscription id
-     * @param    request    Required parameter: Request for updating the subscription start date
+     * @param    body    Required parameter: Request for updating the subscription start date
      * @param    idempotencyKey    Optional parameter: Example: 
      * @return    Returns the GetSubscriptionResponse response from the API call 
      */
     public GetSubscriptionResponse updateSubscriptionStartAt(
                 final String subscriptionId,
-                final UpdateSubscriptionStartAtRequest request,
+                final SubscriptionsStartAtRequest body,
                 final String idempotencyKey
     ) throws Throwable {
 
-        HttpRequest _request = _buildUpdateSubscriptionStartAtRequest(subscriptionId, request, idempotencyKey);
+        HttpRequest _request = _buildUpdateSubscriptionStartAtRequest(subscriptionId, body, idempotencyKey);
         HttpResponse _response = getClientInstance().executeAsString(_request);
         HttpContext _context = new HttpContext(_request, _response);
 
@@ -848,12 +1417,12 @@ public class SubscriptionsController extends BaseController {
     /**
      * Updates the start at date from a subscription
      * @param    subscriptionId    Required parameter: The subscription id
-     * @param    request    Required parameter: Request for updating the subscription start date
+     * @param    body    Required parameter: Request for updating the subscription start date
      * @param    idempotencyKey    Optional parameter: Example: 
      */
     public void updateSubscriptionStartAtAsync(
                 final String subscriptionId,
-                final UpdateSubscriptionStartAtRequest request,
+                final SubscriptionsStartAtRequest body,
                 final String idempotencyKey,
                 final APICallBack<GetSubscriptionResponse> callBack
     ) {
@@ -862,7 +1431,7 @@ public class SubscriptionsController extends BaseController {
 
                 HttpRequest _request;
                 try {
-                    _request = _buildUpdateSubscriptionStartAtRequest(subscriptionId, request, idempotencyKey);
+                    _request = _buildUpdateSubscriptionStartAtRequest(subscriptionId, body, idempotencyKey);
                 } catch (Exception e) {
                     callBack.onFailure(null, e);
                     return;
@@ -896,7 +1465,7 @@ public class SubscriptionsController extends BaseController {
      */
     private HttpRequest _buildUpdateSubscriptionStartAtRequest(
                 final String subscriptionId,
-                final UpdateSubscriptionStartAtRequest request,
+                final SubscriptionsStartAtRequest body,
                 final String idempotencyKey) throws IOException, APIException {
         //the base uri for api requests
         String _baseUri = Configuration.baseUri;
@@ -913,16 +1482,16 @@ public class SubscriptionsController extends BaseController {
 
         //load all headers for the outgoing API request
         Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("Content-Type", "application/json");
         if (idempotencyKey != null) {
             _headers.put("idempotency-key", idempotencyKey);
         }
         _headers.put("user-agent", BaseController.userAgent);
         _headers.put("accept", "application/json");
-        _headers.put("content-type", "application/json");
 
 
         //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().patchBody(_queryUrl, _headers, APIHelper.serialize(request),
+        HttpRequest _request = getClientInstance().patchBody(_queryUrl, _headers, APIHelper.serialize(body),
                 Configuration.basicAuthUserName, Configuration.basicAuthPassword);
 
         // Invoke the callback before request if its not null
@@ -946,6 +1515,27 @@ public class SubscriptionsController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
@@ -960,17 +1550,17 @@ public class SubscriptionsController extends BaseController {
     /**
      * Updates the payment method from a subscription
      * @param    subscriptionId    Required parameter: Subscription id
-     * @param    request    Required parameter: Request for updating the paymentmethod from a subscription
+     * @param    body    Required parameter: Request for updating the paymentmethod from a subscription
      * @param    idempotencyKey    Optional parameter: Example: 
      * @return    Returns the GetSubscriptionResponse response from the API call 
      */
     public GetSubscriptionResponse updateSubscriptionPaymentMethod(
                 final String subscriptionId,
-                final UpdateSubscriptionPaymentMethodRequest request,
+                final SubscriptionsPaymentMethodRequest body,
                 final String idempotencyKey
     ) throws Throwable {
 
-        HttpRequest _request = _buildUpdateSubscriptionPaymentMethodRequest(subscriptionId, request, idempotencyKey);
+        HttpRequest _request = _buildUpdateSubscriptionPaymentMethodRequest(subscriptionId, body, idempotencyKey);
         HttpResponse _response = getClientInstance().executeAsString(_request);
         HttpContext _context = new HttpContext(_request, _response);
 
@@ -980,12 +1570,12 @@ public class SubscriptionsController extends BaseController {
     /**
      * Updates the payment method from a subscription
      * @param    subscriptionId    Required parameter: Subscription id
-     * @param    request    Required parameter: Request for updating the paymentmethod from a subscription
+     * @param    body    Required parameter: Request for updating the paymentmethod from a subscription
      * @param    idempotencyKey    Optional parameter: Example: 
      */
     public void updateSubscriptionPaymentMethodAsync(
                 final String subscriptionId,
-                final UpdateSubscriptionPaymentMethodRequest request,
+                final SubscriptionsPaymentMethodRequest body,
                 final String idempotencyKey,
                 final APICallBack<GetSubscriptionResponse> callBack
     ) {
@@ -994,7 +1584,7 @@ public class SubscriptionsController extends BaseController {
 
                 HttpRequest _request;
                 try {
-                    _request = _buildUpdateSubscriptionPaymentMethodRequest(subscriptionId, request, idempotencyKey);
+                    _request = _buildUpdateSubscriptionPaymentMethodRequest(subscriptionId, body, idempotencyKey);
                 } catch (Exception e) {
                     callBack.onFailure(null, e);
                     return;
@@ -1028,7 +1618,7 @@ public class SubscriptionsController extends BaseController {
      */
     private HttpRequest _buildUpdateSubscriptionPaymentMethodRequest(
                 final String subscriptionId,
-                final UpdateSubscriptionPaymentMethodRequest request,
+                final SubscriptionsPaymentMethodRequest body,
                 final String idempotencyKey) throws IOException, APIException {
         //the base uri for api requests
         String _baseUri = Configuration.baseUri;
@@ -1045,16 +1635,16 @@ public class SubscriptionsController extends BaseController {
 
         //load all headers for the outgoing API request
         Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("Content-Type", "application/json");
         if (idempotencyKey != null) {
             _headers.put("idempotency-key", idempotencyKey);
         }
         _headers.put("user-agent", BaseController.userAgent);
         _headers.put("accept", "application/json");
-        _headers.put("content-type", "application/json");
 
 
         //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().patchBody(_queryUrl, _headers, APIHelper.serialize(request),
+        HttpRequest _request = getClientInstance().patchBody(_queryUrl, _headers, APIHelper.serialize(body),
                 Configuration.basicAuthUserName, Configuration.basicAuthPassword);
 
         // Invoke the callback before request if its not null
@@ -1078,6 +1668,27 @@ public class SubscriptionsController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
@@ -1090,18 +1701,18 @@ public class SubscriptionsController extends BaseController {
     }
 
     /**
-     * TODO: type endpoint description here
+     * UpdateCurrentCycleStatus
      * @param    subscriptionId    Required parameter: Subscription Id
-     * @param    request    Required parameter: Request for updating the end date of the subscription current status
+     * @param    body    Required parameter: Request for updating the end date of the subscription current status
      * @param    idempotencyKey    Optional parameter: Example: 
      */
     public void updateCurrentCycleStatus(
                 final String subscriptionId,
-                final UpdateCurrentCycleStatusRequest request,
+                final UpdateCurrentCycleStatusRequest body,
                 final String idempotencyKey
     ) throws Throwable {
 
-        HttpRequest _request = _buildUpdateCurrentCycleStatusRequest(subscriptionId, request, idempotencyKey);
+        HttpRequest _request = _buildUpdateCurrentCycleStatusRequest(subscriptionId, body, idempotencyKey);
         HttpResponse _response = getClientInstance().executeAsString(_request);
         HttpContext _context = new HttpContext(_request, _response);
 
@@ -1109,14 +1720,14 @@ public class SubscriptionsController extends BaseController {
     }
 
     /**
-     * TODO: type endpoint description here
+     * UpdateCurrentCycleStatus
      * @param    subscriptionId    Required parameter: Subscription Id
-     * @param    request    Required parameter: Request for updating the end date of the subscription current status
+     * @param    body    Required parameter: Request for updating the end date of the subscription current status
      * @param    idempotencyKey    Optional parameter: Example: 
      */
     public void updateCurrentCycleStatusAsync(
                 final String subscriptionId,
-                final UpdateCurrentCycleStatusRequest request,
+                final UpdateCurrentCycleStatusRequest body,
                 final String idempotencyKey,
                 final APICallBack<Object> callBack
     ) {
@@ -1125,7 +1736,7 @@ public class SubscriptionsController extends BaseController {
 
                 HttpRequest _request;
                 try {
-                    _request = _buildUpdateCurrentCycleStatusRequest(subscriptionId, request, idempotencyKey);
+                    _request = _buildUpdateCurrentCycleStatusRequest(subscriptionId, body, idempotencyKey);
                 } catch (Exception e) {
                     callBack.onFailure(null, e);
                     return;
@@ -1159,7 +1770,7 @@ public class SubscriptionsController extends BaseController {
      */
     private HttpRequest _buildUpdateCurrentCycleStatusRequest(
                 final String subscriptionId,
-                final UpdateCurrentCycleStatusRequest request,
+                final UpdateCurrentCycleStatusRequest body,
                 final String idempotencyKey) throws IOException, APIException {
         //the base uri for api requests
         String _baseUri = Configuration.baseUri;
@@ -1176,15 +1787,15 @@ public class SubscriptionsController extends BaseController {
 
         //load all headers for the outgoing API request
         Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("Content-Type", "application/json");
         if (idempotencyKey != null) {
             _headers.put("idempotency-key", idempotencyKey);
         }
         _headers.put("user-agent", BaseController.userAgent);
-        _headers.put("content-type", "application/json");
 
 
         //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().patchBody(_queryUrl, _headers, APIHelper.serialize(request),
+        HttpRequest _request = getClientInstance().patchBody(_queryUrl, _headers, APIHelper.serialize(body),
                 Configuration.basicAuthUserName, Configuration.basicAuthPassword);
 
         // Invoke the callback before request if its not null
@@ -1207,6 +1818,27 @@ public class SubscriptionsController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
@@ -1220,7 +1852,7 @@ public class SubscriptionsController extends BaseController {
      * @return    Returns the GetSubscriptionResponse response from the API call 
      */
     public GetSubscriptionResponse createSubscription(
-                final CreateSubscriptionRequest body,
+                final SubscriptionsRequest1 body,
                 final String idempotencyKey
     ) throws Throwable {
 
@@ -1237,7 +1869,7 @@ public class SubscriptionsController extends BaseController {
      * @param    idempotencyKey    Optional parameter: Example: 
      */
     public void createSubscriptionAsync(
-                final CreateSubscriptionRequest body,
+                final SubscriptionsRequest1 body,
                 final String idempotencyKey,
                 final APICallBack<GetSubscriptionResponse> callBack
     ) {
@@ -1279,7 +1911,7 @@ public class SubscriptionsController extends BaseController {
      * Builds the HttpRequest object for createSubscription
      */
     private HttpRequest _buildCreateSubscriptionRequest(
-                final CreateSubscriptionRequest body,
+                final SubscriptionsRequest1 body,
                 final String idempotencyKey) throws IOException, APIException {
         //the base uri for api requests
         String _baseUri = Configuration.baseUri;
@@ -1291,12 +1923,12 @@ public class SubscriptionsController extends BaseController {
 
         //load all headers for the outgoing API request
         Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("Content-Type", "application/json");
         if (idempotencyKey != null) {
             _headers.put("idempotency-key", idempotencyKey);
         }
         _headers.put("user-agent", BaseController.userAgent);
         _headers.put("accept", "application/json");
-        _headers.put("content-type", "application/json");
 
 
         //prepare and invoke the API call request to fetch the response
@@ -1324,6 +1956,27 @@ public class SubscriptionsController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
@@ -1336,7 +1989,236 @@ public class SubscriptionsController extends BaseController {
     }
 
     /**
-     * TODO: type endpoint description here
+     * Gets all subscriptions
+     * @param    page    Optional parameter: Page number
+     * @param    size    Optional parameter: Page size
+     * @param    code    Optional parameter: Filter for subscription's code
+     * @param    billingType    Optional parameter: Filter for subscription's billing type
+     * @param    customerId    Optional parameter: Filter for subscription's customer id
+     * @param    planId    Optional parameter: Filter for subscription's plan id
+     * @param    cardId    Optional parameter: Filter for subscription's card id
+     * @param    status    Optional parameter: Filter for subscription's status
+     * @param    nextBillingSince    Optional parameter: Filter for subscription's next billing date start range
+     * @param    nextBillingUntil    Optional parameter: Filter for subscription's next billing date end range
+     * @param    createdSince    Optional parameter: Filter for subscription's creation date start range
+     * @param    createdUntil    Optional parameter: Filter for subscriptions creation date end range
+     * @return    Returns the SubscriptionsResponse3 response from the API call 
+     */
+    public SubscriptionsResponse3 getSubscriptions(
+                final Integer page,
+                final Integer size,
+                final String code,
+                final String billingType,
+                final String customerId,
+                final String planId,
+                final String cardId,
+                final String status,
+                final DateTime nextBillingSince,
+                final DateTime nextBillingUntil,
+                final DateTime createdSince,
+                final DateTime createdUntil
+    ) throws Throwable {
+
+        HttpRequest _request = _buildGetSubscriptionsRequest(page, size, code, billingType, customerId, planId, cardId, status, nextBillingSince, nextBillingUntil, createdSince, createdUntil);
+        HttpResponse _response = getClientInstance().executeAsString(_request);
+        HttpContext _context = new HttpContext(_request, _response);
+
+        return _handleGetSubscriptionsResponse(_context);
+    }
+
+    /**
+     * Gets all subscriptions
+     * @param    page    Optional parameter: Page number
+     * @param    size    Optional parameter: Page size
+     * @param    code    Optional parameter: Filter for subscription's code
+     * @param    billingType    Optional parameter: Filter for subscription's billing type
+     * @param    customerId    Optional parameter: Filter for subscription's customer id
+     * @param    planId    Optional parameter: Filter for subscription's plan id
+     * @param    cardId    Optional parameter: Filter for subscription's card id
+     * @param    status    Optional parameter: Filter for subscription's status
+     * @param    nextBillingSince    Optional parameter: Filter for subscription's next billing date start range
+     * @param    nextBillingUntil    Optional parameter: Filter for subscription's next billing date end range
+     * @param    createdSince    Optional parameter: Filter for subscription's creation date start range
+     * @param    createdUntil    Optional parameter: Filter for subscriptions creation date end range
+     */
+    public void getSubscriptionsAsync(
+                final Integer page,
+                final Integer size,
+                final String code,
+                final String billingType,
+                final String customerId,
+                final String planId,
+                final String cardId,
+                final String status,
+                final DateTime nextBillingSince,
+                final DateTime nextBillingUntil,
+                final DateTime createdSince,
+                final DateTime createdUntil,
+                final APICallBack<SubscriptionsResponse3> callBack
+    ) {
+        Runnable _responseTask = new Runnable() {
+            public void run() {
+
+                HttpRequest _request;
+                try {
+                    _request = _buildGetSubscriptionsRequest(page, size, code, billingType, customerId, planId, cardId, status, nextBillingSince, nextBillingUntil, createdSince, createdUntil);
+                } catch (Exception e) {
+                    callBack.onFailure(null, e);
+                    return;
+                }
+
+                // Invoke request and get response
+                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
+                    public void onSuccess(HttpContext _context, HttpResponse _response) {
+                        try {
+                            SubscriptionsResponse3 returnValue = _handleGetSubscriptionsResponse(_context);
+                            callBack.onSuccess(_context, returnValue);
+                        } catch (Exception e) {
+                            callBack.onFailure(_context, e);
+                        }
+                    }
+
+                    public void onFailure(HttpContext _context, Throwable _exception) {
+                        // Let the caller know of the failure
+                        callBack.onFailure(_context, _exception);
+                    }
+                });
+            }
+        };
+
+        // Execute async using thread pool
+        APIHelper.getScheduler().execute(_responseTask);
+    }
+
+    /**
+     * Builds the HttpRequest object for getSubscriptions
+     */
+    private HttpRequest _buildGetSubscriptionsRequest(
+                final Integer page,
+                final Integer size,
+                final String code,
+                final String billingType,
+                final String customerId,
+                final String planId,
+                final String cardId,
+                final String status,
+                final DateTime nextBillingSince,
+                final DateTime nextBillingUntil,
+                final DateTime createdSince,
+                final DateTime createdUntil) throws IOException, APIException {
+        //the base uri for api requests
+        String _baseUri = Configuration.baseUri;
+
+        //prepare query string for API call
+        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/subscriptions");
+
+        //process query parameters
+        Map<String, Object> _queryParameters = new HashMap<String, Object>();
+        if (page != null) {
+            _queryParameters.put("page", page);
+        }
+        if (size != null) {
+            _queryParameters.put("size", size);
+        }
+        if (code != null) {
+            _queryParameters.put("code", code);
+        }
+        if (billingType != null) {
+            _queryParameters.put("billing_type", billingType);
+        }
+        if (customerId != null) {
+            _queryParameters.put("customer_id", customerId);
+        }
+        if (planId != null) {
+            _queryParameters.put("plan_id", planId);
+        }
+        if (cardId != null) {
+            _queryParameters.put("card_id", cardId);
+        }
+        if (status != null) {
+            _queryParameters.put("status", status);
+        }
+        if (nextBillingSince != null) {
+            _queryParameters.put("next_billing_since", DateTimeHelper.toRfc8601DateTime(nextBillingSince));
+        }
+        if (nextBillingUntil != null) {
+            _queryParameters.put("next_billing_until", DateTimeHelper.toRfc8601DateTime(nextBillingUntil));
+        }
+        if (createdSince != null) {
+            _queryParameters.put("created_since", DateTimeHelper.toRfc8601DateTime(createdSince));
+        }
+        if (createdUntil != null) {
+            _queryParameters.put("created_until", DateTimeHelper.toRfc8601DateTime(createdUntil));
+        }
+        APIHelper.appendUrlWithQueryParameters(_queryBuilder, _queryParameters);
+        //validate and preprocess url
+        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
+
+        //load all headers for the outgoing API request
+        Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("user-agent", BaseController.userAgent);
+        _headers.put("accept", "application/json");
+
+
+        //prepare and invoke the API call request to fetch the response
+        HttpRequest _request = getClientInstance().get(_queryUrl, _headers, null,
+                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
+
+        // Invoke the callback before request if its not null
+        if (getHttpCallBack() != null) {
+            getHttpCallBack().OnBeforeRequest(_request);
+        }
+
+        return _request;
+    }
+
+    /**
+     * Processes the response for getSubscriptions
+     * @return An object of type SubscriptionsResponse3
+     */
+    private SubscriptionsResponse3 _handleGetSubscriptionsResponse(HttpContext _context)
+            throws APIException, IOException {
+        HttpResponse _response = _context.getResponse();
+
+        //invoke the callback after response if its not null
+        if (getHttpCallBack() != null) {
+            getHttpCallBack().OnAfterResponse(_context);
+        }
+
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
+        //handle errors defined at the API level
+        validateResponse(_response, _context);
+
+        //extract result from the http response
+        String _responseBody = ((HttpStringResponse)_response).getBody();
+        SubscriptionsResponse3 _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<SubscriptionsResponse3>(){});
+
+        return _result;
+    }
+
+    /**
+     * GetUsagesDetails
      * @param    subscriptionId    Required parameter: Subscription Identifier
      * @param    cycleId    Optional parameter: Cycle id
      * @param    size    Optional parameter: Page size
@@ -1362,7 +2244,7 @@ public class SubscriptionsController extends BaseController {
     }
 
     /**
-     * TODO: type endpoint description here
+     * GetUsagesDetails
      * @param    subscriptionId    Required parameter: Subscription Identifier
      * @param    cycleId    Optional parameter: Cycle id
      * @param    size    Optional parameter: Page size
@@ -1486,6 +2368,27 @@ public class SubscriptionsController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
@@ -1498,12 +2401,12 @@ public class SubscriptionsController extends BaseController {
     }
 
     /**
-     * TODO: type endpoint description here
+     * RenewSubscription
      * @param    subscriptionId    Required parameter: Example: 
      * @param    idempotencyKey    Optional parameter: Example: 
-     * @return    Returns the GetPeriodResponse response from the API call 
+     * @return    Returns the SubscriptionsCyclesResponse response from the API call 
      */
-    public GetPeriodResponse renewSubscription(
+    public SubscriptionsCyclesResponse renewSubscription(
                 final String subscriptionId,
                 final String idempotencyKey
     ) throws Throwable {
@@ -1516,14 +2419,14 @@ public class SubscriptionsController extends BaseController {
     }
 
     /**
-     * TODO: type endpoint description here
+     * RenewSubscription
      * @param    subscriptionId    Required parameter: Example: 
      * @param    idempotencyKey    Optional parameter: Example: 
      */
     public void renewSubscriptionAsync(
                 final String subscriptionId,
                 final String idempotencyKey,
-                final APICallBack<GetPeriodResponse> callBack
+                final APICallBack<SubscriptionsCyclesResponse> callBack
     ) {
         Runnable _responseTask = new Runnable() {
             public void run() {
@@ -1540,7 +2443,7 @@ public class SubscriptionsController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            GetPeriodResponse returnValue = _handleRenewSubscriptionResponse(_context);
+                            SubscriptionsCyclesResponse returnValue = _handleRenewSubscriptionResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -1601,9 +2504,9 @@ public class SubscriptionsController extends BaseController {
 
     /**
      * Processes the response for renewSubscription
-     * @return An object of type GetPeriodResponse
+     * @return An object of type SubscriptionsCyclesResponse
      */
-    private GetPeriodResponse _handleRenewSubscriptionResponse(HttpContext _context)
+    private SubscriptionsCyclesResponse _handleRenewSubscriptionResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -1612,59 +2515,76 @@ public class SubscriptionsController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
         //extract result from the http response
         String _responseBody = ((HttpStringResponse)_response).getBody();
-        GetPeriodResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<GetPeriodResponse>(){});
+        SubscriptionsCyclesResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<SubscriptionsCyclesResponse>(){});
 
         return _result;
     }
 
     /**
-     * Updates a subscription item
+     * GetSubscriptionCycles
      * @param    subscriptionId    Required parameter: Subscription Id
-     * @param    itemId    Required parameter: Item id
-     * @param    body    Required parameter: Request for updating a subscription item
-     * @param    idempotencyKey    Optional parameter: Example: 
-     * @return    Returns the GetSubscriptionItemResponse response from the API call 
+     * @param    page    Required parameter: Page number
+     * @param    size    Required parameter: Page size
+     * @return    Returns the SubscriptionsCyclesResponse2 response from the API call 
      */
-    public GetSubscriptionItemResponse updateSubscriptionItem(
+    public SubscriptionsCyclesResponse2 getSubscriptionCycles(
                 final String subscriptionId,
-                final String itemId,
-                final UpdateSubscriptionItemRequest body,
-                final String idempotencyKey
+                final String page,
+                final String size
     ) throws Throwable {
 
-        HttpRequest _request = _buildUpdateSubscriptionItemRequest(subscriptionId, itemId, body, idempotencyKey);
+        HttpRequest _request = _buildGetSubscriptionCyclesRequest(subscriptionId, page, size);
         HttpResponse _response = getClientInstance().executeAsString(_request);
         HttpContext _context = new HttpContext(_request, _response);
 
-        return _handleUpdateSubscriptionItemResponse(_context);
+        return _handleGetSubscriptionCyclesResponse(_context);
     }
 
     /**
-     * Updates a subscription item
+     * GetSubscriptionCycles
      * @param    subscriptionId    Required parameter: Subscription Id
-     * @param    itemId    Required parameter: Item id
-     * @param    body    Required parameter: Request for updating a subscription item
-     * @param    idempotencyKey    Optional parameter: Example: 
+     * @param    page    Required parameter: Page number
+     * @param    size    Required parameter: Page size
      */
-    public void updateSubscriptionItemAsync(
+    public void getSubscriptionCyclesAsync(
                 final String subscriptionId,
-                final String itemId,
-                final UpdateSubscriptionItemRequest body,
-                final String idempotencyKey,
-                final APICallBack<GetSubscriptionItemResponse> callBack
+                final String page,
+                final String size,
+                final APICallBack<SubscriptionsCyclesResponse2> callBack
     ) {
         Runnable _responseTask = new Runnable() {
             public void run() {
 
                 HttpRequest _request;
                 try {
-                    _request = _buildUpdateSubscriptionItemRequest(subscriptionId, itemId, body, idempotencyKey);
+                    _request = _buildGetSubscriptionCyclesRequest(subscriptionId, page, size);
                 } catch (Exception e) {
                     callBack.onFailure(null, e);
                     return;
@@ -1674,7 +2594,7 @@ public class SubscriptionsController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            GetSubscriptionItemResponse returnValue = _handleUpdateSubscriptionItemResponse(_context);
+                            SubscriptionsCyclesResponse2 returnValue = _handleGetSubscriptionCyclesResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -1694,39 +2614,39 @@ public class SubscriptionsController extends BaseController {
     }
 
     /**
-     * Builds the HttpRequest object for updateSubscriptionItem
+     * Builds the HttpRequest object for getSubscriptionCycles
      */
-    private HttpRequest _buildUpdateSubscriptionItemRequest(
+    private HttpRequest _buildGetSubscriptionCyclesRequest(
                 final String subscriptionId,
-                final String itemId,
-                final UpdateSubscriptionItemRequest body,
-                final String idempotencyKey) throws IOException, APIException {
+                final String page,
+                final String size) throws IOException, APIException {
         //the base uri for api requests
         String _baseUri = Configuration.baseUri;
 
         //prepare query string for API call
-        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/subscriptions/{subscription_id}/items/{item_id}");
+        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/subscriptions/{subscription_id}/cycles");
 
         //process template parameters
         Map<String, Object> _templateParameters = new HashMap<String, Object>();
         _templateParameters.put("subscription_id", subscriptionId);
-        _templateParameters.put("item_id", itemId);
         APIHelper.appendUrlWithTemplateParameters(_queryBuilder, _templateParameters);
+
+        //process query parameters
+        Map<String, Object> _queryParameters = new HashMap<String, Object>();
+        _queryParameters.put("page", page);
+        _queryParameters.put("size", size);
+        APIHelper.appendUrlWithQueryParameters(_queryBuilder, _queryParameters);
         //validate and preprocess url
         String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
 
         //load all headers for the outgoing API request
         Map<String, String> _headers = new HashMap<String, String>();
-        if (idempotencyKey != null) {
-            _headers.put("idempotency-key", idempotencyKey);
-        }
         _headers.put("user-agent", BaseController.userAgent);
         _headers.put("accept", "application/json");
-        _headers.put("content-type", "application/json");
 
 
         //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().putBody(_queryUrl, _headers, APIHelper.serialize(body),
+        HttpRequest _request = getClientInstance().get(_queryUrl, _headers, null,
                 Configuration.basicAuthUserName, Configuration.basicAuthPassword);
 
         // Invoke the callback before request if its not null
@@ -1738,10 +2658,10 @@ public class SubscriptionsController extends BaseController {
     }
 
     /**
-     * Processes the response for updateSubscriptionItem
-     * @return An object of type GetSubscriptionItemResponse
+     * Processes the response for getSubscriptionCycles
+     * @return An object of type SubscriptionsCyclesResponse2
      */
-    private GetSubscriptionItemResponse _handleUpdateSubscriptionItemResponse(HttpContext _context)
+    private SubscriptionsCyclesResponse2 _handleGetSubscriptionCyclesResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -1750,13 +2670,34 @@ public class SubscriptionsController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
         //extract result from the http response
         String _responseBody = ((HttpStringResponse)_response).getBody();
-        GetSubscriptionItemResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<GetSubscriptionItemResponse>(){});
+        SubscriptionsCyclesResponse2 _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<SubscriptionsCyclesResponse2>(){});
 
         return _result;
     }
@@ -1766,9 +2707,9 @@ public class SubscriptionsController extends BaseController {
      * @param    subscriptionId    Required parameter: Subscription id
      * @param    itemId    Required parameter: Item id
      * @param    idempotencyKey    Optional parameter: Example: 
-     * @return    Returns the GetUsageResponse response from the API call 
+     * @return    Returns the SubscriptionsItemsUsagesResponse response from the API call 
      */
-    public GetUsageResponse createAnUsage(
+    public SubscriptionsItemsUsagesResponse createAnUsage(
                 final String subscriptionId,
                 final String itemId,
                 final String idempotencyKey
@@ -1791,7 +2732,7 @@ public class SubscriptionsController extends BaseController {
                 final String subscriptionId,
                 final String itemId,
                 final String idempotencyKey,
-                final APICallBack<GetUsageResponse> callBack
+                final APICallBack<SubscriptionsItemsUsagesResponse> callBack
     ) {
         Runnable _responseTask = new Runnable() {
             public void run() {
@@ -1808,7 +2749,7 @@ public class SubscriptionsController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            GetUsageResponse returnValue = _handleCreateAnUsageResponse(_context);
+                            SubscriptionsItemsUsagesResponse returnValue = _handleCreateAnUsageResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -1871,9 +2812,9 @@ public class SubscriptionsController extends BaseController {
 
     /**
      * Processes the response for createAnUsage
-     * @return An object of type GetUsageResponse
+     * @return An object of type SubscriptionsItemsUsagesResponse
      */
-    private GetUsageResponse _handleCreateAnUsageResponse(HttpContext _context)
+    private SubscriptionsItemsUsagesResponse _handleCreateAnUsageResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -1882,51 +2823,96 @@ public class SubscriptionsController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
         //extract result from the http response
         String _responseBody = ((HttpStringResponse)_response).getBody();
-        GetUsageResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<GetUsageResponse>(){});
+        SubscriptionsItemsUsagesResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<SubscriptionsItemsUsagesResponse>(){});
 
         return _result;
     }
 
     /**
-     * TODO: type endpoint description here
-     * @param    subscriptionId    Required parameter: The subscription Id
-     * @param    incrementId    Required parameter: The increment Id
-     * @return    Returns the GetIncrementResponse response from the API call 
+     * Lists all usages from a subscription item
+     * @param    subscriptionId    Required parameter: The subscription id
+     * @param    itemId    Required parameter: The subscription item id
+     * @param    page    Optional parameter: Page number
+     * @param    size    Optional parameter: Page size
+     * @param    code    Optional parameter: Identification code in the client system
+     * @param    group    Optional parameter: Identification group in the client system
+     * @param    usedSince    Optional parameter: Example: 
+     * @param    usedUntil    Optional parameter: Example: 
+     * @return    Returns the SubscriptionsItemsUsagesResponse1 response from the API call 
      */
-    public GetIncrementResponse getIncrementById(
+    public SubscriptionsItemsUsagesResponse1 getUsages(
                 final String subscriptionId,
-                final String incrementId
+                final String itemId,
+                final Integer page,
+                final Integer size,
+                final String code,
+                final String group,
+                final DateTime usedSince,
+                final DateTime usedUntil
     ) throws Throwable {
 
-        HttpRequest _request = _buildGetIncrementByIdRequest(subscriptionId, incrementId);
+        HttpRequest _request = _buildGetUsagesRequest(subscriptionId, itemId, page, size, code, group, usedSince, usedUntil);
         HttpResponse _response = getClientInstance().executeAsString(_request);
         HttpContext _context = new HttpContext(_request, _response);
 
-        return _handleGetIncrementByIdResponse(_context);
+        return _handleGetUsagesResponse(_context);
     }
 
     /**
-     * TODO: type endpoint description here
-     * @param    subscriptionId    Required parameter: The subscription Id
-     * @param    incrementId    Required parameter: The increment Id
+     * Lists all usages from a subscription item
+     * @param    subscriptionId    Required parameter: The subscription id
+     * @param    itemId    Required parameter: The subscription item id
+     * @param    page    Optional parameter: Page number
+     * @param    size    Optional parameter: Page size
+     * @param    code    Optional parameter: Identification code in the client system
+     * @param    group    Optional parameter: Identification group in the client system
+     * @param    usedSince    Optional parameter: Example: 
+     * @param    usedUntil    Optional parameter: Example: 
      */
-    public void getIncrementByIdAsync(
+    public void getUsagesAsync(
                 final String subscriptionId,
-                final String incrementId,
-                final APICallBack<GetIncrementResponse> callBack
+                final String itemId,
+                final Integer page,
+                final Integer size,
+                final String code,
+                final String group,
+                final DateTime usedSince,
+                final DateTime usedUntil,
+                final APICallBack<SubscriptionsItemsUsagesResponse1> callBack
     ) {
         Runnable _responseTask = new Runnable() {
             public void run() {
 
                 HttpRequest _request;
                 try {
-                    _request = _buildGetIncrementByIdRequest(subscriptionId, incrementId);
+                    _request = _buildGetUsagesRequest(subscriptionId, itemId, page, size, code, group, usedSince, usedUntil);
                 } catch (Exception e) {
                     callBack.onFailure(null, e);
                     return;
@@ -1936,7 +2922,7 @@ public class SubscriptionsController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            GetIncrementResponse returnValue = _handleGetIncrementByIdResponse(_context);
+                            SubscriptionsItemsUsagesResponse1 returnValue = _handleGetUsagesResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -1956,22 +2942,50 @@ public class SubscriptionsController extends BaseController {
     }
 
     /**
-     * Builds the HttpRequest object for getIncrementById
+     * Builds the HttpRequest object for getUsages
      */
-    private HttpRequest _buildGetIncrementByIdRequest(
+    private HttpRequest _buildGetUsagesRequest(
                 final String subscriptionId,
-                final String incrementId) throws IOException, APIException {
+                final String itemId,
+                final Integer page,
+                final Integer size,
+                final String code,
+                final String group,
+                final DateTime usedSince,
+                final DateTime usedUntil) throws IOException, APIException {
         //the base uri for api requests
         String _baseUri = Configuration.baseUri;
 
         //prepare query string for API call
-        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/subscriptions/{subscription_id}/increments/{increment_id}");
+        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/subscriptions/{subscription_id}/items/{item_id}/usages");
 
         //process template parameters
         Map<String, Object> _templateParameters = new HashMap<String, Object>();
         _templateParameters.put("subscription_id", subscriptionId);
-        _templateParameters.put("increment_id", incrementId);
+        _templateParameters.put("item_id", itemId);
         APIHelper.appendUrlWithTemplateParameters(_queryBuilder, _templateParameters);
+
+        //process query parameters
+        Map<String, Object> _queryParameters = new HashMap<String, Object>();
+        if (page != null) {
+            _queryParameters.put("page", page);
+        }
+        if (size != null) {
+            _queryParameters.put("size", size);
+        }
+        if (code != null) {
+            _queryParameters.put("code", code);
+        }
+        if (group != null) {
+            _queryParameters.put("group", group);
+        }
+        if (usedSince != null) {
+            _queryParameters.put("used_since", DateTimeHelper.toRfc8601DateTime(usedSince));
+        }
+        if (usedUntil != null) {
+            _queryParameters.put("used_until", DateTimeHelper.toRfc8601DateTime(usedUntil));
+        }
+        APIHelper.appendUrlWithQueryParameters(_queryBuilder, _queryParameters);
         //validate and preprocess url
         String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
 
@@ -1994,10 +3008,10 @@ public class SubscriptionsController extends BaseController {
     }
 
     /**
-     * Processes the response for getIncrementById
-     * @return An object of type GetIncrementResponse
+     * Processes the response for getUsages
+     * @return An object of type SubscriptionsItemsUsagesResponse1
      */
-    private GetIncrementResponse _handleGetIncrementByIdResponse(HttpContext _context)
+    private SubscriptionsItemsUsagesResponse1 _handleGetUsagesResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -2006,13 +3020,34 @@ public class SubscriptionsController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
         //extract result from the http response
         String _responseBody = ((HttpStringResponse)_response).getBody();
-        GetIncrementResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<GetIncrementResponse>(){});
+        SubscriptionsItemsUsagesResponse1 _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<SubscriptionsItemsUsagesResponse1>(){});
 
         return _result;
     }
@@ -2022,9 +3057,9 @@ public class SubscriptionsController extends BaseController {
      * @param    subscriptionId    Required parameter: Subscription id
      * @param    discountId    Required parameter: Discount Id
      * @param    idempotencyKey    Optional parameter: Example: 
-     * @return    Returns the GetDiscountResponse response from the API call 
+     * @return    Returns the SubscriptionsDiscountsResponse response from the API call 
      */
-    public GetDiscountResponse deleteDiscount(
+    public SubscriptionsDiscountsResponse deleteDiscount(
                 final String subscriptionId,
                 final String discountId,
                 final String idempotencyKey
@@ -2047,7 +3082,7 @@ public class SubscriptionsController extends BaseController {
                 final String subscriptionId,
                 final String discountId,
                 final String idempotencyKey,
-                final APICallBack<GetDiscountResponse> callBack
+                final APICallBack<SubscriptionsDiscountsResponse> callBack
     ) {
         Runnable _responseTask = new Runnable() {
             public void run() {
@@ -2064,7 +3099,7 @@ public class SubscriptionsController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            GetDiscountResponse returnValue = _handleDeleteDiscountResponse(_context);
+                            SubscriptionsDiscountsResponse returnValue = _handleDeleteDiscountResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -2127,9 +3162,9 @@ public class SubscriptionsController extends BaseController {
 
     /**
      * Processes the response for deleteDiscount
-     * @return An object of type GetDiscountResponse
+     * @return An object of type SubscriptionsDiscountsResponse
      */
-    private GetDiscountResponse _handleDeleteDiscountResponse(HttpContext _context)
+    private SubscriptionsDiscountsResponse _handleDeleteDiscountResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -2138,19 +3173,40 @@ public class SubscriptionsController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
         //extract result from the http response
         String _responseBody = ((HttpStringResponse)_response).getBody();
-        GetDiscountResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<GetDiscountResponse>(){});
+        SubscriptionsDiscountsResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<SubscriptionsDiscountsResponse>(){});
 
         return _result;
     }
 
     /**
-     * TODO: type endpoint description here
+     * GetIncrements
      * @param    subscriptionId    Required parameter: The subscription id
      * @param    page    Optional parameter: Page number
      * @param    size    Optional parameter: Page size
@@ -2170,7 +3226,7 @@ public class SubscriptionsController extends BaseController {
     }
 
     /**
-     * TODO: type endpoint description here
+     * GetIncrements
      * @param    subscriptionId    Required parameter: The subscription id
      * @param    page    Optional parameter: Page number
      * @param    size    Optional parameter: Page size
@@ -2276,6 +3332,27 @@ public class SubscriptionsController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
@@ -2288,157 +3365,19 @@ public class SubscriptionsController extends BaseController {
     }
 
     /**
-     * Creates a usage
-     * @param    subscriptionId    Required parameter: Subscription Id
-     * @param    itemId    Required parameter: Item id
-     * @param    body    Required parameter: Request for creating a usage
-     * @param    idempotencyKey    Optional parameter: Example: 
-     * @return    Returns the GetUsageResponse response from the API call 
-     */
-    public GetUsageResponse createUsage(
-                final String subscriptionId,
-                final String itemId,
-                final CreateUsageRequest body,
-                final String idempotencyKey
-    ) throws Throwable {
-
-        HttpRequest _request = _buildCreateUsageRequest(subscriptionId, itemId, body, idempotencyKey);
-        HttpResponse _response = getClientInstance().executeAsString(_request);
-        HttpContext _context = new HttpContext(_request, _response);
-
-        return _handleCreateUsageResponse(_context);
-    }
-
-    /**
-     * Creates a usage
-     * @param    subscriptionId    Required parameter: Subscription Id
-     * @param    itemId    Required parameter: Item id
-     * @param    body    Required parameter: Request for creating a usage
-     * @param    idempotencyKey    Optional parameter: Example: 
-     */
-    public void createUsageAsync(
-                final String subscriptionId,
-                final String itemId,
-                final CreateUsageRequest body,
-                final String idempotencyKey,
-                final APICallBack<GetUsageResponse> callBack
-    ) {
-        Runnable _responseTask = new Runnable() {
-            public void run() {
-
-                HttpRequest _request;
-                try {
-                    _request = _buildCreateUsageRequest(subscriptionId, itemId, body, idempotencyKey);
-                } catch (Exception e) {
-                    callBack.onFailure(null, e);
-                    return;
-                }
-
-                // Invoke request and get response
-                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
-                    public void onSuccess(HttpContext _context, HttpResponse _response) {
-                        try {
-                            GetUsageResponse returnValue = _handleCreateUsageResponse(_context);
-                            callBack.onSuccess(_context, returnValue);
-                        } catch (Exception e) {
-                            callBack.onFailure(_context, e);
-                        }
-                    }
-
-                    public void onFailure(HttpContext _context, Throwable _exception) {
-                        // Let the caller know of the failure
-                        callBack.onFailure(_context, _exception);
-                    }
-                });
-            }
-        };
-
-        // Execute async using thread pool
-        APIHelper.getScheduler().execute(_responseTask);
-    }
-
-    /**
-     * Builds the HttpRequest object for createUsage
-     */
-    private HttpRequest _buildCreateUsageRequest(
-                final String subscriptionId,
-                final String itemId,
-                final CreateUsageRequest body,
-                final String idempotencyKey) throws IOException, APIException {
-        //the base uri for api requests
-        String _baseUri = Configuration.baseUri;
-
-        //prepare query string for API call
-        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/subscriptions/{subscription_id}/items/{item_id}/usages");
-
-        //process template parameters
-        Map<String, Object> _templateParameters = new HashMap<String, Object>();
-        _templateParameters.put("subscription_id", subscriptionId);
-        _templateParameters.put("item_id", itemId);
-        APIHelper.appendUrlWithTemplateParameters(_queryBuilder, _templateParameters);
-        //validate and preprocess url
-        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
-
-        //load all headers for the outgoing API request
-        Map<String, String> _headers = new HashMap<String, String>();
-        if (idempotencyKey != null) {
-            _headers.put("idempotency-key", idempotencyKey);
-        }
-        _headers.put("user-agent", BaseController.userAgent);
-        _headers.put("accept", "application/json");
-        _headers.put("content-type", "application/json");
-
-
-        //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().postBody(_queryUrl, _headers, APIHelper.serialize(body),
-                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
-
-        // Invoke the callback before request if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnBeforeRequest(_request);
-        }
-
-        return _request;
-    }
-
-    /**
-     * Processes the response for createUsage
-     * @return An object of type GetUsageResponse
-     */
-    private GetUsageResponse _handleCreateUsageResponse(HttpContext _context)
-            throws APIException, IOException {
-        HttpResponse _response = _context.getResponse();
-
-        //invoke the callback after response if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnAfterResponse(_context);
-        }
-
-        //handle errors defined at the API level
-        validateResponse(_response, _context);
-
-        //extract result from the http response
-        String _responseBody = ((HttpStringResponse)_response).getBody();
-        GetUsageResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<GetUsageResponse>(){});
-
-        return _result;
-    }
-
-    /**
      * Creates a new Subscription item
      * @param    subscriptionId    Required parameter: Subscription id
-     * @param    request    Required parameter: Request for creating a subscription item
+     * @param    body    Required parameter: Request for creating a subscription item
      * @param    idempotencyKey    Optional parameter: Example: 
      * @return    Returns the GetSubscriptionItemResponse response from the API call 
      */
     public GetSubscriptionItemResponse createSubscriptionItem(
                 final String subscriptionId,
-                final CreateSubscriptionItemRequest request,
+                final SubscriptionsItemsRequest1 body,
                 final String idempotencyKey
     ) throws Throwable {
 
-        HttpRequest _request = _buildCreateSubscriptionItemRequest(subscriptionId, request, idempotencyKey);
+        HttpRequest _request = _buildCreateSubscriptionItemRequest(subscriptionId, body, idempotencyKey);
         HttpResponse _response = getClientInstance().executeAsString(_request);
         HttpContext _context = new HttpContext(_request, _response);
 
@@ -2448,12 +3387,12 @@ public class SubscriptionsController extends BaseController {
     /**
      * Creates a new Subscription item
      * @param    subscriptionId    Required parameter: Subscription id
-     * @param    request    Required parameter: Request for creating a subscription item
+     * @param    body    Required parameter: Request for creating a subscription item
      * @param    idempotencyKey    Optional parameter: Example: 
      */
     public void createSubscriptionItemAsync(
                 final String subscriptionId,
-                final CreateSubscriptionItemRequest request,
+                final SubscriptionsItemsRequest1 body,
                 final String idempotencyKey,
                 final APICallBack<GetSubscriptionItemResponse> callBack
     ) {
@@ -2462,7 +3401,7 @@ public class SubscriptionsController extends BaseController {
 
                 HttpRequest _request;
                 try {
-                    _request = _buildCreateSubscriptionItemRequest(subscriptionId, request, idempotencyKey);
+                    _request = _buildCreateSubscriptionItemRequest(subscriptionId, body, idempotencyKey);
                 } catch (Exception e) {
                     callBack.onFailure(null, e);
                     return;
@@ -2496,7 +3435,7 @@ public class SubscriptionsController extends BaseController {
      */
     private HttpRequest _buildCreateSubscriptionItemRequest(
                 final String subscriptionId,
-                final CreateSubscriptionItemRequest request,
+                final SubscriptionsItemsRequest1 body,
                 final String idempotencyKey) throws IOException, APIException {
         //the base uri for api requests
         String _baseUri = Configuration.baseUri;
@@ -2513,16 +3452,16 @@ public class SubscriptionsController extends BaseController {
 
         //load all headers for the outgoing API request
         Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("Content-Type", "application/json");
         if (idempotencyKey != null) {
             _headers.put("idempotency-key", idempotencyKey);
         }
         _headers.put("user-agent", BaseController.userAgent);
         _headers.put("accept", "application/json");
-        _headers.put("content-type", "application/json");
 
 
         //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().postBody(_queryUrl, _headers, APIHelper.serialize(request),
+        HttpRequest _request = getClientInstance().postBody(_queryUrl, _headers, APIHelper.serialize(body),
                 Configuration.basicAuthUserName, Configuration.basicAuthPassword);
 
         // Invoke the callback before request if its not null
@@ -2546,6 +3485,27 @@ public class SubscriptionsController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
@@ -2553,912 +3513,6 @@ public class SubscriptionsController extends BaseController {
         String _responseBody = ((HttpStringResponse)_response).getBody();
         GetSubscriptionItemResponse _result = APIHelper.deserialize(_responseBody,
                                                         new TypeReference<GetSubscriptionItemResponse>(){});
-
-        return _result;
-    }
-
-    /**
-     * Lists all usages from a subscription item
-     * @param    subscriptionId    Required parameter: The subscription id
-     * @param    itemId    Required parameter: The subscription item id
-     * @param    page    Optional parameter: Page number
-     * @param    size    Optional parameter: Page size
-     * @param    code    Optional parameter: Identification code in the client system
-     * @param    group    Optional parameter: Identification group in the client system
-     * @param    usedSince    Optional parameter: Example: 
-     * @param    usedUntil    Optional parameter: Example: 
-     * @return    Returns the ListUsagesResponse response from the API call 
-     */
-    public ListUsagesResponse getUsages(
-                final String subscriptionId,
-                final String itemId,
-                final Integer page,
-                final Integer size,
-                final String code,
-                final String group,
-                final DateTime usedSince,
-                final DateTime usedUntil
-    ) throws Throwable {
-
-        HttpRequest _request = _buildGetUsagesRequest(subscriptionId, itemId, page, size, code, group, usedSince, usedUntil);
-        HttpResponse _response = getClientInstance().executeAsString(_request);
-        HttpContext _context = new HttpContext(_request, _response);
-
-        return _handleGetUsagesResponse(_context);
-    }
-
-    /**
-     * Lists all usages from a subscription item
-     * @param    subscriptionId    Required parameter: The subscription id
-     * @param    itemId    Required parameter: The subscription item id
-     * @param    page    Optional parameter: Page number
-     * @param    size    Optional parameter: Page size
-     * @param    code    Optional parameter: Identification code in the client system
-     * @param    group    Optional parameter: Identification group in the client system
-     * @param    usedSince    Optional parameter: Example: 
-     * @param    usedUntil    Optional parameter: Example: 
-     */
-    public void getUsagesAsync(
-                final String subscriptionId,
-                final String itemId,
-                final Integer page,
-                final Integer size,
-                final String code,
-                final String group,
-                final DateTime usedSince,
-                final DateTime usedUntil,
-                final APICallBack<ListUsagesResponse> callBack
-    ) {
-        Runnable _responseTask = new Runnable() {
-            public void run() {
-
-                HttpRequest _request;
-                try {
-                    _request = _buildGetUsagesRequest(subscriptionId, itemId, page, size, code, group, usedSince, usedUntil);
-                } catch (Exception e) {
-                    callBack.onFailure(null, e);
-                    return;
-                }
-
-                // Invoke request and get response
-                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
-                    public void onSuccess(HttpContext _context, HttpResponse _response) {
-                        try {
-                            ListUsagesResponse returnValue = _handleGetUsagesResponse(_context);
-                            callBack.onSuccess(_context, returnValue);
-                        } catch (Exception e) {
-                            callBack.onFailure(_context, e);
-                        }
-                    }
-
-                    public void onFailure(HttpContext _context, Throwable _exception) {
-                        // Let the caller know of the failure
-                        callBack.onFailure(_context, _exception);
-                    }
-                });
-            }
-        };
-
-        // Execute async using thread pool
-        APIHelper.getScheduler().execute(_responseTask);
-    }
-
-    /**
-     * Builds the HttpRequest object for getUsages
-     */
-    private HttpRequest _buildGetUsagesRequest(
-                final String subscriptionId,
-                final String itemId,
-                final Integer page,
-                final Integer size,
-                final String code,
-                final String group,
-                final DateTime usedSince,
-                final DateTime usedUntil) throws IOException, APIException {
-        //the base uri for api requests
-        String _baseUri = Configuration.baseUri;
-
-        //prepare query string for API call
-        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/subscriptions/{subscription_id}/items/{item_id}/usages");
-
-        //process template parameters
-        Map<String, Object> _templateParameters = new HashMap<String, Object>();
-        _templateParameters.put("subscription_id", subscriptionId);
-        _templateParameters.put("item_id", itemId);
-        APIHelper.appendUrlWithTemplateParameters(_queryBuilder, _templateParameters);
-
-        //process query parameters
-        Map<String, Object> _queryParameters = new HashMap<String, Object>();
-        if (page != null) {
-            _queryParameters.put("page", page);
-        }
-        if (size != null) {
-            _queryParameters.put("size", size);
-        }
-        if (code != null) {
-            _queryParameters.put("code", code);
-        }
-        if (group != null) {
-            _queryParameters.put("group", group);
-        }
-        if (usedSince != null) {
-            _queryParameters.put("used_since", DateTimeHelper.toRfc8601DateTime(usedSince));
-        }
-        if (usedUntil != null) {
-            _queryParameters.put("used_until", DateTimeHelper.toRfc8601DateTime(usedUntil));
-        }
-        APIHelper.appendUrlWithQueryParameters(_queryBuilder, _queryParameters);
-        //validate and preprocess url
-        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
-
-        //load all headers for the outgoing API request
-        Map<String, String> _headers = new HashMap<String, String>();
-        _headers.put("user-agent", BaseController.userAgent);
-        _headers.put("accept", "application/json");
-
-
-        //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().get(_queryUrl, _headers, null,
-                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
-
-        // Invoke the callback before request if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnBeforeRequest(_request);
-        }
-
-        return _request;
-    }
-
-    /**
-     * Processes the response for getUsages
-     * @return An object of type ListUsagesResponse
-     */
-    private ListUsagesResponse _handleGetUsagesResponse(HttpContext _context)
-            throws APIException, IOException {
-        HttpResponse _response = _context.getResponse();
-
-        //invoke the callback after response if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnAfterResponse(_context);
-        }
-
-        //handle errors defined at the API level
-        validateResponse(_response, _context);
-
-        //extract result from the http response
-        String _responseBody = ((HttpStringResponse)_response).getBody();
-        ListUsagesResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<ListUsagesResponse>(){});
-
-        return _result;
-    }
-
-    /**
-     * Updates the billing date from a subscription
-     * @param    subscriptionId    Required parameter: The subscription id
-     * @param    request    Required parameter: Request for updating the subscription billing date
-     * @param    idempotencyKey    Optional parameter: Example: 
-     * @return    Returns the GetSubscriptionResponse response from the API call 
-     */
-    public GetSubscriptionResponse updateSubscriptionBillingDate(
-                final String subscriptionId,
-                final UpdateSubscriptionBillingDateRequest request,
-                final String idempotencyKey
-    ) throws Throwable {
-
-        HttpRequest _request = _buildUpdateSubscriptionBillingDateRequest(subscriptionId, request, idempotencyKey);
-        HttpResponse _response = getClientInstance().executeAsString(_request);
-        HttpContext _context = new HttpContext(_request, _response);
-
-        return _handleUpdateSubscriptionBillingDateResponse(_context);
-    }
-
-    /**
-     * Updates the billing date from a subscription
-     * @param    subscriptionId    Required parameter: The subscription id
-     * @param    request    Required parameter: Request for updating the subscription billing date
-     * @param    idempotencyKey    Optional parameter: Example: 
-     */
-    public void updateSubscriptionBillingDateAsync(
-                final String subscriptionId,
-                final UpdateSubscriptionBillingDateRequest request,
-                final String idempotencyKey,
-                final APICallBack<GetSubscriptionResponse> callBack
-    ) {
-        Runnable _responseTask = new Runnable() {
-            public void run() {
-
-                HttpRequest _request;
-                try {
-                    _request = _buildUpdateSubscriptionBillingDateRequest(subscriptionId, request, idempotencyKey);
-                } catch (Exception e) {
-                    callBack.onFailure(null, e);
-                    return;
-                }
-
-                // Invoke request and get response
-                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
-                    public void onSuccess(HttpContext _context, HttpResponse _response) {
-                        try {
-                            GetSubscriptionResponse returnValue = _handleUpdateSubscriptionBillingDateResponse(_context);
-                            callBack.onSuccess(_context, returnValue);
-                        } catch (Exception e) {
-                            callBack.onFailure(_context, e);
-                        }
-                    }
-
-                    public void onFailure(HttpContext _context, Throwable _exception) {
-                        // Let the caller know of the failure
-                        callBack.onFailure(_context, _exception);
-                    }
-                });
-            }
-        };
-
-        // Execute async using thread pool
-        APIHelper.getScheduler().execute(_responseTask);
-    }
-
-    /**
-     * Builds the HttpRequest object for updateSubscriptionBillingDate
-     */
-    private HttpRequest _buildUpdateSubscriptionBillingDateRequest(
-                final String subscriptionId,
-                final UpdateSubscriptionBillingDateRequest request,
-                final String idempotencyKey) throws IOException, APIException {
-        //the base uri for api requests
-        String _baseUri = Configuration.baseUri;
-
-        //prepare query string for API call
-        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/subscriptions/{subscription_id}/billing-date");
-
-        //process template parameters
-        Map<String, Object> _templateParameters = new HashMap<String, Object>();
-        _templateParameters.put("subscription_id", subscriptionId);
-        APIHelper.appendUrlWithTemplateParameters(_queryBuilder, _templateParameters);
-        //validate and preprocess url
-        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
-
-        //load all headers for the outgoing API request
-        Map<String, String> _headers = new HashMap<String, String>();
-        if (idempotencyKey != null) {
-            _headers.put("idempotency-key", idempotencyKey);
-        }
-        _headers.put("user-agent", BaseController.userAgent);
-        _headers.put("accept", "application/json");
-        _headers.put("content-type", "application/json");
-
-
-        //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().patchBody(_queryUrl, _headers, APIHelper.serialize(request),
-                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
-
-        // Invoke the callback before request if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnBeforeRequest(_request);
-        }
-
-        return _request;
-    }
-
-    /**
-     * Processes the response for updateSubscriptionBillingDate
-     * @return An object of type GetSubscriptionResponse
-     */
-    private GetSubscriptionResponse _handleUpdateSubscriptionBillingDateResponse(HttpContext _context)
-            throws APIException, IOException {
-        HttpResponse _response = _context.getResponse();
-
-        //invoke the callback after response if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnAfterResponse(_context);
-        }
-
-        //handle errors defined at the API level
-        validateResponse(_response, _context);
-
-        //extract result from the http response
-        String _responseBody = ((HttpStringResponse)_response).getBody();
-        GetSubscriptionResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<GetSubscriptionResponse>(){});
-
-        return _result;
-    }
-
-    /**
-     * TODO: type endpoint description here
-     * @param    subscriptionId    Required parameter: Example: 
-     * @param    request    Required parameter: Request for updating the end date of the current signature cycle
-     * @param    idempotencyKey    Optional parameter: Example: 
-     * @return    Returns the GetSubscriptionResponse response from the API call 
-     */
-    public GetSubscriptionResponse updateLatestPeriodEndAt(
-                final String subscriptionId,
-                final UpdateCurrentCycleEndDateRequest request,
-                final String idempotencyKey
-    ) throws Throwable {
-
-        HttpRequest _request = _buildUpdateLatestPeriodEndAtRequest(subscriptionId, request, idempotencyKey);
-        HttpResponse _response = getClientInstance().executeAsString(_request);
-        HttpContext _context = new HttpContext(_request, _response);
-
-        return _handleUpdateLatestPeriodEndAtResponse(_context);
-    }
-
-    /**
-     * TODO: type endpoint description here
-     * @param    subscriptionId    Required parameter: Example: 
-     * @param    request    Required parameter: Request for updating the end date of the current signature cycle
-     * @param    idempotencyKey    Optional parameter: Example: 
-     */
-    public void updateLatestPeriodEndAtAsync(
-                final String subscriptionId,
-                final UpdateCurrentCycleEndDateRequest request,
-                final String idempotencyKey,
-                final APICallBack<GetSubscriptionResponse> callBack
-    ) {
-        Runnable _responseTask = new Runnable() {
-            public void run() {
-
-                HttpRequest _request;
-                try {
-                    _request = _buildUpdateLatestPeriodEndAtRequest(subscriptionId, request, idempotencyKey);
-                } catch (Exception e) {
-                    callBack.onFailure(null, e);
-                    return;
-                }
-
-                // Invoke request and get response
-                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
-                    public void onSuccess(HttpContext _context, HttpResponse _response) {
-                        try {
-                            GetSubscriptionResponse returnValue = _handleUpdateLatestPeriodEndAtResponse(_context);
-                            callBack.onSuccess(_context, returnValue);
-                        } catch (Exception e) {
-                            callBack.onFailure(_context, e);
-                        }
-                    }
-
-                    public void onFailure(HttpContext _context, Throwable _exception) {
-                        // Let the caller know of the failure
-                        callBack.onFailure(_context, _exception);
-                    }
-                });
-            }
-        };
-
-        // Execute async using thread pool
-        APIHelper.getScheduler().execute(_responseTask);
-    }
-
-    /**
-     * Builds the HttpRequest object for updateLatestPeriodEndAt
-     */
-    private HttpRequest _buildUpdateLatestPeriodEndAtRequest(
-                final String subscriptionId,
-                final UpdateCurrentCycleEndDateRequest request,
-                final String idempotencyKey) throws IOException, APIException {
-        //the base uri for api requests
-        String _baseUri = Configuration.baseUri;
-
-        //prepare query string for API call
-        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/subscriptions/{subscription_id}/periods/latest/end-at");
-
-        //process template parameters
-        Map<String, Object> _templateParameters = new HashMap<String, Object>();
-        _templateParameters.put("subscription_id", subscriptionId);
-        APIHelper.appendUrlWithTemplateParameters(_queryBuilder, _templateParameters);
-        //validate and preprocess url
-        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
-
-        //load all headers for the outgoing API request
-        Map<String, String> _headers = new HashMap<String, String>();
-        if (idempotencyKey != null) {
-            _headers.put("idempotency-key", idempotencyKey);
-        }
-        _headers.put("user-agent", BaseController.userAgent);
-        _headers.put("accept", "application/json");
-        _headers.put("content-type", "application/json");
-
-
-        //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().patchBody(_queryUrl, _headers, APIHelper.serialize(request),
-                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
-
-        // Invoke the callback before request if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnBeforeRequest(_request);
-        }
-
-        return _request;
-    }
-
-    /**
-     * Processes the response for updateLatestPeriodEndAt
-     * @return An object of type GetSubscriptionResponse
-     */
-    private GetSubscriptionResponse _handleUpdateLatestPeriodEndAtResponse(HttpContext _context)
-            throws APIException, IOException {
-        HttpResponse _response = _context.getResponse();
-
-        //invoke the callback after response if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnAfterResponse(_context);
-        }
-
-        //handle errors defined at the API level
-        validateResponse(_response, _context);
-
-        //extract result from the http response
-        String _responseBody = ((HttpStringResponse)_response).getBody();
-        GetSubscriptionResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<GetSubscriptionResponse>(){});
-
-        return _result;
-    }
-
-    /**
-     * TODO: type endpoint description here
-     * @param    subscriptionId    Required parameter: Subscription Id
-     * @param    page    Required parameter: Page number
-     * @param    size    Required parameter: Page size
-     * @return    Returns the ListCyclesResponse response from the API call 
-     */
-    public ListCyclesResponse getSubscriptionCycles(
-                final String subscriptionId,
-                final String page,
-                final String size
-    ) throws Throwable {
-
-        HttpRequest _request = _buildGetSubscriptionCyclesRequest(subscriptionId, page, size);
-        HttpResponse _response = getClientInstance().executeAsString(_request);
-        HttpContext _context = new HttpContext(_request, _response);
-
-        return _handleGetSubscriptionCyclesResponse(_context);
-    }
-
-    /**
-     * TODO: type endpoint description here
-     * @param    subscriptionId    Required parameter: Subscription Id
-     * @param    page    Required parameter: Page number
-     * @param    size    Required parameter: Page size
-     */
-    public void getSubscriptionCyclesAsync(
-                final String subscriptionId,
-                final String page,
-                final String size,
-                final APICallBack<ListCyclesResponse> callBack
-    ) {
-        Runnable _responseTask = new Runnable() {
-            public void run() {
-
-                HttpRequest _request;
-                try {
-                    _request = _buildGetSubscriptionCyclesRequest(subscriptionId, page, size);
-                } catch (Exception e) {
-                    callBack.onFailure(null, e);
-                    return;
-                }
-
-                // Invoke request and get response
-                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
-                    public void onSuccess(HttpContext _context, HttpResponse _response) {
-                        try {
-                            ListCyclesResponse returnValue = _handleGetSubscriptionCyclesResponse(_context);
-                            callBack.onSuccess(_context, returnValue);
-                        } catch (Exception e) {
-                            callBack.onFailure(_context, e);
-                        }
-                    }
-
-                    public void onFailure(HttpContext _context, Throwable _exception) {
-                        // Let the caller know of the failure
-                        callBack.onFailure(_context, _exception);
-                    }
-                });
-            }
-        };
-
-        // Execute async using thread pool
-        APIHelper.getScheduler().execute(_responseTask);
-    }
-
-    /**
-     * Builds the HttpRequest object for getSubscriptionCycles
-     */
-    private HttpRequest _buildGetSubscriptionCyclesRequest(
-                final String subscriptionId,
-                final String page,
-                final String size) throws IOException, APIException {
-        //the base uri for api requests
-        String _baseUri = Configuration.baseUri;
-
-        //prepare query string for API call
-        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/subscriptions/{subscription_id}/cycles");
-
-        //process template parameters
-        Map<String, Object> _templateParameters = new HashMap<String, Object>();
-        _templateParameters.put("subscription_id", subscriptionId);
-        APIHelper.appendUrlWithTemplateParameters(_queryBuilder, _templateParameters);
-
-        //process query parameters
-        Map<String, Object> _queryParameters = new HashMap<String, Object>();
-        _queryParameters.put("page", page);
-        _queryParameters.put("size", size);
-        APIHelper.appendUrlWithQueryParameters(_queryBuilder, _queryParameters);
-        //validate and preprocess url
-        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
-
-        //load all headers for the outgoing API request
-        Map<String, String> _headers = new HashMap<String, String>();
-        _headers.put("user-agent", BaseController.userAgent);
-        _headers.put("accept", "application/json");
-
-
-        //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().get(_queryUrl, _headers, null,
-                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
-
-        // Invoke the callback before request if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnBeforeRequest(_request);
-        }
-
-        return _request;
-    }
-
-    /**
-     * Processes the response for getSubscriptionCycles
-     * @return An object of type ListCyclesResponse
-     */
-    private ListCyclesResponse _handleGetSubscriptionCyclesResponse(HttpContext _context)
-            throws APIException, IOException {
-        HttpResponse _response = _context.getResponse();
-
-        //invoke the callback after response if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnAfterResponse(_context);
-        }
-
-        //handle errors defined at the API level
-        validateResponse(_response, _context);
-
-        //extract result from the http response
-        String _responseBody = ((HttpStringResponse)_response).getBody();
-        ListCyclesResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<ListCyclesResponse>(){});
-
-        return _result;
-    }
-
-    /**
-     * Gets all subscriptions
-     * @param    page    Optional parameter: Page number
-     * @param    size    Optional parameter: Page size
-     * @param    code    Optional parameter: Filter for subscription's code
-     * @param    billingType    Optional parameter: Filter for subscription's billing type
-     * @param    customerId    Optional parameter: Filter for subscription's customer id
-     * @param    planId    Optional parameter: Filter for subscription's plan id
-     * @param    cardId    Optional parameter: Filter for subscription's card id
-     * @param    status    Optional parameter: Filter for subscription's status
-     * @param    nextBillingSince    Optional parameter: Filter for subscription's next billing date start range
-     * @param    nextBillingUntil    Optional parameter: Filter for subscription's next billing date end range
-     * @param    createdSince    Optional parameter: Filter for subscription's creation date start range
-     * @param    createdUntil    Optional parameter: Filter for subscriptions creation date end range
-     * @return    Returns the ListSubscriptionsResponse response from the API call 
-     */
-    public ListSubscriptionsResponse getSubscriptions(
-                final Integer page,
-                final Integer size,
-                final String code,
-                final String billingType,
-                final String customerId,
-                final String planId,
-                final String cardId,
-                final String status,
-                final DateTime nextBillingSince,
-                final DateTime nextBillingUntil,
-                final DateTime createdSince,
-                final DateTime createdUntil
-    ) throws Throwable {
-
-        HttpRequest _request = _buildGetSubscriptionsRequest(page, size, code, billingType, customerId, planId, cardId, status, nextBillingSince, nextBillingUntil, createdSince, createdUntil);
-        HttpResponse _response = getClientInstance().executeAsString(_request);
-        HttpContext _context = new HttpContext(_request, _response);
-
-        return _handleGetSubscriptionsResponse(_context);
-    }
-
-    /**
-     * Gets all subscriptions
-     * @param    page    Optional parameter: Page number
-     * @param    size    Optional parameter: Page size
-     * @param    code    Optional parameter: Filter for subscription's code
-     * @param    billingType    Optional parameter: Filter for subscription's billing type
-     * @param    customerId    Optional parameter: Filter for subscription's customer id
-     * @param    planId    Optional parameter: Filter for subscription's plan id
-     * @param    cardId    Optional parameter: Filter for subscription's card id
-     * @param    status    Optional parameter: Filter for subscription's status
-     * @param    nextBillingSince    Optional parameter: Filter for subscription's next billing date start range
-     * @param    nextBillingUntil    Optional parameter: Filter for subscription's next billing date end range
-     * @param    createdSince    Optional parameter: Filter for subscription's creation date start range
-     * @param    createdUntil    Optional parameter: Filter for subscriptions creation date end range
-     */
-    public void getSubscriptionsAsync(
-                final Integer page,
-                final Integer size,
-                final String code,
-                final String billingType,
-                final String customerId,
-                final String planId,
-                final String cardId,
-                final String status,
-                final DateTime nextBillingSince,
-                final DateTime nextBillingUntil,
-                final DateTime createdSince,
-                final DateTime createdUntil,
-                final APICallBack<ListSubscriptionsResponse> callBack
-    ) {
-        Runnable _responseTask = new Runnable() {
-            public void run() {
-
-                HttpRequest _request;
-                try {
-                    _request = _buildGetSubscriptionsRequest(page, size, code, billingType, customerId, planId, cardId, status, nextBillingSince, nextBillingUntil, createdSince, createdUntil);
-                } catch (Exception e) {
-                    callBack.onFailure(null, e);
-                    return;
-                }
-
-                // Invoke request and get response
-                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
-                    public void onSuccess(HttpContext _context, HttpResponse _response) {
-                        try {
-                            ListSubscriptionsResponse returnValue = _handleGetSubscriptionsResponse(_context);
-                            callBack.onSuccess(_context, returnValue);
-                        } catch (Exception e) {
-                            callBack.onFailure(_context, e);
-                        }
-                    }
-
-                    public void onFailure(HttpContext _context, Throwable _exception) {
-                        // Let the caller know of the failure
-                        callBack.onFailure(_context, _exception);
-                    }
-                });
-            }
-        };
-
-        // Execute async using thread pool
-        APIHelper.getScheduler().execute(_responseTask);
-    }
-
-    /**
-     * Builds the HttpRequest object for getSubscriptions
-     */
-    private HttpRequest _buildGetSubscriptionsRequest(
-                final Integer page,
-                final Integer size,
-                final String code,
-                final String billingType,
-                final String customerId,
-                final String planId,
-                final String cardId,
-                final String status,
-                final DateTime nextBillingSince,
-                final DateTime nextBillingUntil,
-                final DateTime createdSince,
-                final DateTime createdUntil) throws IOException, APIException {
-        //the base uri for api requests
-        String _baseUri = Configuration.baseUri;
-
-        //prepare query string for API call
-        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/subscriptions");
-
-        //process query parameters
-        Map<String, Object> _queryParameters = new HashMap<String, Object>();
-        if (page != null) {
-            _queryParameters.put("page", page);
-        }
-        if (size != null) {
-            _queryParameters.put("size", size);
-        }
-        if (code != null) {
-            _queryParameters.put("code", code);
-        }
-        if (billingType != null) {
-            _queryParameters.put("billing_type", billingType);
-        }
-        if (customerId != null) {
-            _queryParameters.put("customer_id", customerId);
-        }
-        if (planId != null) {
-            _queryParameters.put("plan_id", planId);
-        }
-        if (cardId != null) {
-            _queryParameters.put("card_id", cardId);
-        }
-        if (status != null) {
-            _queryParameters.put("status", status);
-        }
-        if (nextBillingSince != null) {
-            _queryParameters.put("next_billing_since", DateTimeHelper.toRfc8601DateTime(nextBillingSince));
-        }
-        if (nextBillingUntil != null) {
-            _queryParameters.put("next_billing_until", DateTimeHelper.toRfc8601DateTime(nextBillingUntil));
-        }
-        if (createdSince != null) {
-            _queryParameters.put("created_since", DateTimeHelper.toRfc8601DateTime(createdSince));
-        }
-        if (createdUntil != null) {
-            _queryParameters.put("created_until", DateTimeHelper.toRfc8601DateTime(createdUntil));
-        }
-        APIHelper.appendUrlWithQueryParameters(_queryBuilder, _queryParameters);
-        //validate and preprocess url
-        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
-
-        //load all headers for the outgoing API request
-        Map<String, String> _headers = new HashMap<String, String>();
-        _headers.put("user-agent", BaseController.userAgent);
-        _headers.put("accept", "application/json");
-
-
-        //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().get(_queryUrl, _headers, null,
-                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
-
-        // Invoke the callback before request if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnBeforeRequest(_request);
-        }
-
-        return _request;
-    }
-
-    /**
-     * Processes the response for getSubscriptions
-     * @return An object of type ListSubscriptionsResponse
-     */
-    private ListSubscriptionsResponse _handleGetSubscriptionsResponse(HttpContext _context)
-            throws APIException, IOException {
-        HttpResponse _response = _context.getResponse();
-
-        //invoke the callback after response if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnAfterResponse(_context);
-        }
-
-        //handle errors defined at the API level
-        validateResponse(_response, _context);
-
-        //extract result from the http response
-        String _responseBody = ((HttpStringResponse)_response).getBody();
-        ListSubscriptionsResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<ListSubscriptionsResponse>(){});
-
-        return _result;
-    }
-
-    /**
-     * TODO: type endpoint description here
-     * @param    subscriptionId    Required parameter: The subscription id
-     * @param    discountId    Required parameter: Example: 
-     * @return    Returns the GetDiscountResponse response from the API call 
-     */
-    public GetDiscountResponse getDiscountById(
-                final String subscriptionId,
-                final String discountId
-    ) throws Throwable {
-
-        HttpRequest _request = _buildGetDiscountByIdRequest(subscriptionId, discountId);
-        HttpResponse _response = getClientInstance().executeAsString(_request);
-        HttpContext _context = new HttpContext(_request, _response);
-
-        return _handleGetDiscountByIdResponse(_context);
-    }
-
-    /**
-     * TODO: type endpoint description here
-     * @param    subscriptionId    Required parameter: The subscription id
-     * @param    discountId    Required parameter: Example: 
-     */
-    public void getDiscountByIdAsync(
-                final String subscriptionId,
-                final String discountId,
-                final APICallBack<GetDiscountResponse> callBack
-    ) {
-        Runnable _responseTask = new Runnable() {
-            public void run() {
-
-                HttpRequest _request;
-                try {
-                    _request = _buildGetDiscountByIdRequest(subscriptionId, discountId);
-                } catch (Exception e) {
-                    callBack.onFailure(null, e);
-                    return;
-                }
-
-                // Invoke request and get response
-                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
-                    public void onSuccess(HttpContext _context, HttpResponse _response) {
-                        try {
-                            GetDiscountResponse returnValue = _handleGetDiscountByIdResponse(_context);
-                            callBack.onSuccess(_context, returnValue);
-                        } catch (Exception e) {
-                            callBack.onFailure(_context, e);
-                        }
-                    }
-
-                    public void onFailure(HttpContext _context, Throwable _exception) {
-                        // Let the caller know of the failure
-                        callBack.onFailure(_context, _exception);
-                    }
-                });
-            }
-        };
-
-        // Execute async using thread pool
-        APIHelper.getScheduler().execute(_responseTask);
-    }
-
-    /**
-     * Builds the HttpRequest object for getDiscountById
-     */
-    private HttpRequest _buildGetDiscountByIdRequest(
-                final String subscriptionId,
-                final String discountId) throws IOException, APIException {
-        //the base uri for api requests
-        String _baseUri = Configuration.baseUri;
-
-        //prepare query string for API call
-        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/subscriptions/{subscription_id}/discounts/{discountId}");
-
-        //process template parameters
-        Map<String, Object> _templateParameters = new HashMap<String, Object>();
-        _templateParameters.put("subscription_id", subscriptionId);
-        _templateParameters.put("discountId", discountId);
-        APIHelper.appendUrlWithTemplateParameters(_queryBuilder, _templateParameters);
-        //validate and preprocess url
-        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
-
-        //load all headers for the outgoing API request
-        Map<String, String> _headers = new HashMap<String, String>();
-        _headers.put("user-agent", BaseController.userAgent);
-        _headers.put("accept", "application/json");
-
-
-        //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().get(_queryUrl, _headers, null,
-                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
-
-        // Invoke the callback before request if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnBeforeRequest(_request);
-        }
-
-        return _request;
-    }
-
-    /**
-     * Processes the response for getDiscountById
-     * @return An object of type GetDiscountResponse
-     */
-    private GetDiscountResponse _handleGetDiscountByIdResponse(HttpContext _context)
-            throws APIException, IOException {
-        HttpResponse _response = _context.getResponse();
-
-        //invoke the callback after response if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnAfterResponse(_context);
-        }
-
-        //handle errors defined at the API level
-        validateResponse(_response, _context);
-
-        //extract result from the http response
-        String _responseBody = ((HttpStringResponse)_response).getBody();
-        GetDiscountResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<GetDiscountResponse>(){});
 
         return _result;
     }
@@ -3474,9 +3528,9 @@ public class SubscriptionsController extends BaseController {
      * @param    description    Optional parameter: The item description
      * @param    createdSince    Optional parameter: Filter for item's creation date start range
      * @param    createdUntil    Optional parameter: Filter for item's creation date end range
-     * @return    Returns the ListSubscriptionItemsResponse response from the API call 
+     * @return    Returns the SubscriptionsItemsResponse3 response from the API call 
      */
-    public ListSubscriptionItemsResponse getSubscriptionItems(
+    public SubscriptionsItemsResponse3 getSubscriptionItems(
                 final String subscriptionId,
                 final Integer page,
                 final Integer size,
@@ -3517,7 +3571,7 @@ public class SubscriptionsController extends BaseController {
                 final String description,
                 final String createdSince,
                 final String createdUntil,
-                final APICallBack<ListSubscriptionItemsResponse> callBack
+                final APICallBack<SubscriptionsItemsResponse3> callBack
     ) {
         Runnable _responseTask = new Runnable() {
             public void run() {
@@ -3534,7 +3588,7 @@ public class SubscriptionsController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            ListSubscriptionItemsResponse returnValue = _handleGetSubscriptionItemsResponse(_context);
+                            SubscriptionsItemsResponse3 returnValue = _handleGetSubscriptionItemsResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -3627,9 +3681,9 @@ public class SubscriptionsController extends BaseController {
 
     /**
      * Processes the response for getSubscriptionItems
-     * @return An object of type ListSubscriptionItemsResponse
+     * @return An object of type SubscriptionsItemsResponse3
      */
-    private ListSubscriptionItemsResponse _handleGetSubscriptionItemsResponse(HttpContext _context)
+    private SubscriptionsItemsResponse3 _handleGetSubscriptionItemsResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -3638,46 +3692,67 @@ public class SubscriptionsController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
         //extract result from the http response
         String _responseBody = ((HttpStringResponse)_response).getBody();
-        ListSubscriptionItemsResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<ListSubscriptionItemsResponse>(){});
+        SubscriptionsItemsResponse3 _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<SubscriptionsItemsResponse3>(){});
 
         return _result;
     }
 
     /**
-     * Atualização do valor mínimo da assinatura
-     * @param    subscriptionId    Required parameter: Subscription Id
-     * @param    request    Required parameter: Request da requisição com o valor mínimo que será configurado
+     * Updates the billing date from a subscription
+     * @param    subscriptionId    Required parameter: The subscription id
+     * @param    body    Required parameter: Request for updating the subscription billing date
      * @param    idempotencyKey    Optional parameter: Example: 
      * @return    Returns the GetSubscriptionResponse response from the API call 
      */
-    public GetSubscriptionResponse updateSubscriptionMiniumPrice(
+    public GetSubscriptionResponse updateSubscriptionBillingDate(
                 final String subscriptionId,
-                final UpdateSubscriptionMinimumPriceRequest request,
+                final SubscriptionsBillingDateRequest body,
                 final String idempotencyKey
     ) throws Throwable {
 
-        HttpRequest _request = _buildUpdateSubscriptionMiniumPriceRequest(subscriptionId, request, idempotencyKey);
+        HttpRequest _request = _buildUpdateSubscriptionBillingDateRequest(subscriptionId, body, idempotencyKey);
         HttpResponse _response = getClientInstance().executeAsString(_request);
         HttpContext _context = new HttpContext(_request, _response);
 
-        return _handleUpdateSubscriptionMiniumPriceResponse(_context);
+        return _handleUpdateSubscriptionBillingDateResponse(_context);
     }
 
     /**
-     * Atualização do valor mínimo da assinatura
-     * @param    subscriptionId    Required parameter: Subscription Id
-     * @param    request    Required parameter: Request da requisição com o valor mínimo que será configurado
+     * Updates the billing date from a subscription
+     * @param    subscriptionId    Required parameter: The subscription id
+     * @param    body    Required parameter: Request for updating the subscription billing date
      * @param    idempotencyKey    Optional parameter: Example: 
      */
-    public void updateSubscriptionMiniumPriceAsync(
+    public void updateSubscriptionBillingDateAsync(
                 final String subscriptionId,
-                final UpdateSubscriptionMinimumPriceRequest request,
+                final SubscriptionsBillingDateRequest body,
                 final String idempotencyKey,
                 final APICallBack<GetSubscriptionResponse> callBack
     ) {
@@ -3686,7 +3761,7 @@ public class SubscriptionsController extends BaseController {
 
                 HttpRequest _request;
                 try {
-                    _request = _buildUpdateSubscriptionMiniumPriceRequest(subscriptionId, request, idempotencyKey);
+                    _request = _buildUpdateSubscriptionBillingDateRequest(subscriptionId, body, idempotencyKey);
                 } catch (Exception e) {
                     callBack.onFailure(null, e);
                     return;
@@ -3696,7 +3771,7 @@ public class SubscriptionsController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            GetSubscriptionResponse returnValue = _handleUpdateSubscriptionMiniumPriceResponse(_context);
+                            GetSubscriptionResponse returnValue = _handleUpdateSubscriptionBillingDateResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -3716,17 +3791,17 @@ public class SubscriptionsController extends BaseController {
     }
 
     /**
-     * Builds the HttpRequest object for updateSubscriptionMiniumPrice
+     * Builds the HttpRequest object for updateSubscriptionBillingDate
      */
-    private HttpRequest _buildUpdateSubscriptionMiniumPriceRequest(
+    private HttpRequest _buildUpdateSubscriptionBillingDateRequest(
                 final String subscriptionId,
-                final UpdateSubscriptionMinimumPriceRequest request,
+                final SubscriptionsBillingDateRequest body,
                 final String idempotencyKey) throws IOException, APIException {
         //the base uri for api requests
         String _baseUri = Configuration.baseUri;
 
         //prepare query string for API call
-        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/subscriptions/{subscription_id}/minimum_price");
+        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/subscriptions/{subscription_id}/billing-date");
 
         //process template parameters
         Map<String, Object> _templateParameters = new HashMap<String, Object>();
@@ -3737,16 +3812,16 @@ public class SubscriptionsController extends BaseController {
 
         //load all headers for the outgoing API request
         Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("Content-Type", "application/json");
         if (idempotencyKey != null) {
             _headers.put("idempotency-key", idempotencyKey);
         }
         _headers.put("user-agent", BaseController.userAgent);
         _headers.put("accept", "application/json");
-        _headers.put("content-type", "application/json");
 
 
         //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().patchBody(_queryUrl, _headers, APIHelper.serialize(request),
+        HttpRequest _request = getClientInstance().patchBody(_queryUrl, _headers, APIHelper.serialize(body),
                 Configuration.basicAuthUserName, Configuration.basicAuthPassword);
 
         // Invoke the callback before request if its not null
@@ -3758,10 +3833,10 @@ public class SubscriptionsController extends BaseController {
     }
 
     /**
-     * Processes the response for updateSubscriptionMiniumPrice
+     * Processes the response for updateSubscriptionBillingDate
      * @return An object of type GetSubscriptionResponse
      */
-    private GetSubscriptionResponse _handleUpdateSubscriptionMiniumPriceResponse(HttpContext _context)
+    private GetSubscriptionResponse _handleUpdateSubscriptionBillingDateResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -3770,6 +3845,27 @@ public class SubscriptionsController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
@@ -3782,27 +3878,35 @@ public class SubscriptionsController extends BaseController {
     }
 
     /**
-     * Gets a subscription
-     * @param    subscriptionId    Required parameter: Subscription id
+     * UpdateLatestPeriodEndAt
+     * @param    subscriptionId    Required parameter: Example: 
+     * @param    body    Required parameter: Request for updating the end date of the current signature cycle
+     * @param    idempotencyKey    Optional parameter: Example: 
      * @return    Returns the GetSubscriptionResponse response from the API call 
      */
-    public GetSubscriptionResponse getSubscription(
-                final String subscriptionId
+    public GetSubscriptionResponse updateLatestPeriodEndAt(
+                final String subscriptionId,
+                final SubscriptionsPeriodsLatestEndAtRequest body,
+                final String idempotencyKey
     ) throws Throwable {
 
-        HttpRequest _request = _buildGetSubscriptionRequest(subscriptionId);
+        HttpRequest _request = _buildUpdateLatestPeriodEndAtRequest(subscriptionId, body, idempotencyKey);
         HttpResponse _response = getClientInstance().executeAsString(_request);
         HttpContext _context = new HttpContext(_request, _response);
 
-        return _handleGetSubscriptionResponse(_context);
+        return _handleUpdateLatestPeriodEndAtResponse(_context);
     }
 
     /**
-     * Gets a subscription
-     * @param    subscriptionId    Required parameter: Subscription id
+     * UpdateLatestPeriodEndAt
+     * @param    subscriptionId    Required parameter: Example: 
+     * @param    body    Required parameter: Request for updating the end date of the current signature cycle
+     * @param    idempotencyKey    Optional parameter: Example: 
      */
-    public void getSubscriptionAsync(
+    public void updateLatestPeriodEndAtAsync(
                 final String subscriptionId,
+                final SubscriptionsPeriodsLatestEndAtRequest body,
+                final String idempotencyKey,
                 final APICallBack<GetSubscriptionResponse> callBack
     ) {
         Runnable _responseTask = new Runnable() {
@@ -3810,7 +3914,7 @@ public class SubscriptionsController extends BaseController {
 
                 HttpRequest _request;
                 try {
-                    _request = _buildGetSubscriptionRequest(subscriptionId);
+                    _request = _buildUpdateLatestPeriodEndAtRequest(subscriptionId, body, idempotencyKey);
                 } catch (Exception e) {
                     callBack.onFailure(null, e);
                     return;
@@ -3820,7 +3924,7 @@ public class SubscriptionsController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            GetSubscriptionResponse returnValue = _handleGetSubscriptionResponse(_context);
+                            GetSubscriptionResponse returnValue = _handleUpdateLatestPeriodEndAtResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -3840,15 +3944,17 @@ public class SubscriptionsController extends BaseController {
     }
 
     /**
-     * Builds the HttpRequest object for getSubscription
+     * Builds the HttpRequest object for updateLatestPeriodEndAt
      */
-    private HttpRequest _buildGetSubscriptionRequest(
-                final String subscriptionId) throws IOException, APIException {
+    private HttpRequest _buildUpdateLatestPeriodEndAtRequest(
+                final String subscriptionId,
+                final SubscriptionsPeriodsLatestEndAtRequest body,
+                final String idempotencyKey) throws IOException, APIException {
         //the base uri for api requests
         String _baseUri = Configuration.baseUri;
 
         //prepare query string for API call
-        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/subscriptions/{subscription_id}");
+        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/subscriptions/{subscription_id}/periods/latest/end-at");
 
         //process template parameters
         Map<String, Object> _templateParameters = new HashMap<String, Object>();
@@ -3859,12 +3965,16 @@ public class SubscriptionsController extends BaseController {
 
         //load all headers for the outgoing API request
         Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("Content-Type", "application/json");
+        if (idempotencyKey != null) {
+            _headers.put("idempotency-key", idempotencyKey);
+        }
         _headers.put("user-agent", BaseController.userAgent);
         _headers.put("accept", "application/json");
 
 
         //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().get(_queryUrl, _headers, null,
+        HttpRequest _request = getClientInstance().patchBody(_queryUrl, _headers, APIHelper.serialize(body),
                 Configuration.basicAuthUserName, Configuration.basicAuthPassword);
 
         // Invoke the callback before request if its not null
@@ -3876,10 +3986,10 @@ public class SubscriptionsController extends BaseController {
     }
 
     /**
-     * Processes the response for getSubscription
+     * Processes the response for updateLatestPeriodEndAt
      * @return An object of type GetSubscriptionResponse
      */
-    private GetSubscriptionResponse _handleGetSubscriptionResponse(HttpContext _context)
+    private GetSubscriptionResponse _handleUpdateLatestPeriodEndAtResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -3888,6 +3998,27 @@ public class SubscriptionsController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
@@ -3900,19 +4031,19 @@ public class SubscriptionsController extends BaseController {
     }
 
     /**
-     * TODO: type endpoint description here
+     * UpdateSubscriptionAffiliationId
      * @param    subscriptionId    Required parameter: Example: 
-     * @param    request    Required parameter: Request for updating a subscription affiliation id
+     * @param    body    Required parameter: Request for updating a subscription affiliation id
      * @param    idempotencyKey    Optional parameter: Example: 
      * @return    Returns the GetSubscriptionResponse response from the API call 
      */
     public GetSubscriptionResponse updateSubscriptionAffiliationId(
                 final String subscriptionId,
-                final UpdateSubscriptionAffiliationIdRequest request,
+                final SubscriptionsGatewayAffiliationIdRequest body,
                 final String idempotencyKey
     ) throws Throwable {
 
-        HttpRequest _request = _buildUpdateSubscriptionAffiliationIdRequest(subscriptionId, request, idempotencyKey);
+        HttpRequest _request = _buildUpdateSubscriptionAffiliationIdRequest(subscriptionId, body, idempotencyKey);
         HttpResponse _response = getClientInstance().executeAsString(_request);
         HttpContext _context = new HttpContext(_request, _response);
 
@@ -3920,14 +4051,14 @@ public class SubscriptionsController extends BaseController {
     }
 
     /**
-     * TODO: type endpoint description here
+     * UpdateSubscriptionAffiliationId
      * @param    subscriptionId    Required parameter: Example: 
-     * @param    request    Required parameter: Request for updating a subscription affiliation id
+     * @param    body    Required parameter: Request for updating a subscription affiliation id
      * @param    idempotencyKey    Optional parameter: Example: 
      */
     public void updateSubscriptionAffiliationIdAsync(
                 final String subscriptionId,
-                final UpdateSubscriptionAffiliationIdRequest request,
+                final SubscriptionsGatewayAffiliationIdRequest body,
                 final String idempotencyKey,
                 final APICallBack<GetSubscriptionResponse> callBack
     ) {
@@ -3936,7 +4067,7 @@ public class SubscriptionsController extends BaseController {
 
                 HttpRequest _request;
                 try {
-                    _request = _buildUpdateSubscriptionAffiliationIdRequest(subscriptionId, request, idempotencyKey);
+                    _request = _buildUpdateSubscriptionAffiliationIdRequest(subscriptionId, body, idempotencyKey);
                 } catch (Exception e) {
                     callBack.onFailure(null, e);
                     return;
@@ -3970,7 +4101,7 @@ public class SubscriptionsController extends BaseController {
      */
     private HttpRequest _buildUpdateSubscriptionAffiliationIdRequest(
                 final String subscriptionId,
-                final UpdateSubscriptionAffiliationIdRequest request,
+                final SubscriptionsGatewayAffiliationIdRequest body,
                 final String idempotencyKey) throws IOException, APIException {
         //the base uri for api requests
         String _baseUri = Configuration.baseUri;
@@ -3987,16 +4118,16 @@ public class SubscriptionsController extends BaseController {
 
         //load all headers for the outgoing API request
         Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("Content-Type", "application/json");
         if (idempotencyKey != null) {
             _headers.put("idempotency-key", idempotencyKey);
         }
         _headers.put("user-agent", BaseController.userAgent);
         _headers.put("accept", "application/json");
-        _headers.put("content-type", "application/json");
 
 
         //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().patchBody(_queryUrl, _headers, APIHelper.serialize(request),
+        HttpRequest _request = getClientInstance().patchBody(_queryUrl, _headers, APIHelper.serialize(body),
                 Configuration.basicAuthUserName, Configuration.basicAuthPassword);
 
         // Invoke the callback before request if its not null
@@ -4020,6 +4151,27 @@ public class SubscriptionsController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
@@ -4152,6 +4304,27 @@ public class SubscriptionsController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
@@ -4166,17 +4339,17 @@ public class SubscriptionsController extends BaseController {
     /**
      * Updates the credit card from a subscription
      * @param    subscriptionId    Required parameter: Subscription id
-     * @param    request    Required parameter: Request for updating a card
+     * @param    body    Required parameter: Request for updating a card
      * @param    idempotencyKey    Optional parameter: Example: 
      * @return    Returns the GetSubscriptionResponse response from the API call 
      */
     public GetSubscriptionResponse updateSubscriptionCard(
                 final String subscriptionId,
-                final UpdateSubscriptionCardRequest request,
+                final SubscriptionsCardRequest body,
                 final String idempotencyKey
     ) throws Throwable {
 
-        HttpRequest _request = _buildUpdateSubscriptionCardRequest(subscriptionId, request, idempotencyKey);
+        HttpRequest _request = _buildUpdateSubscriptionCardRequest(subscriptionId, body, idempotencyKey);
         HttpResponse _response = getClientInstance().executeAsString(_request);
         HttpContext _context = new HttpContext(_request, _response);
 
@@ -4186,12 +4359,12 @@ public class SubscriptionsController extends BaseController {
     /**
      * Updates the credit card from a subscription
      * @param    subscriptionId    Required parameter: Subscription id
-     * @param    request    Required parameter: Request for updating a card
+     * @param    body    Required parameter: Request for updating a card
      * @param    idempotencyKey    Optional parameter: Example: 
      */
     public void updateSubscriptionCardAsync(
                 final String subscriptionId,
-                final UpdateSubscriptionCardRequest request,
+                final SubscriptionsCardRequest body,
                 final String idempotencyKey,
                 final APICallBack<GetSubscriptionResponse> callBack
     ) {
@@ -4200,7 +4373,7 @@ public class SubscriptionsController extends BaseController {
 
                 HttpRequest _request;
                 try {
-                    _request = _buildUpdateSubscriptionCardRequest(subscriptionId, request, idempotencyKey);
+                    _request = _buildUpdateSubscriptionCardRequest(subscriptionId, body, idempotencyKey);
                 } catch (Exception e) {
                     callBack.onFailure(null, e);
                     return;
@@ -4234,7 +4407,7 @@ public class SubscriptionsController extends BaseController {
      */
     private HttpRequest _buildUpdateSubscriptionCardRequest(
                 final String subscriptionId,
-                final UpdateSubscriptionCardRequest request,
+                final SubscriptionsCardRequest body,
                 final String idempotencyKey) throws IOException, APIException {
         //the base uri for api requests
         String _baseUri = Configuration.baseUri;
@@ -4251,16 +4424,16 @@ public class SubscriptionsController extends BaseController {
 
         //load all headers for the outgoing API request
         Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("Content-Type", "application/json");
         if (idempotencyKey != null) {
             _headers.put("idempotency-key", idempotencyKey);
         }
         _headers.put("user-agent", BaseController.userAgent);
         _headers.put("accept", "application/json");
-        _headers.put("content-type", "application/json");
 
 
         //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().patchBody(_queryUrl, _headers, APIHelper.serialize(request),
+        HttpRequest _request = getClientInstance().patchBody(_queryUrl, _headers, APIHelper.serialize(body),
                 Configuration.basicAuthUserName, Configuration.basicAuthPassword);
 
         // Invoke the callback before request if its not null
@@ -4284,6 +4457,27 @@ public class SubscriptionsController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
@@ -4298,17 +4492,17 @@ public class SubscriptionsController extends BaseController {
     /**
      * Updates the metadata from a subscription
      * @param    subscriptionId    Required parameter: The subscription id
-     * @param    request    Required parameter: Request for updating the subscrption metadata
+     * @param    body    Required parameter: Request for updating the subscrption metadata
      * @param    idempotencyKey    Optional parameter: Example: 
      * @return    Returns the GetSubscriptionResponse response from the API call 
      */
     public GetSubscriptionResponse updateSubscriptionMetadata(
                 final String subscriptionId,
-                final UpdateMetadataRequest request,
+                final SubscriptionsMetadataRequest body,
                 final String idempotencyKey
     ) throws Throwable {
 
-        HttpRequest _request = _buildUpdateSubscriptionMetadataRequest(subscriptionId, request, idempotencyKey);
+        HttpRequest _request = _buildUpdateSubscriptionMetadataRequest(subscriptionId, body, idempotencyKey);
         HttpResponse _response = getClientInstance().executeAsString(_request);
         HttpContext _context = new HttpContext(_request, _response);
 
@@ -4318,12 +4512,12 @@ public class SubscriptionsController extends BaseController {
     /**
      * Updates the metadata from a subscription
      * @param    subscriptionId    Required parameter: The subscription id
-     * @param    request    Required parameter: Request for updating the subscrption metadata
+     * @param    body    Required parameter: Request for updating the subscrption metadata
      * @param    idempotencyKey    Optional parameter: Example: 
      */
     public void updateSubscriptionMetadataAsync(
                 final String subscriptionId,
-                final UpdateMetadataRequest request,
+                final SubscriptionsMetadataRequest body,
                 final String idempotencyKey,
                 final APICallBack<GetSubscriptionResponse> callBack
     ) {
@@ -4332,7 +4526,7 @@ public class SubscriptionsController extends BaseController {
 
                 HttpRequest _request;
                 try {
-                    _request = _buildUpdateSubscriptionMetadataRequest(subscriptionId, request, idempotencyKey);
+                    _request = _buildUpdateSubscriptionMetadataRequest(subscriptionId, body, idempotencyKey);
                 } catch (Exception e) {
                     callBack.onFailure(null, e);
                     return;
@@ -4366,7 +4560,7 @@ public class SubscriptionsController extends BaseController {
      */
     private HttpRequest _buildUpdateSubscriptionMetadataRequest(
                 final String subscriptionId,
-                final UpdateMetadataRequest request,
+                final SubscriptionsMetadataRequest body,
                 final String idempotencyKey) throws IOException, APIException {
         //the base uri for api requests
         String _baseUri = Configuration.baseUri;
@@ -4383,16 +4577,16 @@ public class SubscriptionsController extends BaseController {
 
         //load all headers for the outgoing API request
         Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("Content-Type", "application/json");
         if (idempotencyKey != null) {
             _headers.put("idempotency-key", idempotencyKey);
         }
         _headers.put("user-agent", BaseController.userAgent);
         _headers.put("accept", "application/json");
-        _headers.put("content-type", "application/json");
 
 
         //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().patchBody(_queryUrl, _headers, APIHelper.serialize(request),
+        HttpRequest _request = getClientInstance().patchBody(_queryUrl, _headers, APIHelper.serialize(body),
                 Configuration.basicAuthUserName, Configuration.basicAuthPassword);
 
         // Invoke the callback before request if its not null
@@ -4416,6 +4610,27 @@ public class SubscriptionsController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
@@ -4430,17 +4645,17 @@ public class SubscriptionsController extends BaseController {
     /**
      * Updates the boleto due days from a subscription
      * @param    subscriptionId    Required parameter: Subscription Id
-     * @param    request    Required parameter: Example: 
+     * @param    body    Required parameter: Example: 
      * @param    idempotencyKey    Optional parameter: Example: 
      * @return    Returns the GetSubscriptionResponse response from the API call 
      */
     public GetSubscriptionResponse updateSubscriptionDueDays(
                 final String subscriptionId,
-                final UpdateSubscriptionDueDaysRequest request,
+                final UpdateSubscriptionDueDaysRequest body,
                 final String idempotencyKey
     ) throws Throwable {
 
-        HttpRequest _request = _buildUpdateSubscriptionDueDaysRequest(subscriptionId, request, idempotencyKey);
+        HttpRequest _request = _buildUpdateSubscriptionDueDaysRequest(subscriptionId, body, idempotencyKey);
         HttpResponse _response = getClientInstance().executeAsString(_request);
         HttpContext _context = new HttpContext(_request, _response);
 
@@ -4450,12 +4665,12 @@ public class SubscriptionsController extends BaseController {
     /**
      * Updates the boleto due days from a subscription
      * @param    subscriptionId    Required parameter: Subscription Id
-     * @param    request    Required parameter: Example: 
+     * @param    body    Required parameter: Example: 
      * @param    idempotencyKey    Optional parameter: Example: 
      */
     public void updateSubscriptionDueDaysAsync(
                 final String subscriptionId,
-                final UpdateSubscriptionDueDaysRequest request,
+                final UpdateSubscriptionDueDaysRequest body,
                 final String idempotencyKey,
                 final APICallBack<GetSubscriptionResponse> callBack
     ) {
@@ -4464,7 +4679,7 @@ public class SubscriptionsController extends BaseController {
 
                 HttpRequest _request;
                 try {
-                    _request = _buildUpdateSubscriptionDueDaysRequest(subscriptionId, request, idempotencyKey);
+                    _request = _buildUpdateSubscriptionDueDaysRequest(subscriptionId, body, idempotencyKey);
                 } catch (Exception e) {
                     callBack.onFailure(null, e);
                     return;
@@ -4498,7 +4713,7 @@ public class SubscriptionsController extends BaseController {
      */
     private HttpRequest _buildUpdateSubscriptionDueDaysRequest(
                 final String subscriptionId,
-                final UpdateSubscriptionDueDaysRequest request,
+                final UpdateSubscriptionDueDaysRequest body,
                 final String idempotencyKey) throws IOException, APIException {
         //the base uri for api requests
         String _baseUri = Configuration.baseUri;
@@ -4515,16 +4730,16 @@ public class SubscriptionsController extends BaseController {
 
         //load all headers for the outgoing API request
         Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("Content-Type", "application/json");
         if (idempotencyKey != null) {
             _headers.put("idempotency-key", idempotencyKey);
         }
         _headers.put("user-agent", BaseController.userAgent);
         _headers.put("accept", "application/json");
-        _headers.put("content-type", "application/json");
 
 
         //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().patchBody(_queryUrl, _headers, APIHelper.serialize(request),
+        HttpRequest _request = getClientInstance().patchBody(_queryUrl, _headers, APIHelper.serialize(body),
                 Configuration.basicAuthUserName, Configuration.basicAuthPassword);
 
         // Invoke the callback before request if its not null
@@ -4548,6 +4763,27 @@ public class SubscriptionsController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
@@ -4560,7 +4796,7 @@ public class SubscriptionsController extends BaseController {
     }
 
     /**
-     * TODO: type endpoint description here
+     * GetDiscounts
      * @param    subscriptionId    Required parameter: The subscription id
      * @param    page    Required parameter: Page number
      * @param    size    Required parameter: Page size
@@ -4580,7 +4816,7 @@ public class SubscriptionsController extends BaseController {
     }
 
     /**
-     * TODO: type endpoint description here
+     * GetDiscounts
      * @param    subscriptionId    Required parameter: The subscription id
      * @param    page    Required parameter: Page number
      * @param    size    Required parameter: Page size
@@ -4682,6 +4918,27 @@ public class SubscriptionsController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
@@ -4696,17 +4953,17 @@ public class SubscriptionsController extends BaseController {
     /**
      * Creates a increment
      * @param    subscriptionId    Required parameter: Subscription id
-     * @param    request    Required parameter: Request for creating a increment
+     * @param    body    Required parameter: Request for creating a increment
      * @param    idempotencyKey    Optional parameter: Example: 
-     * @return    Returns the GetIncrementResponse response from the API call 
+     * @return    Returns the SubscriptionsIncrementsResponse response from the API call 
      */
-    public GetIncrementResponse createIncrement(
+    public SubscriptionsIncrementsResponse createIncrement(
                 final String subscriptionId,
-                final CreateIncrementRequest request,
+                final SubscriptionsIncrementsRequest body,
                 final String idempotencyKey
     ) throws Throwable {
 
-        HttpRequest _request = _buildCreateIncrementRequest(subscriptionId, request, idempotencyKey);
+        HttpRequest _request = _buildCreateIncrementRequest(subscriptionId, body, idempotencyKey);
         HttpResponse _response = getClientInstance().executeAsString(_request);
         HttpContext _context = new HttpContext(_request, _response);
 
@@ -4716,21 +4973,21 @@ public class SubscriptionsController extends BaseController {
     /**
      * Creates a increment
      * @param    subscriptionId    Required parameter: Subscription id
-     * @param    request    Required parameter: Request for creating a increment
+     * @param    body    Required parameter: Request for creating a increment
      * @param    idempotencyKey    Optional parameter: Example: 
      */
     public void createIncrementAsync(
                 final String subscriptionId,
-                final CreateIncrementRequest request,
+                final SubscriptionsIncrementsRequest body,
                 final String idempotencyKey,
-                final APICallBack<GetIncrementResponse> callBack
+                final APICallBack<SubscriptionsIncrementsResponse> callBack
     ) {
         Runnable _responseTask = new Runnable() {
             public void run() {
 
                 HttpRequest _request;
                 try {
-                    _request = _buildCreateIncrementRequest(subscriptionId, request, idempotencyKey);
+                    _request = _buildCreateIncrementRequest(subscriptionId, body, idempotencyKey);
                 } catch (Exception e) {
                     callBack.onFailure(null, e);
                     return;
@@ -4740,7 +4997,7 @@ public class SubscriptionsController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            GetIncrementResponse returnValue = _handleCreateIncrementResponse(_context);
+                            SubscriptionsIncrementsResponse returnValue = _handleCreateIncrementResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -4764,7 +5021,7 @@ public class SubscriptionsController extends BaseController {
      */
     private HttpRequest _buildCreateIncrementRequest(
                 final String subscriptionId,
-                final CreateIncrementRequest request,
+                final SubscriptionsIncrementsRequest body,
                 final String idempotencyKey) throws IOException, APIException {
         //the base uri for api requests
         String _baseUri = Configuration.baseUri;
@@ -4781,16 +5038,16 @@ public class SubscriptionsController extends BaseController {
 
         //load all headers for the outgoing API request
         Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("Content-Type", "application/json");
         if (idempotencyKey != null) {
             _headers.put("idempotency-key", idempotencyKey);
         }
         _headers.put("user-agent", BaseController.userAgent);
         _headers.put("accept", "application/json");
-        _headers.put("content-type", "application/json");
 
 
         //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().postBody(_queryUrl, _headers, APIHelper.serialize(request),
+        HttpRequest _request = getClientInstance().postBody(_queryUrl, _headers, APIHelper.serialize(body),
                 Configuration.basicAuthUserName, Configuration.basicAuthPassword);
 
         // Invoke the callback before request if its not null
@@ -4803,9 +5060,9 @@ public class SubscriptionsController extends BaseController {
 
     /**
      * Processes the response for createIncrement
-     * @return An object of type GetIncrementResponse
+     * @return An object of type SubscriptionsIncrementsResponse
      */
-    private GetIncrementResponse _handleCreateIncrementResponse(HttpContext _context)
+    private SubscriptionsIncrementsResponse _handleCreateIncrementResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -4814,19 +5071,338 @@ public class SubscriptionsController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
         //extract result from the http response
         String _responseBody = ((HttpStringResponse)_response).getBody();
-        GetIncrementResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<GetIncrementResponse>(){});
+        SubscriptionsIncrementsResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<SubscriptionsIncrementsResponse>(){});
 
         return _result;
     }
 
     /**
-     * TODO: type endpoint description here
+     * GetDiscountById
+     * @param    subscriptionId    Required parameter: The subscription id
+     * @param    discountId    Required parameter: Example: 
+     * @return    Returns the SubscriptionsDiscountsResponse response from the API call 
+     */
+    public SubscriptionsDiscountsResponse getDiscountById(
+                final String subscriptionId,
+                final String discountId
+    ) throws Throwable {
+
+        HttpRequest _request = _buildGetDiscountByIdRequest(subscriptionId, discountId);
+        HttpResponse _response = getClientInstance().executeAsString(_request);
+        HttpContext _context = new HttpContext(_request, _response);
+
+        return _handleGetDiscountByIdResponse(_context);
+    }
+
+    /**
+     * GetDiscountById
+     * @param    subscriptionId    Required parameter: The subscription id
+     * @param    discountId    Required parameter: Example: 
+     */
+    public void getDiscountByIdAsync(
+                final String subscriptionId,
+                final String discountId,
+                final APICallBack<SubscriptionsDiscountsResponse> callBack
+    ) {
+        Runnable _responseTask = new Runnable() {
+            public void run() {
+
+                HttpRequest _request;
+                try {
+                    _request = _buildGetDiscountByIdRequest(subscriptionId, discountId);
+                } catch (Exception e) {
+                    callBack.onFailure(null, e);
+                    return;
+                }
+
+                // Invoke request and get response
+                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
+                    public void onSuccess(HttpContext _context, HttpResponse _response) {
+                        try {
+                            SubscriptionsDiscountsResponse returnValue = _handleGetDiscountByIdResponse(_context);
+                            callBack.onSuccess(_context, returnValue);
+                        } catch (Exception e) {
+                            callBack.onFailure(_context, e);
+                        }
+                    }
+
+                    public void onFailure(HttpContext _context, Throwable _exception) {
+                        // Let the caller know of the failure
+                        callBack.onFailure(_context, _exception);
+                    }
+                });
+            }
+        };
+
+        // Execute async using thread pool
+        APIHelper.getScheduler().execute(_responseTask);
+    }
+
+    /**
+     * Builds the HttpRequest object for getDiscountById
+     */
+    private HttpRequest _buildGetDiscountByIdRequest(
+                final String subscriptionId,
+                final String discountId) throws IOException, APIException {
+        //the base uri for api requests
+        String _baseUri = Configuration.baseUri;
+
+        //prepare query string for API call
+        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/subscriptions/{subscription_id}/discounts/{discountId}");
+
+        //process template parameters
+        Map<String, Object> _templateParameters = new HashMap<String, Object>();
+        _templateParameters.put("subscription_id", subscriptionId);
+        _templateParameters.put("discountId", discountId);
+        APIHelper.appendUrlWithTemplateParameters(_queryBuilder, _templateParameters);
+        //validate and preprocess url
+        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
+
+        //load all headers for the outgoing API request
+        Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("user-agent", BaseController.userAgent);
+        _headers.put("accept", "application/json");
+
+
+        //prepare and invoke the API call request to fetch the response
+        HttpRequest _request = getClientInstance().get(_queryUrl, _headers, null,
+                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
+
+        // Invoke the callback before request if its not null
+        if (getHttpCallBack() != null) {
+            getHttpCallBack().OnBeforeRequest(_request);
+        }
+
+        return _request;
+    }
+
+    /**
+     * Processes the response for getDiscountById
+     * @return An object of type SubscriptionsDiscountsResponse
+     */
+    private SubscriptionsDiscountsResponse _handleGetDiscountByIdResponse(HttpContext _context)
+            throws APIException, IOException {
+        HttpResponse _response = _context.getResponse();
+
+        //invoke the callback after response if its not null
+        if (getHttpCallBack() != null) {
+            getHttpCallBack().OnAfterResponse(_context);
+        }
+
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
+        //handle errors defined at the API level
+        validateResponse(_response, _context);
+
+        //extract result from the http response
+        String _responseBody = ((HttpStringResponse)_response).getBody();
+        SubscriptionsDiscountsResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<SubscriptionsDiscountsResponse>(){});
+
+        return _result;
+    }
+
+    /**
+     * Atualização do valor mínimo da assinatura
+     * @param    subscriptionId    Required parameter: Subscription Id
+     * @param    body    Required parameter: Request da requisição com o valor mínimo que será configurado
+     * @param    idempotencyKey    Optional parameter: Example: 
+     * @return    Returns the GetSubscriptionResponse response from the API call 
+     */
+    public GetSubscriptionResponse updateSubscriptionMiniumPrice(
+                final String subscriptionId,
+                final SubscriptionsMinimumPriceRequest body,
+                final String idempotencyKey
+    ) throws Throwable {
+
+        HttpRequest _request = _buildUpdateSubscriptionMiniumPriceRequest(subscriptionId, body, idempotencyKey);
+        HttpResponse _response = getClientInstance().executeAsString(_request);
+        HttpContext _context = new HttpContext(_request, _response);
+
+        return _handleUpdateSubscriptionMiniumPriceResponse(_context);
+    }
+
+    /**
+     * Atualização do valor mínimo da assinatura
+     * @param    subscriptionId    Required parameter: Subscription Id
+     * @param    body    Required parameter: Request da requisição com o valor mínimo que será configurado
+     * @param    idempotencyKey    Optional parameter: Example: 
+     */
+    public void updateSubscriptionMiniumPriceAsync(
+                final String subscriptionId,
+                final SubscriptionsMinimumPriceRequest body,
+                final String idempotencyKey,
+                final APICallBack<GetSubscriptionResponse> callBack
+    ) {
+        Runnable _responseTask = new Runnable() {
+            public void run() {
+
+                HttpRequest _request;
+                try {
+                    _request = _buildUpdateSubscriptionMiniumPriceRequest(subscriptionId, body, idempotencyKey);
+                } catch (Exception e) {
+                    callBack.onFailure(null, e);
+                    return;
+                }
+
+                // Invoke request and get response
+                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
+                    public void onSuccess(HttpContext _context, HttpResponse _response) {
+                        try {
+                            GetSubscriptionResponse returnValue = _handleUpdateSubscriptionMiniumPriceResponse(_context);
+                            callBack.onSuccess(_context, returnValue);
+                        } catch (Exception e) {
+                            callBack.onFailure(_context, e);
+                        }
+                    }
+
+                    public void onFailure(HttpContext _context, Throwable _exception) {
+                        // Let the caller know of the failure
+                        callBack.onFailure(_context, _exception);
+                    }
+                });
+            }
+        };
+
+        // Execute async using thread pool
+        APIHelper.getScheduler().execute(_responseTask);
+    }
+
+    /**
+     * Builds the HttpRequest object for updateSubscriptionMiniumPrice
+     */
+    private HttpRequest _buildUpdateSubscriptionMiniumPriceRequest(
+                final String subscriptionId,
+                final SubscriptionsMinimumPriceRequest body,
+                final String idempotencyKey) throws IOException, APIException {
+        //the base uri for api requests
+        String _baseUri = Configuration.baseUri;
+
+        //prepare query string for API call
+        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/subscriptions/{subscription_id}/minimum_price");
+
+        //process template parameters
+        Map<String, Object> _templateParameters = new HashMap<String, Object>();
+        _templateParameters.put("subscription_id", subscriptionId);
+        APIHelper.appendUrlWithTemplateParameters(_queryBuilder, _templateParameters);
+        //validate and preprocess url
+        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
+
+        //load all headers for the outgoing API request
+        Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("Content-Type", "application/json");
+        if (idempotencyKey != null) {
+            _headers.put("idempotency-key", idempotencyKey);
+        }
+        _headers.put("user-agent", BaseController.userAgent);
+        _headers.put("accept", "application/json");
+
+
+        //prepare and invoke the API call request to fetch the response
+        HttpRequest _request = getClientInstance().patchBody(_queryUrl, _headers, APIHelper.serialize(body),
+                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
+
+        // Invoke the callback before request if its not null
+        if (getHttpCallBack() != null) {
+            getHttpCallBack().OnBeforeRequest(_request);
+        }
+
+        return _request;
+    }
+
+    /**
+     * Processes the response for updateSubscriptionMiniumPrice
+     * @return An object of type GetSubscriptionResponse
+     */
+    private GetSubscriptionResponse _handleUpdateSubscriptionMiniumPriceResponse(HttpContext _context)
+            throws APIException, IOException {
+        HttpResponse _response = _context.getResponse();
+
+        //invoke the callback after response if its not null
+        if (getHttpCallBack() != null) {
+            getHttpCallBack().OnAfterResponse(_context);
+        }
+
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
+        //handle errors defined at the API level
+        validateResponse(_response, _context);
+
+        //extract result from the http response
+        String _responseBody = ((HttpStringResponse)_response).getBody();
+        GetSubscriptionResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<GetSubscriptionResponse>(){});
+
+        return _result;
+    }
+
+    /**
+     * GetUsageReport
      * @param    subscriptionId    Required parameter: The subscription Id
      * @param    periodId    Required parameter: The period Id
      * @return    Returns the GetUsageReportResponse response from the API call 
@@ -4844,7 +5420,7 @@ public class SubscriptionsController extends BaseController {
     }
 
     /**
-     * TODO: type endpoint description here
+     * GetUsageReport
      * @param    subscriptionId    Required parameter: The subscription Id
      * @param    periodId    Required parameter: The period Id
      */
@@ -4938,6 +5514,27 @@ public class SubscriptionsController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 
@@ -4950,17 +5547,17 @@ public class SubscriptionsController extends BaseController {
     }
 
     /**
-     * TODO: type endpoint description here
+     * UpdateSplitSubscription
      * @param    id    Required parameter: Subscription's id
-     * @param    request    Required parameter: Example: 
+     * @param    body    Required parameter: Example: 
      * @return    Returns the GetSubscriptionResponse response from the API call 
      */
     public GetSubscriptionResponse updateSplitSubscription(
                 final String id,
-                final UpdateSubscriptionSplitRequest request
+                final UpdateSubscriptionSplitRequest body
     ) throws Throwable {
 
-        HttpRequest _request = _buildUpdateSplitSubscriptionRequest(id, request);
+        HttpRequest _request = _buildUpdateSplitSubscriptionRequest(id, body);
         HttpResponse _response = getClientInstance().executeAsString(_request);
         HttpContext _context = new HttpContext(_request, _response);
 
@@ -4968,13 +5565,13 @@ public class SubscriptionsController extends BaseController {
     }
 
     /**
-     * TODO: type endpoint description here
+     * UpdateSplitSubscription
      * @param    id    Required parameter: Subscription's id
-     * @param    request    Required parameter: Example: 
+     * @param    body    Required parameter: Example: 
      */
     public void updateSplitSubscriptionAsync(
                 final String id,
-                final UpdateSubscriptionSplitRequest request,
+                final UpdateSubscriptionSplitRequest body,
                 final APICallBack<GetSubscriptionResponse> callBack
     ) {
         Runnable _responseTask = new Runnable() {
@@ -4982,7 +5579,7 @@ public class SubscriptionsController extends BaseController {
 
                 HttpRequest _request;
                 try {
-                    _request = _buildUpdateSplitSubscriptionRequest(id, request);
+                    _request = _buildUpdateSplitSubscriptionRequest(id, body);
                 } catch (Exception e) {
                     callBack.onFailure(null, e);
                     return;
@@ -5016,7 +5613,7 @@ public class SubscriptionsController extends BaseController {
      */
     private HttpRequest _buildUpdateSplitSubscriptionRequest(
                 final String id,
-                final UpdateSubscriptionSplitRequest request) throws IOException, APIException {
+                final UpdateSubscriptionSplitRequest body) throws IOException, APIException {
         //the base uri for api requests
         String _baseUri = Configuration.baseUri;
 
@@ -5032,13 +5629,13 @@ public class SubscriptionsController extends BaseController {
 
         //load all headers for the outgoing API request
         Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("Content-Type", "application/json");
         _headers.put("user-agent", BaseController.userAgent);
         _headers.put("accept", "application/json");
-        _headers.put("content-type", "application/json");
 
 
         //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().patchBody(_queryUrl, _headers, APIHelper.serialize(request),
+        HttpRequest _request = getClientInstance().patchBody(_queryUrl, _headers, APIHelper.serialize(body),
                 Configuration.basicAuthUserName, Configuration.basicAuthPassword);
 
         // Invoke the callback before request if its not null
@@ -5062,6 +5659,27 @@ public class SubscriptionsController extends BaseController {
             getHttpCallBack().OnAfterResponse(_context);
         }
 
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
         //handle errors defined at the API level
         validateResponse(_response, _context);
 

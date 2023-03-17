@@ -26,10 +26,7 @@ public class ListSubscriptionItemsResponseBuilder {
         return this;
     }
 
-    /**
-     * Paging object
-     */
-    public ListSubscriptionItemsResponseBuilder paging(PagingResponse paging) {
+    public ListSubscriptionItemsResponseBuilder paging(Paging paging) {
         listSubscriptionItemsResponse.setPaging(paging);
         return this;
     }

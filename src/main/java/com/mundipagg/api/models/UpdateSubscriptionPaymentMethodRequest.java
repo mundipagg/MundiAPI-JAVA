@@ -14,10 +14,10 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.ALWAYS)
 public class UpdateSubscriptionPaymentMethodRequest 
         implements java.io.Serializable {
-    private static final long serialVersionUID = -6735308679554246732L;
+    private static final long serialVersionUID = -6735277525801926541L;
     private String paymentMethod;
     private String cardId;
-    private CreateCardRequest card;
+    private Card1 card;
     private String cardToken;
     /** GETTER
      * The new payment method
@@ -52,18 +52,18 @@ public class UpdateSubscriptionPaymentMethodRequest
     }
  
     /** GETTER
-     * Card data
+     * TODO: Write general description for this method
      */
     @JsonGetter("card")
-    public CreateCardRequest getCard ( ) { 
+    public Card1 getCard ( ) { 
         return this.card;
     }
     
     /** SETTER
-     * Card data
+     * TODO: Write general description for this method
      */
     @JsonSetter("card")
-    public void setCard (CreateCardRequest value) { 
+    public void setCard (Card1 value) { 
         this.card = value;
     }
  
