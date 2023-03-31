@@ -66,6 +66,14 @@ public class MundiAPIClient {
     }
 
     /**
+     * Singleton access to Transfers controller
+     * @return	Returns the TransfersController instance 
+     */
+    public TransfersController getTransfers() {
+        return TransfersController.getInstance();
+    }
+
+    /**
      * Singleton access to Tokens controller
      * @return	Returns the TokensController instance 
      */
@@ -79,14 +87,6 @@ public class MundiAPIClient {
      */
     public TransactionsController getTransactions() {
         return TransactionsController.getInstance();
-    }
-
-    /**
-     * Singleton access to Transfers controller
-     * @return	Returns the TransfersController instance 
-     */
-    public TransfersController getTransfers() {
-        return TransfersController.getInstance();
     }
 
     /**
