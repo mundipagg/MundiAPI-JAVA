@@ -44,6 +44,14 @@ public class GetPixTransactionResponseBuilder
         getPixTransactionResponse.setPayer(payer);
         return this;
     }
+
+    /**
+     * Provider transaction id
+     */
+    public GetPixTransactionResponseBuilder providerTransactionId(String providerTransactionId) {
+        getPixTransactionResponse.setProviderTransactionId(providerTransactionId);
+        return this;
+    }
     /**
      * Build the instance with the given values
      */
