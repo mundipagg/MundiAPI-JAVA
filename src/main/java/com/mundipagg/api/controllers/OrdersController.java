@@ -44,39 +44,43 @@ public class OrdersController extends BaseController {
     }
 
     /**
-     * Creates a new Order
-     * @param    body    Required parameter: Request for creating an order
+     * UpdateOrderStatus
+     * @param    id    Required parameter: Order Id
+     * @param    body    Required parameter: Update Order Model
      * @param    idempotencyKey    Optional parameter: Example: 
-     * @return    Returns the OrdersResponse1 response from the API call 
+     * @return    Returns the OrdersClosedResponse response from the API call 
      */
-    public OrdersResponse1 createOrder(
-                final OrdersRequest body,
+    public OrdersClosedResponse updateOrderStatus(
+                final String id,
+                final UpdateOrderStatusRequest body,
                 final String idempotencyKey
     ) throws Throwable {
 
-        HttpRequest _request = _buildCreateOrderRequest(body, idempotencyKey);
+        HttpRequest _request = _buildUpdateOrderStatusRequest(id, body, idempotencyKey);
         HttpResponse _response = getClientInstance().executeAsString(_request);
         HttpContext _context = new HttpContext(_request, _response);
 
-        return _handleCreateOrderResponse(_context);
+        return _handleUpdateOrderStatusResponse(_context);
     }
 
     /**
-     * Creates a new Order
-     * @param    body    Required parameter: Request for creating an order
+     * UpdateOrderStatus
+     * @param    id    Required parameter: Order Id
+     * @param    body    Required parameter: Update Order Model
      * @param    idempotencyKey    Optional parameter: Example: 
      */
-    public void createOrderAsync(
-                final OrdersRequest body,
+    public void updateOrderStatusAsync(
+                final String id,
+                final UpdateOrderStatusRequest body,
                 final String idempotencyKey,
-                final APICallBack<OrdersResponse1> callBack
+                final APICallBack<OrdersClosedResponse> callBack
     ) {
         Runnable _responseTask = new Runnable() {
             public void run() {
 
                 HttpRequest _request;
                 try {
-                    _request = _buildCreateOrderRequest(body, idempotencyKey);
+                    _request = _buildUpdateOrderStatusRequest(id, body, idempotencyKey);
                 } catch (Exception e) {
                     callBack.onFailure(null, e);
                     return;
@@ -86,7 +90,7 @@ public class OrdersController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            OrdersResponse1 returnValue = _handleCreateOrderResponse(_context);
+                            OrdersClosedResponse returnValue = _handleUpdateOrderStatusResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -106,16 +110,22 @@ public class OrdersController extends BaseController {
     }
 
     /**
-     * Builds the HttpRequest object for createOrder
+     * Builds the HttpRequest object for updateOrderStatus
      */
-    private HttpRequest _buildCreateOrderRequest(
-                final OrdersRequest body,
+    private HttpRequest _buildUpdateOrderStatusRequest(
+                final String id,
+                final UpdateOrderStatusRequest body,
                 final String idempotencyKey) throws IOException, APIException {
         //the base uri for api requests
         String _baseUri = Configuration.baseUri;
 
         //prepare query string for API call
-        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/orders");
+        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/orders/{id}/closed");
+
+        //process template parameters
+        Map<String, Object> _templateParameters = new HashMap<String, Object>();
+        _templateParameters.put("id", id);
+        APIHelper.appendUrlWithTemplateParameters(_queryBuilder, _templateParameters);
         //validate and preprocess url
         String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
 
@@ -130,7 +140,7 @@ public class OrdersController extends BaseController {
 
 
         //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().postBody(_queryUrl, _headers, APIHelper.serialize(body),
+        HttpRequest _request = getClientInstance().patchBody(_queryUrl, _headers, APIHelper.serialize(body),
                 Configuration.basicAuthUserName, Configuration.basicAuthPassword);
 
         // Invoke the callback before request if its not null
@@ -142,10 +152,10 @@ public class OrdersController extends BaseController {
     }
 
     /**
-     * Processes the response for createOrder
-     * @return An object of type OrdersResponse1
+     * Processes the response for updateOrderStatus
+     * @return An object of type OrdersClosedResponse
      */
-    private OrdersResponse1 _handleCreateOrderResponse(HttpContext _context)
+    private OrdersClosedResponse _handleUpdateOrderStatusResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -180,42 +190,46 @@ public class OrdersController extends BaseController {
 
         //extract result from the http response
         String _responseBody = ((HttpStringResponse)_response).getBody();
-        OrdersResponse1 _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<OrdersResponse1>(){});
+        OrdersClosedResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<OrdersClosedResponse>(){});
 
         return _result;
     }
 
     /**
-     * Gets an order
-     * @param    orderId    Required parameter: Order id
-     * @return    Returns the OrdersResponse1 response from the API call 
+     * DeleteAllOrderItems
+     * @param    orderId    Required parameter: Order Id
+     * @param    idempotencyKey    Optional parameter: Example: 
+     * @return    Returns the OrdersItemsResponse response from the API call 
      */
-    public OrdersResponse1 getOrder(
-                final String orderId
+    public OrdersItemsResponse deleteAllOrderItems(
+                final String orderId,
+                final String idempotencyKey
     ) throws Throwable {
 
-        HttpRequest _request = _buildGetOrderRequest(orderId);
+        HttpRequest _request = _buildDeleteAllOrderItemsRequest(orderId, idempotencyKey);
         HttpResponse _response = getClientInstance().executeAsString(_request);
         HttpContext _context = new HttpContext(_request, _response);
 
-        return _handleGetOrderResponse(_context);
+        return _handleDeleteAllOrderItemsResponse(_context);
     }
 
     /**
-     * Gets an order
-     * @param    orderId    Required parameter: Order id
+     * DeleteAllOrderItems
+     * @param    orderId    Required parameter: Order Id
+     * @param    idempotencyKey    Optional parameter: Example: 
      */
-    public void getOrderAsync(
+    public void deleteAllOrderItemsAsync(
                 final String orderId,
-                final APICallBack<OrdersResponse1> callBack
+                final String idempotencyKey,
+                final APICallBack<OrdersItemsResponse> callBack
     ) {
         Runnable _responseTask = new Runnable() {
             public void run() {
 
                 HttpRequest _request;
                 try {
-                    _request = _buildGetOrderRequest(orderId);
+                    _request = _buildDeleteAllOrderItemsRequest(orderId, idempotencyKey);
                 } catch (Exception e) {
                     callBack.onFailure(null, e);
                     return;
@@ -225,7 +239,7 @@ public class OrdersController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            OrdersResponse1 returnValue = _handleGetOrderResponse(_context);
+                            OrdersItemsResponse returnValue = _handleDeleteAllOrderItemsResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -245,31 +259,35 @@ public class OrdersController extends BaseController {
     }
 
     /**
-     * Builds the HttpRequest object for getOrder
+     * Builds the HttpRequest object for deleteAllOrderItems
      */
-    private HttpRequest _buildGetOrderRequest(
-                final String orderId) throws IOException, APIException {
+    private HttpRequest _buildDeleteAllOrderItemsRequest(
+                final String orderId,
+                final String idempotencyKey) throws IOException, APIException {
         //the base uri for api requests
         String _baseUri = Configuration.baseUri;
 
         //prepare query string for API call
-        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/orders/{order_id}");
+        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/orders/{orderId}/items");
 
         //process template parameters
         Map<String, Object> _templateParameters = new HashMap<String, Object>();
-        _templateParameters.put("order_id", orderId);
+        _templateParameters.put("orderId", orderId);
         APIHelper.appendUrlWithTemplateParameters(_queryBuilder, _templateParameters);
         //validate and preprocess url
         String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
 
         //load all headers for the outgoing API request
         Map<String, String> _headers = new HashMap<String, String>();
+        if (idempotencyKey != null) {
+            _headers.put("idempotency-key", idempotencyKey);
+        }
         _headers.put("user-agent", BaseController.userAgent);
         _headers.put("accept", "application/json");
 
 
         //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().get(_queryUrl, _headers, null,
+        HttpRequest _request = getClientInstance().delete(_queryUrl, _headers, null,
                 Configuration.basicAuthUserName, Configuration.basicAuthPassword);
 
         // Invoke the callback before request if its not null
@@ -281,10 +299,10 @@ public class OrdersController extends BaseController {
     }
 
     /**
-     * Processes the response for getOrder
-     * @return An object of type OrdersResponse1
+     * Processes the response for deleteAllOrderItems
+     * @return An object of type OrdersItemsResponse
      */
-    private OrdersResponse1 _handleGetOrderResponse(HttpContext _context)
+    private OrdersItemsResponse _handleDeleteAllOrderItemsResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -319,8 +337,8 @@ public class OrdersController extends BaseController {
 
         //extract result from the http response
         String _responseBody = ((HttpStringResponse)_response).getBody();
-        OrdersResponse1 _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<OrdersResponse1>(){});
+        OrdersItemsResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<OrdersItemsResponse>(){});
 
         return _result;
     }
@@ -479,312 +497,6 @@ public class OrdersController extends BaseController {
     }
 
     /**
-     * UpdateOrderItem
-     * @param    orderId    Required parameter: Order Id
-     * @param    itemId    Required parameter: Item Id
-     * @param    body    Required parameter: Item Model
-     * @param    idempotencyKey    Optional parameter: Example: 
-     * @return    Returns the OrdersItemsResponse1 response from the API call 
-     */
-    public OrdersItemsResponse1 updateOrderItem(
-                final String orderId,
-                final String itemId,
-                final OrdersItemsRequest1 body,
-                final String idempotencyKey
-    ) throws Throwable {
-
-        HttpRequest _request = _buildUpdateOrderItemRequest(orderId, itemId, body, idempotencyKey);
-        HttpResponse _response = getClientInstance().executeAsString(_request);
-        HttpContext _context = new HttpContext(_request, _response);
-
-        return _handleUpdateOrderItemResponse(_context);
-    }
-
-    /**
-     * UpdateOrderItem
-     * @param    orderId    Required parameter: Order Id
-     * @param    itemId    Required parameter: Item Id
-     * @param    body    Required parameter: Item Model
-     * @param    idempotencyKey    Optional parameter: Example: 
-     */
-    public void updateOrderItemAsync(
-                final String orderId,
-                final String itemId,
-                final OrdersItemsRequest1 body,
-                final String idempotencyKey,
-                final APICallBack<OrdersItemsResponse1> callBack
-    ) {
-        Runnable _responseTask = new Runnable() {
-            public void run() {
-
-                HttpRequest _request;
-                try {
-                    _request = _buildUpdateOrderItemRequest(orderId, itemId, body, idempotencyKey);
-                } catch (Exception e) {
-                    callBack.onFailure(null, e);
-                    return;
-                }
-
-                // Invoke request and get response
-                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
-                    public void onSuccess(HttpContext _context, HttpResponse _response) {
-                        try {
-                            OrdersItemsResponse1 returnValue = _handleUpdateOrderItemResponse(_context);
-                            callBack.onSuccess(_context, returnValue);
-                        } catch (Exception e) {
-                            callBack.onFailure(_context, e);
-                        }
-                    }
-
-                    public void onFailure(HttpContext _context, Throwable _exception) {
-                        // Let the caller know of the failure
-                        callBack.onFailure(_context, _exception);
-                    }
-                });
-            }
-        };
-
-        // Execute async using thread pool
-        APIHelper.getScheduler().execute(_responseTask);
-    }
-
-    /**
-     * Builds the HttpRequest object for updateOrderItem
-     */
-    private HttpRequest _buildUpdateOrderItemRequest(
-                final String orderId,
-                final String itemId,
-                final OrdersItemsRequest1 body,
-                final String idempotencyKey) throws IOException, APIException {
-        //the base uri for api requests
-        String _baseUri = Configuration.baseUri;
-
-        //prepare query string for API call
-        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/orders/{orderId}/items/{itemId}");
-
-        //process template parameters
-        Map<String, Object> _templateParameters = new HashMap<String, Object>();
-        _templateParameters.put("orderId", orderId);
-        _templateParameters.put("itemId", itemId);
-        APIHelper.appendUrlWithTemplateParameters(_queryBuilder, _templateParameters);
-        //validate and preprocess url
-        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
-
-        //load all headers for the outgoing API request
-        Map<String, String> _headers = new HashMap<String, String>();
-        _headers.put("Content-Type", "application/json");
-        if (idempotencyKey != null) {
-            _headers.put("idempotency-key", idempotencyKey);
-        }
-        _headers.put("user-agent", BaseController.userAgent);
-        _headers.put("accept", "application/json");
-
-
-        //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().putBody(_queryUrl, _headers, APIHelper.serialize(body),
-                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
-
-        // Invoke the callback before request if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnBeforeRequest(_request);
-        }
-
-        return _request;
-    }
-
-    /**
-     * Processes the response for updateOrderItem
-     * @return An object of type OrdersItemsResponse1
-     */
-    private OrdersItemsResponse1 _handleUpdateOrderItemResponse(HttpContext _context)
-            throws APIException, IOException {
-        HttpResponse _response = _context.getResponse();
-
-        //invoke the callback after response if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnAfterResponse(_context);
-        }
-
-        //Error handling using HTTP status codes
-        int _responseCode = _response.getStatusCode();
-
-        if (_responseCode == 400) {
-            throw new MErrorException("Invalid request", _context);
-        }
-        if (_responseCode == 401) {
-            throw new MErrorException("Invalid API key", _context);
-        }
-        if (_responseCode == 404) {
-            throw new MErrorException("An informed resource was not found", _context);
-        }
-        if (_responseCode == 412) {
-            throw new MErrorException("Business validation error", _context);
-        }
-        if (_responseCode == 422) {
-            throw new MErrorException("Contract validation error", _context);
-        }
-        if (_responseCode == 500) {
-            throw new MErrorException("Internal server error", _context);
-        }
-        //handle errors defined at the API level
-        validateResponse(_response, _context);
-
-        //extract result from the http response
-        String _responseBody = ((HttpStringResponse)_response).getBody();
-        OrdersItemsResponse1 _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<OrdersItemsResponse1>(){});
-
-        return _result;
-    }
-
-    /**
-     * DeleteAllOrderItems
-     * @param    orderId    Required parameter: Order Id
-     * @param    idempotencyKey    Optional parameter: Example: 
-     * @return    Returns the OrdersItemsResponse response from the API call 
-     */
-    public OrdersItemsResponse deleteAllOrderItems(
-                final String orderId,
-                final String idempotencyKey
-    ) throws Throwable {
-
-        HttpRequest _request = _buildDeleteAllOrderItemsRequest(orderId, idempotencyKey);
-        HttpResponse _response = getClientInstance().executeAsString(_request);
-        HttpContext _context = new HttpContext(_request, _response);
-
-        return _handleDeleteAllOrderItemsResponse(_context);
-    }
-
-    /**
-     * DeleteAllOrderItems
-     * @param    orderId    Required parameter: Order Id
-     * @param    idempotencyKey    Optional parameter: Example: 
-     */
-    public void deleteAllOrderItemsAsync(
-                final String orderId,
-                final String idempotencyKey,
-                final APICallBack<OrdersItemsResponse> callBack
-    ) {
-        Runnable _responseTask = new Runnable() {
-            public void run() {
-
-                HttpRequest _request;
-                try {
-                    _request = _buildDeleteAllOrderItemsRequest(orderId, idempotencyKey);
-                } catch (Exception e) {
-                    callBack.onFailure(null, e);
-                    return;
-                }
-
-                // Invoke request and get response
-                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
-                    public void onSuccess(HttpContext _context, HttpResponse _response) {
-                        try {
-                            OrdersItemsResponse returnValue = _handleDeleteAllOrderItemsResponse(_context);
-                            callBack.onSuccess(_context, returnValue);
-                        } catch (Exception e) {
-                            callBack.onFailure(_context, e);
-                        }
-                    }
-
-                    public void onFailure(HttpContext _context, Throwable _exception) {
-                        // Let the caller know of the failure
-                        callBack.onFailure(_context, _exception);
-                    }
-                });
-            }
-        };
-
-        // Execute async using thread pool
-        APIHelper.getScheduler().execute(_responseTask);
-    }
-
-    /**
-     * Builds the HttpRequest object for deleteAllOrderItems
-     */
-    private HttpRequest _buildDeleteAllOrderItemsRequest(
-                final String orderId,
-                final String idempotencyKey) throws IOException, APIException {
-        //the base uri for api requests
-        String _baseUri = Configuration.baseUri;
-
-        //prepare query string for API call
-        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/orders/{orderId}/items");
-
-        //process template parameters
-        Map<String, Object> _templateParameters = new HashMap<String, Object>();
-        _templateParameters.put("orderId", orderId);
-        APIHelper.appendUrlWithTemplateParameters(_queryBuilder, _templateParameters);
-        //validate and preprocess url
-        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
-
-        //load all headers for the outgoing API request
-        Map<String, String> _headers = new HashMap<String, String>();
-        if (idempotencyKey != null) {
-            _headers.put("idempotency-key", idempotencyKey);
-        }
-        _headers.put("user-agent", BaseController.userAgent);
-        _headers.put("accept", "application/json");
-
-
-        //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().delete(_queryUrl, _headers, null,
-                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
-
-        // Invoke the callback before request if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnBeforeRequest(_request);
-        }
-
-        return _request;
-    }
-
-    /**
-     * Processes the response for deleteAllOrderItems
-     * @return An object of type OrdersItemsResponse
-     */
-    private OrdersItemsResponse _handleDeleteAllOrderItemsResponse(HttpContext _context)
-            throws APIException, IOException {
-        HttpResponse _response = _context.getResponse();
-
-        //invoke the callback after response if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnAfterResponse(_context);
-        }
-
-        //Error handling using HTTP status codes
-        int _responseCode = _response.getStatusCode();
-
-        if (_responseCode == 400) {
-            throw new MErrorException("Invalid request", _context);
-        }
-        if (_responseCode == 401) {
-            throw new MErrorException("Invalid API key", _context);
-        }
-        if (_responseCode == 404) {
-            throw new MErrorException("An informed resource was not found", _context);
-        }
-        if (_responseCode == 412) {
-            throw new MErrorException("Business validation error", _context);
-        }
-        if (_responseCode == 422) {
-            throw new MErrorException("Contract validation error", _context);
-        }
-        if (_responseCode == 500) {
-            throw new MErrorException("Internal server error", _context);
-        }
-        //handle errors defined at the API level
-        validateResponse(_response, _context);
-
-        //extract result from the http response
-        String _responseBody = ((HttpStringResponse)_response).getBody();
-        OrdersItemsResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<OrdersItemsResponse>(){});
-
-        return _result;
-    }
-
-    /**
      * Updates the metadata from an order
      * @param    orderId    Required parameter: The order id
      * @param    body    Required parameter: Request for updating the order metadata
@@ -933,159 +645,6 @@ public class OrdersController extends BaseController {
         String _responseBody = ((HttpStringResponse)_response).getBody();
         OrdersMetadataResponse _result = APIHelper.deserialize(_responseBody,
                                                         new TypeReference<OrdersMetadataResponse>(){});
-
-        return _result;
-    }
-
-    /**
-     * UpdateOrderStatus
-     * @param    id    Required parameter: Order Id
-     * @param    body    Required parameter: Update Order Model
-     * @param    idempotencyKey    Optional parameter: Example: 
-     * @return    Returns the OrdersClosedResponse response from the API call 
-     */
-    public OrdersClosedResponse updateOrderStatus(
-                final String id,
-                final UpdateOrderStatusRequest body,
-                final String idempotencyKey
-    ) throws Throwable {
-
-        HttpRequest _request = _buildUpdateOrderStatusRequest(id, body, idempotencyKey);
-        HttpResponse _response = getClientInstance().executeAsString(_request);
-        HttpContext _context = new HttpContext(_request, _response);
-
-        return _handleUpdateOrderStatusResponse(_context);
-    }
-
-    /**
-     * UpdateOrderStatus
-     * @param    id    Required parameter: Order Id
-     * @param    body    Required parameter: Update Order Model
-     * @param    idempotencyKey    Optional parameter: Example: 
-     */
-    public void updateOrderStatusAsync(
-                final String id,
-                final UpdateOrderStatusRequest body,
-                final String idempotencyKey,
-                final APICallBack<OrdersClosedResponse> callBack
-    ) {
-        Runnable _responseTask = new Runnable() {
-            public void run() {
-
-                HttpRequest _request;
-                try {
-                    _request = _buildUpdateOrderStatusRequest(id, body, idempotencyKey);
-                } catch (Exception e) {
-                    callBack.onFailure(null, e);
-                    return;
-                }
-
-                // Invoke request and get response
-                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
-                    public void onSuccess(HttpContext _context, HttpResponse _response) {
-                        try {
-                            OrdersClosedResponse returnValue = _handleUpdateOrderStatusResponse(_context);
-                            callBack.onSuccess(_context, returnValue);
-                        } catch (Exception e) {
-                            callBack.onFailure(_context, e);
-                        }
-                    }
-
-                    public void onFailure(HttpContext _context, Throwable _exception) {
-                        // Let the caller know of the failure
-                        callBack.onFailure(_context, _exception);
-                    }
-                });
-            }
-        };
-
-        // Execute async using thread pool
-        APIHelper.getScheduler().execute(_responseTask);
-    }
-
-    /**
-     * Builds the HttpRequest object for updateOrderStatus
-     */
-    private HttpRequest _buildUpdateOrderStatusRequest(
-                final String id,
-                final UpdateOrderStatusRequest body,
-                final String idempotencyKey) throws IOException, APIException {
-        //the base uri for api requests
-        String _baseUri = Configuration.baseUri;
-
-        //prepare query string for API call
-        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/orders/{id}/closed");
-
-        //process template parameters
-        Map<String, Object> _templateParameters = new HashMap<String, Object>();
-        _templateParameters.put("id", id);
-        APIHelper.appendUrlWithTemplateParameters(_queryBuilder, _templateParameters);
-        //validate and preprocess url
-        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
-
-        //load all headers for the outgoing API request
-        Map<String, String> _headers = new HashMap<String, String>();
-        _headers.put("Content-Type", "application/json");
-        if (idempotencyKey != null) {
-            _headers.put("idempotency-key", idempotencyKey);
-        }
-        _headers.put("user-agent", BaseController.userAgent);
-        _headers.put("accept", "application/json");
-
-
-        //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().patchBody(_queryUrl, _headers, APIHelper.serialize(body),
-                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
-
-        // Invoke the callback before request if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnBeforeRequest(_request);
-        }
-
-        return _request;
-    }
-
-    /**
-     * Processes the response for updateOrderStatus
-     * @return An object of type OrdersClosedResponse
-     */
-    private OrdersClosedResponse _handleUpdateOrderStatusResponse(HttpContext _context)
-            throws APIException, IOException {
-        HttpResponse _response = _context.getResponse();
-
-        //invoke the callback after response if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnAfterResponse(_context);
-        }
-
-        //Error handling using HTTP status codes
-        int _responseCode = _response.getStatusCode();
-
-        if (_responseCode == 400) {
-            throw new MErrorException("Invalid request", _context);
-        }
-        if (_responseCode == 401) {
-            throw new MErrorException("Invalid API key", _context);
-        }
-        if (_responseCode == 404) {
-            throw new MErrorException("An informed resource was not found", _context);
-        }
-        if (_responseCode == 412) {
-            throw new MErrorException("Business validation error", _context);
-        }
-        if (_responseCode == 422) {
-            throw new MErrorException("Contract validation error", _context);
-        }
-        if (_responseCode == 500) {
-            throw new MErrorException("Internal server error", _context);
-        }
-        //handle errors defined at the API level
-        validateResponse(_response, _context);
-
-        //extract result from the http response
-        String _responseBody = ((HttpStringResponse)_response).getBody();
-        OrdersClosedResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<OrdersClosedResponse>(){});
 
         return _result;
     }
@@ -1275,6 +834,149 @@ public class OrdersController extends BaseController {
         String _responseBody = ((HttpStringResponse)_response).getBody();
         OrdersResponse _result = APIHelper.deserialize(_responseBody,
                                                         new TypeReference<OrdersResponse>(){});
+
+        return _result;
+    }
+
+    /**
+     * Creates a new Order
+     * @param    body    Required parameter: Request for creating an order
+     * @param    idempotencyKey    Optional parameter: Example: 
+     * @return    Returns the OrdersResponse1 response from the API call 
+     */
+    public OrdersResponse1 createOrder(
+                final OrdersRequest body,
+                final String idempotencyKey
+    ) throws Throwable {
+
+        HttpRequest _request = _buildCreateOrderRequest(body, idempotencyKey);
+        HttpResponse _response = getClientInstance().executeAsString(_request);
+        HttpContext _context = new HttpContext(_request, _response);
+
+        return _handleCreateOrderResponse(_context);
+    }
+
+    /**
+     * Creates a new Order
+     * @param    body    Required parameter: Request for creating an order
+     * @param    idempotencyKey    Optional parameter: Example: 
+     */
+    public void createOrderAsync(
+                final OrdersRequest body,
+                final String idempotencyKey,
+                final APICallBack<OrdersResponse1> callBack
+    ) {
+        Runnable _responseTask = new Runnable() {
+            public void run() {
+
+                HttpRequest _request;
+                try {
+                    _request = _buildCreateOrderRequest(body, idempotencyKey);
+                } catch (Exception e) {
+                    callBack.onFailure(null, e);
+                    return;
+                }
+
+                // Invoke request and get response
+                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
+                    public void onSuccess(HttpContext _context, HttpResponse _response) {
+                        try {
+                            OrdersResponse1 returnValue = _handleCreateOrderResponse(_context);
+                            callBack.onSuccess(_context, returnValue);
+                        } catch (Exception e) {
+                            callBack.onFailure(_context, e);
+                        }
+                    }
+
+                    public void onFailure(HttpContext _context, Throwable _exception) {
+                        // Let the caller know of the failure
+                        callBack.onFailure(_context, _exception);
+                    }
+                });
+            }
+        };
+
+        // Execute async using thread pool
+        APIHelper.getScheduler().execute(_responseTask);
+    }
+
+    /**
+     * Builds the HttpRequest object for createOrder
+     */
+    private HttpRequest _buildCreateOrderRequest(
+                final OrdersRequest body,
+                final String idempotencyKey) throws IOException, APIException {
+        //the base uri for api requests
+        String _baseUri = Configuration.baseUri;
+
+        //prepare query string for API call
+        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/orders");
+        //validate and preprocess url
+        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
+
+        //load all headers for the outgoing API request
+        Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("Content-Type", "application/json");
+        if (idempotencyKey != null) {
+            _headers.put("idempotency-key", idempotencyKey);
+        }
+        _headers.put("user-agent", BaseController.userAgent);
+        _headers.put("accept", "application/json");
+
+
+        //prepare and invoke the API call request to fetch the response
+        HttpRequest _request = getClientInstance().postBody(_queryUrl, _headers, APIHelper.serialize(body),
+                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
+
+        // Invoke the callback before request if its not null
+        if (getHttpCallBack() != null) {
+            getHttpCallBack().OnBeforeRequest(_request);
+        }
+
+        return _request;
+    }
+
+    /**
+     * Processes the response for createOrder
+     * @return An object of type OrdersResponse1
+     */
+    private OrdersResponse1 _handleCreateOrderResponse(HttpContext _context)
+            throws APIException, IOException {
+        HttpResponse _response = _context.getResponse();
+
+        //invoke the callback after response if its not null
+        if (getHttpCallBack() != null) {
+            getHttpCallBack().OnAfterResponse(_context);
+        }
+
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
+        //handle errors defined at the API level
+        validateResponse(_response, _context);
+
+        //extract result from the http response
+        String _responseBody = ((HttpStringResponse)_response).getBody();
+        OrdersResponse1 _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<OrdersResponse1>(){});
 
         return _result;
     }
@@ -1573,6 +1275,304 @@ public class OrdersController extends BaseController {
         String _responseBody = ((HttpStringResponse)_response).getBody();
         OrdersItemsResponse1 _result = APIHelper.deserialize(_responseBody,
                                                         new TypeReference<OrdersItemsResponse1>(){});
+
+        return _result;
+    }
+
+    /**
+     * UpdateOrderItem
+     * @param    orderId    Required parameter: Order Id
+     * @param    itemId    Required parameter: Item Id
+     * @param    body    Required parameter: Item Model
+     * @param    idempotencyKey    Optional parameter: Example: 
+     * @return    Returns the OrdersItemsResponse1 response from the API call 
+     */
+    public OrdersItemsResponse1 updateOrderItem(
+                final String orderId,
+                final String itemId,
+                final OrdersItemsRequest1 body,
+                final String idempotencyKey
+    ) throws Throwable {
+
+        HttpRequest _request = _buildUpdateOrderItemRequest(orderId, itemId, body, idempotencyKey);
+        HttpResponse _response = getClientInstance().executeAsString(_request);
+        HttpContext _context = new HttpContext(_request, _response);
+
+        return _handleUpdateOrderItemResponse(_context);
+    }
+
+    /**
+     * UpdateOrderItem
+     * @param    orderId    Required parameter: Order Id
+     * @param    itemId    Required parameter: Item Id
+     * @param    body    Required parameter: Item Model
+     * @param    idempotencyKey    Optional parameter: Example: 
+     */
+    public void updateOrderItemAsync(
+                final String orderId,
+                final String itemId,
+                final OrdersItemsRequest1 body,
+                final String idempotencyKey,
+                final APICallBack<OrdersItemsResponse1> callBack
+    ) {
+        Runnable _responseTask = new Runnable() {
+            public void run() {
+
+                HttpRequest _request;
+                try {
+                    _request = _buildUpdateOrderItemRequest(orderId, itemId, body, idempotencyKey);
+                } catch (Exception e) {
+                    callBack.onFailure(null, e);
+                    return;
+                }
+
+                // Invoke request and get response
+                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
+                    public void onSuccess(HttpContext _context, HttpResponse _response) {
+                        try {
+                            OrdersItemsResponse1 returnValue = _handleUpdateOrderItemResponse(_context);
+                            callBack.onSuccess(_context, returnValue);
+                        } catch (Exception e) {
+                            callBack.onFailure(_context, e);
+                        }
+                    }
+
+                    public void onFailure(HttpContext _context, Throwable _exception) {
+                        // Let the caller know of the failure
+                        callBack.onFailure(_context, _exception);
+                    }
+                });
+            }
+        };
+
+        // Execute async using thread pool
+        APIHelper.getScheduler().execute(_responseTask);
+    }
+
+    /**
+     * Builds the HttpRequest object for updateOrderItem
+     */
+    private HttpRequest _buildUpdateOrderItemRequest(
+                final String orderId,
+                final String itemId,
+                final OrdersItemsRequest1 body,
+                final String idempotencyKey) throws IOException, APIException {
+        //the base uri for api requests
+        String _baseUri = Configuration.baseUri;
+
+        //prepare query string for API call
+        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/orders/{orderId}/items/{itemId}");
+
+        //process template parameters
+        Map<String, Object> _templateParameters = new HashMap<String, Object>();
+        _templateParameters.put("orderId", orderId);
+        _templateParameters.put("itemId", itemId);
+        APIHelper.appendUrlWithTemplateParameters(_queryBuilder, _templateParameters);
+        //validate and preprocess url
+        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
+
+        //load all headers for the outgoing API request
+        Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("Content-Type", "application/json");
+        if (idempotencyKey != null) {
+            _headers.put("idempotency-key", idempotencyKey);
+        }
+        _headers.put("user-agent", BaseController.userAgent);
+        _headers.put("accept", "application/json");
+
+
+        //prepare and invoke the API call request to fetch the response
+        HttpRequest _request = getClientInstance().putBody(_queryUrl, _headers, APIHelper.serialize(body),
+                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
+
+        // Invoke the callback before request if its not null
+        if (getHttpCallBack() != null) {
+            getHttpCallBack().OnBeforeRequest(_request);
+        }
+
+        return _request;
+    }
+
+    /**
+     * Processes the response for updateOrderItem
+     * @return An object of type OrdersItemsResponse1
+     */
+    private OrdersItemsResponse1 _handleUpdateOrderItemResponse(HttpContext _context)
+            throws APIException, IOException {
+        HttpResponse _response = _context.getResponse();
+
+        //invoke the callback after response if its not null
+        if (getHttpCallBack() != null) {
+            getHttpCallBack().OnAfterResponse(_context);
+        }
+
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
+        //handle errors defined at the API level
+        validateResponse(_response, _context);
+
+        //extract result from the http response
+        String _responseBody = ((HttpStringResponse)_response).getBody();
+        OrdersItemsResponse1 _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<OrdersItemsResponse1>(){});
+
+        return _result;
+    }
+
+    /**
+     * Gets an order
+     * @param    orderId    Required parameter: Order id
+     * @return    Returns the OrdersResponse1 response from the API call 
+     */
+    public OrdersResponse1 getOrder(
+                final String orderId
+    ) throws Throwable {
+
+        HttpRequest _request = _buildGetOrderRequest(orderId);
+        HttpResponse _response = getClientInstance().executeAsString(_request);
+        HttpContext _context = new HttpContext(_request, _response);
+
+        return _handleGetOrderResponse(_context);
+    }
+
+    /**
+     * Gets an order
+     * @param    orderId    Required parameter: Order id
+     */
+    public void getOrderAsync(
+                final String orderId,
+                final APICallBack<OrdersResponse1> callBack
+    ) {
+        Runnable _responseTask = new Runnable() {
+            public void run() {
+
+                HttpRequest _request;
+                try {
+                    _request = _buildGetOrderRequest(orderId);
+                } catch (Exception e) {
+                    callBack.onFailure(null, e);
+                    return;
+                }
+
+                // Invoke request and get response
+                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
+                    public void onSuccess(HttpContext _context, HttpResponse _response) {
+                        try {
+                            OrdersResponse1 returnValue = _handleGetOrderResponse(_context);
+                            callBack.onSuccess(_context, returnValue);
+                        } catch (Exception e) {
+                            callBack.onFailure(_context, e);
+                        }
+                    }
+
+                    public void onFailure(HttpContext _context, Throwable _exception) {
+                        // Let the caller know of the failure
+                        callBack.onFailure(_context, _exception);
+                    }
+                });
+            }
+        };
+
+        // Execute async using thread pool
+        APIHelper.getScheduler().execute(_responseTask);
+    }
+
+    /**
+     * Builds the HttpRequest object for getOrder
+     */
+    private HttpRequest _buildGetOrderRequest(
+                final String orderId) throws IOException, APIException {
+        //the base uri for api requests
+        String _baseUri = Configuration.baseUri;
+
+        //prepare query string for API call
+        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/orders/{order_id}");
+
+        //process template parameters
+        Map<String, Object> _templateParameters = new HashMap<String, Object>();
+        _templateParameters.put("order_id", orderId);
+        APIHelper.appendUrlWithTemplateParameters(_queryBuilder, _templateParameters);
+        //validate and preprocess url
+        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
+
+        //load all headers for the outgoing API request
+        Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("user-agent", BaseController.userAgent);
+        _headers.put("accept", "application/json");
+
+
+        //prepare and invoke the API call request to fetch the response
+        HttpRequest _request = getClientInstance().get(_queryUrl, _headers, null,
+                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
+
+        // Invoke the callback before request if its not null
+        if (getHttpCallBack() != null) {
+            getHttpCallBack().OnBeforeRequest(_request);
+        }
+
+        return _request;
+    }
+
+    /**
+     * Processes the response for getOrder
+     * @return An object of type OrdersResponse1
+     */
+    private OrdersResponse1 _handleGetOrderResponse(HttpContext _context)
+            throws APIException, IOException {
+        HttpResponse _response = _context.getResponse();
+
+        //invoke the callback after response if its not null
+        if (getHttpCallBack() != null) {
+            getHttpCallBack().OnAfterResponse(_context);
+        }
+
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
+        //handle errors defined at the API level
+        validateResponse(_response, _context);
+
+        //extract result from the http response
+        String _responseBody = ((HttpStringResponse)_response).getBody();
+        OrdersResponse1 _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<OrdersResponse1>(){});
 
         return _result;
     }
