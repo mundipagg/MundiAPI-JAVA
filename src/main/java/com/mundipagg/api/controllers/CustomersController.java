@@ -43,321 +43,43 @@ public class CustomersController extends BaseController {
     }
 
     /**
-     * Get a customer
+     * Creates a access token for a customer
      * @param    customerId    Required parameter: Customer Id
-     * @return    Returns the CustomersResponse response from the API call 
-     */
-    public CustomersResponse getCustomer(
-                final String customerId
-    ) throws Throwable {
-
-        HttpRequest _request = _buildGetCustomerRequest(customerId);
-        HttpResponse _response = getClientInstance().executeAsString(_request);
-        HttpContext _context = new HttpContext(_request, _response);
-
-        return _handleGetCustomerResponse(_context);
-    }
-
-    /**
-     * Get a customer
-     * @param    customerId    Required parameter: Customer Id
-     */
-    public void getCustomerAsync(
-                final String customerId,
-                final APICallBack<CustomersResponse> callBack
-    ) {
-        Runnable _responseTask = new Runnable() {
-            public void run() {
-
-                HttpRequest _request;
-                try {
-                    _request = _buildGetCustomerRequest(customerId);
-                } catch (Exception e) {
-                    callBack.onFailure(null, e);
-                    return;
-                }
-
-                // Invoke request and get response
-                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
-                    public void onSuccess(HttpContext _context, HttpResponse _response) {
-                        try {
-                            CustomersResponse returnValue = _handleGetCustomerResponse(_context);
-                            callBack.onSuccess(_context, returnValue);
-                        } catch (Exception e) {
-                            callBack.onFailure(_context, e);
-                        }
-                    }
-
-                    public void onFailure(HttpContext _context, Throwable _exception) {
-                        // Let the caller know of the failure
-                        callBack.onFailure(_context, _exception);
-                    }
-                });
-            }
-        };
-
-        // Execute async using thread pool
-        APIHelper.getScheduler().execute(_responseTask);
-    }
-
-    /**
-     * Builds the HttpRequest object for getCustomer
-     */
-    private HttpRequest _buildGetCustomerRequest(
-                final String customerId) throws IOException, APIException {
-        //the base uri for api requests
-        String _baseUri = Configuration.baseUri;
-
-        //prepare query string for API call
-        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/customers/{customer_id}");
-
-        //process template parameters
-        Map<String, Object> _templateParameters = new HashMap<String, Object>();
-        _templateParameters.put("customer_id", customerId);
-        APIHelper.appendUrlWithTemplateParameters(_queryBuilder, _templateParameters);
-        //validate and preprocess url
-        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
-
-        //load all headers for the outgoing API request
-        Map<String, String> _headers = new HashMap<String, String>();
-        _headers.put("user-agent", BaseController.userAgent);
-        _headers.put("accept", "application/json");
-
-
-        //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().get(_queryUrl, _headers, null,
-                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
-
-        // Invoke the callback before request if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnBeforeRequest(_request);
-        }
-
-        return _request;
-    }
-
-    /**
-     * Processes the response for getCustomer
-     * @return An object of type CustomersResponse
-     */
-    private CustomersResponse _handleGetCustomerResponse(HttpContext _context)
-            throws APIException, IOException {
-        HttpResponse _response = _context.getResponse();
-
-        //invoke the callback after response if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnAfterResponse(_context);
-        }
-
-        //Error handling using HTTP status codes
-        int _responseCode = _response.getStatusCode();
-
-        if (_responseCode == 400) {
-            throw new MErrorException("Invalid request", _context);
-        }
-        if (_responseCode == 401) {
-            throw new MErrorException("Invalid API key", _context);
-        }
-        if (_responseCode == 404) {
-            throw new MErrorException("An informed resource was not found", _context);
-        }
-        if (_responseCode == 412) {
-            throw new MErrorException("Business validation error", _context);
-        }
-        if (_responseCode == 422) {
-            throw new MErrorException("Contract validation error", _context);
-        }
-        if (_responseCode == 500) {
-            throw new MErrorException("Internal server error", _context);
-        }
-        //handle errors defined at the API level
-        validateResponse(_response, _context);
-
-        //extract result from the http response
-        String _responseBody = ((HttpStringResponse)_response).getBody();
-        CustomersResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<CustomersResponse>(){});
-
-        return _result;
-    }
-
-    /**
-     * Delete a Customer's access tokens
-     * @param    customerId    Required parameter: Customer Id
-     * @return    Returns the CustomersAccessTokensResponse1 response from the API call 
-     */
-    public CustomersAccessTokensResponse1 deleteAccessTokens(
-                final String customerId
-    ) throws Throwable {
-
-        HttpRequest _request = _buildDeleteAccessTokensRequest(customerId);
-        HttpResponse _response = getClientInstance().executeAsString(_request);
-        HttpContext _context = new HttpContext(_request, _response);
-
-        return _handleDeleteAccessTokensResponse(_context);
-    }
-
-    /**
-     * Delete a Customer's access tokens
-     * @param    customerId    Required parameter: Customer Id
-     */
-    public void deleteAccessTokensAsync(
-                final String customerId,
-                final APICallBack<CustomersAccessTokensResponse1> callBack
-    ) {
-        Runnable _responseTask = new Runnable() {
-            public void run() {
-
-                HttpRequest _request;
-                try {
-                    _request = _buildDeleteAccessTokensRequest(customerId);
-                } catch (Exception e) {
-                    callBack.onFailure(null, e);
-                    return;
-                }
-
-                // Invoke request and get response
-                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
-                    public void onSuccess(HttpContext _context, HttpResponse _response) {
-                        try {
-                            CustomersAccessTokensResponse1 returnValue = _handleDeleteAccessTokensResponse(_context);
-                            callBack.onSuccess(_context, returnValue);
-                        } catch (Exception e) {
-                            callBack.onFailure(_context, e);
-                        }
-                    }
-
-                    public void onFailure(HttpContext _context, Throwable _exception) {
-                        // Let the caller know of the failure
-                        callBack.onFailure(_context, _exception);
-                    }
-                });
-            }
-        };
-
-        // Execute async using thread pool
-        APIHelper.getScheduler().execute(_responseTask);
-    }
-
-    /**
-     * Builds the HttpRequest object for deleteAccessTokens
-     */
-    private HttpRequest _buildDeleteAccessTokensRequest(
-                final String customerId) throws IOException, APIException {
-        //the base uri for api requests
-        String _baseUri = Configuration.baseUri;
-
-        //prepare query string for API call
-        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/customers/{customer_id}/access-tokens/");
-
-        //process template parameters
-        Map<String, Object> _templateParameters = new HashMap<String, Object>();
-        _templateParameters.put("customer_id", customerId);
-        APIHelper.appendUrlWithTemplateParameters(_queryBuilder, _templateParameters);
-        //validate and preprocess url
-        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
-
-        //load all headers for the outgoing API request
-        Map<String, String> _headers = new HashMap<String, String>();
-        _headers.put("user-agent", BaseController.userAgent);
-        _headers.put("accept", "application/json");
-
-
-        //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().get(_queryUrl, _headers, null,
-                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
-
-        // Invoke the callback before request if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnBeforeRequest(_request);
-        }
-
-        return _request;
-    }
-
-    /**
-     * Processes the response for deleteAccessTokens
-     * @return An object of type CustomersAccessTokensResponse1
-     */
-    private CustomersAccessTokensResponse1 _handleDeleteAccessTokensResponse(HttpContext _context)
-            throws APIException, IOException {
-        HttpResponse _response = _context.getResponse();
-
-        //invoke the callback after response if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnAfterResponse(_context);
-        }
-
-        //Error handling using HTTP status codes
-        int _responseCode = _response.getStatusCode();
-
-        if (_responseCode == 400) {
-            throw new MErrorException("Invalid request", _context);
-        }
-        if (_responseCode == 401) {
-            throw new MErrorException("Invalid API key", _context);
-        }
-        if (_responseCode == 404) {
-            throw new MErrorException("An informed resource was not found", _context);
-        }
-        if (_responseCode == 412) {
-            throw new MErrorException("Business validation error", _context);
-        }
-        if (_responseCode == 422) {
-            throw new MErrorException("Contract validation error", _context);
-        }
-        if (_responseCode == 500) {
-            throw new MErrorException("Internal server error", _context);
-        }
-        //handle errors defined at the API level
-        validateResponse(_response, _context);
-
-        //extract result from the http response
-        String _responseBody = ((HttpStringResponse)_response).getBody();
-        CustomersAccessTokensResponse1 _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<CustomersAccessTokensResponse1>(){});
-
-        return _result;
-    }
-
-    /**
-     * Creates a new address for a customer
-     * @param    customerId    Required parameter: Customer Id
-     * @param    body    Required parameter: Request for creating an address
+     * @param    body    Required parameter: Request for creating a access token
      * @param    idempotencyKey    Optional parameter: Example: 
-     * @return    Returns the CustomersAddressesResponse1 response from the API call 
+     * @return    Returns the CustomersAccessTokensResponse response from the API call 
      */
-    public CustomersAddressesResponse1 createAddress(
+    public CustomersAccessTokensResponse createAccessToken(
                 final String customerId,
-                final CustomersAddressesRequest body,
+                final CustomersAccessTokensRequest body,
                 final String idempotencyKey
     ) throws Throwable {
 
-        HttpRequest _request = _buildCreateAddressRequest(customerId, body, idempotencyKey);
+        HttpRequest _request = _buildCreateAccessTokenRequest(customerId, body, idempotencyKey);
         HttpResponse _response = getClientInstance().executeAsString(_request);
         HttpContext _context = new HttpContext(_request, _response);
 
-        return _handleCreateAddressResponse(_context);
+        return _handleCreateAccessTokenResponse(_context);
     }
 
     /**
-     * Creates a new address for a customer
+     * Creates a access token for a customer
      * @param    customerId    Required parameter: Customer Id
-     * @param    body    Required parameter: Request for creating an address
+     * @param    body    Required parameter: Request for creating a access token
      * @param    idempotencyKey    Optional parameter: Example: 
      */
-    public void createAddressAsync(
+    public void createAccessTokenAsync(
                 final String customerId,
-                final CustomersAddressesRequest body,
+                final CustomersAccessTokensRequest body,
                 final String idempotencyKey,
-                final APICallBack<CustomersAddressesResponse1> callBack
+                final APICallBack<CustomersAccessTokensResponse> callBack
     ) {
         Runnable _responseTask = new Runnable() {
             public void run() {
 
                 HttpRequest _request;
                 try {
-                    _request = _buildCreateAddressRequest(customerId, body, idempotencyKey);
+                    _request = _buildCreateAccessTokenRequest(customerId, body, idempotencyKey);
                 } catch (Exception e) {
                     callBack.onFailure(null, e);
                     return;
@@ -367,7 +89,7 @@ public class CustomersController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            CustomersAddressesResponse1 returnValue = _handleCreateAddressResponse(_context);
+                            CustomersAccessTokensResponse returnValue = _handleCreateAccessTokenResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -387,17 +109,17 @@ public class CustomersController extends BaseController {
     }
 
     /**
-     * Builds the HttpRequest object for createAddress
+     * Builds the HttpRequest object for createAccessToken
      */
-    private HttpRequest _buildCreateAddressRequest(
+    private HttpRequest _buildCreateAccessTokenRequest(
                 final String customerId,
-                final CustomersAddressesRequest body,
+                final CustomersAccessTokensRequest body,
                 final String idempotencyKey) throws IOException, APIException {
         //the base uri for api requests
         String _baseUri = Configuration.baseUri;
 
         //prepare query string for API call
-        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/customers/{customer_id}/addresses");
+        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/customers/{customer_id}/access-tokens");
 
         //process template parameters
         Map<String, Object> _templateParameters = new HashMap<String, Object>();
@@ -429,10 +151,10 @@ public class CustomersController extends BaseController {
     }
 
     /**
-     * Processes the response for createAddress
-     * @return An object of type CustomersAddressesResponse1
+     * Processes the response for createAccessToken
+     * @return An object of type CustomersAccessTokensResponse
      */
-    private CustomersAddressesResponse1 _handleCreateAddressResponse(HttpContext _context)
+    private CustomersAccessTokensResponse _handleCreateAccessTokenResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -467,920 +189,8 @@ public class CustomersController extends BaseController {
 
         //extract result from the http response
         String _responseBody = ((HttpStringResponse)_response).getBody();
-        CustomersAddressesResponse1 _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<CustomersAddressesResponse1>(){});
-
-        return _result;
-    }
-
-    /**
-     * Updates an address
-     * @param    customerId    Required parameter: Customer Id
-     * @param    addressId    Required parameter: Address Id
-     * @param    body    Required parameter: Request for updating an address
-     * @param    idempotencyKey    Optional parameter: Example: 
-     * @return    Returns the CustomersAddressesResponse1 response from the API call 
-     */
-    public CustomersAddressesResponse1 updateAddress(
-                final String customerId,
-                final String addressId,
-                final CustomersAddressesRequest1 body,
-                final String idempotencyKey
-    ) throws Throwable {
-
-        HttpRequest _request = _buildUpdateAddressRequest(customerId, addressId, body, idempotencyKey);
-        HttpResponse _response = getClientInstance().executeAsString(_request);
-        HttpContext _context = new HttpContext(_request, _response);
-
-        return _handleUpdateAddressResponse(_context);
-    }
-
-    /**
-     * Updates an address
-     * @param    customerId    Required parameter: Customer Id
-     * @param    addressId    Required parameter: Address Id
-     * @param    body    Required parameter: Request for updating an address
-     * @param    idempotencyKey    Optional parameter: Example: 
-     */
-    public void updateAddressAsync(
-                final String customerId,
-                final String addressId,
-                final CustomersAddressesRequest1 body,
-                final String idempotencyKey,
-                final APICallBack<CustomersAddressesResponse1> callBack
-    ) {
-        Runnable _responseTask = new Runnable() {
-            public void run() {
-
-                HttpRequest _request;
-                try {
-                    _request = _buildUpdateAddressRequest(customerId, addressId, body, idempotencyKey);
-                } catch (Exception e) {
-                    callBack.onFailure(null, e);
-                    return;
-                }
-
-                // Invoke request and get response
-                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
-                    public void onSuccess(HttpContext _context, HttpResponse _response) {
-                        try {
-                            CustomersAddressesResponse1 returnValue = _handleUpdateAddressResponse(_context);
-                            callBack.onSuccess(_context, returnValue);
-                        } catch (Exception e) {
-                            callBack.onFailure(_context, e);
-                        }
-                    }
-
-                    public void onFailure(HttpContext _context, Throwable _exception) {
-                        // Let the caller know of the failure
-                        callBack.onFailure(_context, _exception);
-                    }
-                });
-            }
-        };
-
-        // Execute async using thread pool
-        APIHelper.getScheduler().execute(_responseTask);
-    }
-
-    /**
-     * Builds the HttpRequest object for updateAddress
-     */
-    private HttpRequest _buildUpdateAddressRequest(
-                final String customerId,
-                final String addressId,
-                final CustomersAddressesRequest1 body,
-                final String idempotencyKey) throws IOException, APIException {
-        //the base uri for api requests
-        String _baseUri = Configuration.baseUri;
-
-        //prepare query string for API call
-        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/customers/{customer_id}/addresses/{address_id}");
-
-        //process template parameters
-        Map<String, Object> _templateParameters = new HashMap<String, Object>();
-        _templateParameters.put("customer_id", customerId);
-        _templateParameters.put("address_id", addressId);
-        APIHelper.appendUrlWithTemplateParameters(_queryBuilder, _templateParameters);
-        //validate and preprocess url
-        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
-
-        //load all headers for the outgoing API request
-        Map<String, String> _headers = new HashMap<String, String>();
-        _headers.put("Content-Type", "application/json");
-        if (idempotencyKey != null) {
-            _headers.put("idempotency-key", idempotencyKey);
-        }
-        _headers.put("user-agent", BaseController.userAgent);
-        _headers.put("accept", "application/json");
-
-
-        //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().putBody(_queryUrl, _headers, APIHelper.serialize(body),
-                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
-
-        // Invoke the callback before request if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnBeforeRequest(_request);
-        }
-
-        return _request;
-    }
-
-    /**
-     * Processes the response for updateAddress
-     * @return An object of type CustomersAddressesResponse1
-     */
-    private CustomersAddressesResponse1 _handleUpdateAddressResponse(HttpContext _context)
-            throws APIException, IOException {
-        HttpResponse _response = _context.getResponse();
-
-        //invoke the callback after response if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnAfterResponse(_context);
-        }
-
-        //Error handling using HTTP status codes
-        int _responseCode = _response.getStatusCode();
-
-        if (_responseCode == 400) {
-            throw new MErrorException("Invalid request", _context);
-        }
-        if (_responseCode == 401) {
-            throw new MErrorException("Invalid API key", _context);
-        }
-        if (_responseCode == 404) {
-            throw new MErrorException("An informed resource was not found", _context);
-        }
-        if (_responseCode == 412) {
-            throw new MErrorException("Business validation error", _context);
-        }
-        if (_responseCode == 422) {
-            throw new MErrorException("Contract validation error", _context);
-        }
-        if (_responseCode == 500) {
-            throw new MErrorException("Internal server error", _context);
-        }
-        //handle errors defined at the API level
-        validateResponse(_response, _context);
-
-        //extract result from the http response
-        String _responseBody = ((HttpStringResponse)_response).getBody();
-        CustomersAddressesResponse1 _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<CustomersAddressesResponse1>(){});
-
-        return _result;
-    }
-
-    /**
-     * Get all cards from a customer
-     * @param    customerId    Required parameter: Customer Id
-     * @param    page    Optional parameter: Page number
-     * @param    size    Optional parameter: Page size
-     * @return    Returns the CustomersCardsResponse1 response from the API call 
-     */
-    public CustomersCardsResponse1 getCards(
-                final String customerId,
-                final Integer page,
-                final Integer size
-    ) throws Throwable {
-
-        HttpRequest _request = _buildGetCardsRequest(customerId, page, size);
-        HttpResponse _response = getClientInstance().executeAsString(_request);
-        HttpContext _context = new HttpContext(_request, _response);
-
-        return _handleGetCardsResponse(_context);
-    }
-
-    /**
-     * Get all cards from a customer
-     * @param    customerId    Required parameter: Customer Id
-     * @param    page    Optional parameter: Page number
-     * @param    size    Optional parameter: Page size
-     */
-    public void getCardsAsync(
-                final String customerId,
-                final Integer page,
-                final Integer size,
-                final APICallBack<CustomersCardsResponse1> callBack
-    ) {
-        Runnable _responseTask = new Runnable() {
-            public void run() {
-
-                HttpRequest _request;
-                try {
-                    _request = _buildGetCardsRequest(customerId, page, size);
-                } catch (Exception e) {
-                    callBack.onFailure(null, e);
-                    return;
-                }
-
-                // Invoke request and get response
-                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
-                    public void onSuccess(HttpContext _context, HttpResponse _response) {
-                        try {
-                            CustomersCardsResponse1 returnValue = _handleGetCardsResponse(_context);
-                            callBack.onSuccess(_context, returnValue);
-                        } catch (Exception e) {
-                            callBack.onFailure(_context, e);
-                        }
-                    }
-
-                    public void onFailure(HttpContext _context, Throwable _exception) {
-                        // Let the caller know of the failure
-                        callBack.onFailure(_context, _exception);
-                    }
-                });
-            }
-        };
-
-        // Execute async using thread pool
-        APIHelper.getScheduler().execute(_responseTask);
-    }
-
-    /**
-     * Builds the HttpRequest object for getCards
-     */
-    private HttpRequest _buildGetCardsRequest(
-                final String customerId,
-                final Integer page,
-                final Integer size) throws IOException, APIException {
-        //the base uri for api requests
-        String _baseUri = Configuration.baseUri;
-
-        //prepare query string for API call
-        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/customers/{customer_id}/cards");
-
-        //process template parameters
-        Map<String, Object> _templateParameters = new HashMap<String, Object>();
-        _templateParameters.put("customer_id", customerId);
-        APIHelper.appendUrlWithTemplateParameters(_queryBuilder, _templateParameters);
-
-        //process query parameters
-        Map<String, Object> _queryParameters = new HashMap<String, Object>();
-        if (page != null) {
-            _queryParameters.put("page", page);
-        }
-        if (size != null) {
-            _queryParameters.put("size", size);
-        }
-        APIHelper.appendUrlWithQueryParameters(_queryBuilder, _queryParameters);
-        //validate and preprocess url
-        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
-
-        //load all headers for the outgoing API request
-        Map<String, String> _headers = new HashMap<String, String>();
-        _headers.put("user-agent", BaseController.userAgent);
-        _headers.put("accept", "application/json");
-
-
-        //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().get(_queryUrl, _headers, null,
-                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
-
-        // Invoke the callback before request if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnBeforeRequest(_request);
-        }
-
-        return _request;
-    }
-
-    /**
-     * Processes the response for getCards
-     * @return An object of type CustomersCardsResponse1
-     */
-    private CustomersCardsResponse1 _handleGetCardsResponse(HttpContext _context)
-            throws APIException, IOException {
-        HttpResponse _response = _context.getResponse();
-
-        //invoke the callback after response if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnAfterResponse(_context);
-        }
-
-        //Error handling using HTTP status codes
-        int _responseCode = _response.getStatusCode();
-
-        if (_responseCode == 400) {
-            throw new MErrorException("Invalid request", _context);
-        }
-        if (_responseCode == 401) {
-            throw new MErrorException("Invalid API key", _context);
-        }
-        if (_responseCode == 404) {
-            throw new MErrorException("An informed resource was not found", _context);
-        }
-        if (_responseCode == 412) {
-            throw new MErrorException("Business validation error", _context);
-        }
-        if (_responseCode == 422) {
-            throw new MErrorException("Contract validation error", _context);
-        }
-        if (_responseCode == 500) {
-            throw new MErrorException("Internal server error", _context);
-        }
-        //handle errors defined at the API level
-        validateResponse(_response, _context);
-
-        //extract result from the http response
-        String _responseBody = ((HttpStringResponse)_response).getBody();
-        CustomersCardsResponse1 _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<CustomersCardsResponse1>(){});
-
-        return _result;
-    }
-
-    /**
-     * Creates a new customer
-     * @param    body    Required parameter: Request for creating a customer
-     * @param    idempotencyKey    Optional parameter: Example: 
-     * @return    Returns the CustomersResponse response from the API call 
-     */
-    public CustomersResponse createCustomer(
-                final CustomersRequest1 body,
-                final String idempotencyKey
-    ) throws Throwable {
-
-        HttpRequest _request = _buildCreateCustomerRequest(body, idempotencyKey);
-        HttpResponse _response = getClientInstance().executeAsString(_request);
-        HttpContext _context = new HttpContext(_request, _response);
-
-        return _handleCreateCustomerResponse(_context);
-    }
-
-    /**
-     * Creates a new customer
-     * @param    body    Required parameter: Request for creating a customer
-     * @param    idempotencyKey    Optional parameter: Example: 
-     */
-    public void createCustomerAsync(
-                final CustomersRequest1 body,
-                final String idempotencyKey,
-                final APICallBack<CustomersResponse> callBack
-    ) {
-        Runnable _responseTask = new Runnable() {
-            public void run() {
-
-                HttpRequest _request;
-                try {
-                    _request = _buildCreateCustomerRequest(body, idempotencyKey);
-                } catch (Exception e) {
-                    callBack.onFailure(null, e);
-                    return;
-                }
-
-                // Invoke request and get response
-                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
-                    public void onSuccess(HttpContext _context, HttpResponse _response) {
-                        try {
-                            CustomersResponse returnValue = _handleCreateCustomerResponse(_context);
-                            callBack.onSuccess(_context, returnValue);
-                        } catch (Exception e) {
-                            callBack.onFailure(_context, e);
-                        }
-                    }
-
-                    public void onFailure(HttpContext _context, Throwable _exception) {
-                        // Let the caller know of the failure
-                        callBack.onFailure(_context, _exception);
-                    }
-                });
-            }
-        };
-
-        // Execute async using thread pool
-        APIHelper.getScheduler().execute(_responseTask);
-    }
-
-    /**
-     * Builds the HttpRequest object for createCustomer
-     */
-    private HttpRequest _buildCreateCustomerRequest(
-                final CustomersRequest1 body,
-                final String idempotencyKey) throws IOException, APIException {
-        //the base uri for api requests
-        String _baseUri = Configuration.baseUri;
-
-        //prepare query string for API call
-        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/customers");
-        //validate and preprocess url
-        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
-
-        //load all headers for the outgoing API request
-        Map<String, String> _headers = new HashMap<String, String>();
-        _headers.put("Content-Type", "application/json");
-        if (idempotencyKey != null) {
-            _headers.put("idempotency-key", idempotencyKey);
-        }
-        _headers.put("user-agent", BaseController.userAgent);
-        _headers.put("accept", "application/json");
-
-
-        //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().postBody(_queryUrl, _headers, APIHelper.serialize(body),
-                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
-
-        // Invoke the callback before request if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnBeforeRequest(_request);
-        }
-
-        return _request;
-    }
-
-    /**
-     * Processes the response for createCustomer
-     * @return An object of type CustomersResponse
-     */
-    private CustomersResponse _handleCreateCustomerResponse(HttpContext _context)
-            throws APIException, IOException {
-        HttpResponse _response = _context.getResponse();
-
-        //invoke the callback after response if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnAfterResponse(_context);
-        }
-
-        //Error handling using HTTP status codes
-        int _responseCode = _response.getStatusCode();
-
-        if (_responseCode == 400) {
-            throw new MErrorException("Invalid request", _context);
-        }
-        if (_responseCode == 401) {
-            throw new MErrorException("Invalid API key", _context);
-        }
-        if (_responseCode == 404) {
-            throw new MErrorException("An informed resource was not found", _context);
-        }
-        if (_responseCode == 412) {
-            throw new MErrorException("Business validation error", _context);
-        }
-        if (_responseCode == 422) {
-            throw new MErrorException("Contract validation error", _context);
-        }
-        if (_responseCode == 500) {
-            throw new MErrorException("Internal server error", _context);
-        }
-        //handle errors defined at the API level
-        validateResponse(_response, _context);
-
-        //extract result from the http response
-        String _responseBody = ((HttpStringResponse)_response).getBody();
-        CustomersResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<CustomersResponse>(){});
-
-        return _result;
-    }
-
-    /**
-     * Updates the metadata a customer
-     * @param    customerId    Required parameter: The customer id
-     * @param    body    Required parameter: Request for updating the customer metadata
-     * @param    idempotencyKey    Optional parameter: Example: 
-     * @return    Returns the CustomersMetadataResponse response from the API call 
-     */
-    public CustomersMetadataResponse updateCustomerMetadata(
-                final String customerId,
-                final CustomersMetadataRequest body,
-                final String idempotencyKey
-    ) throws Throwable {
-
-        HttpRequest _request = _buildUpdateCustomerMetadataRequest(customerId, body, idempotencyKey);
-        HttpResponse _response = getClientInstance().executeAsString(_request);
-        HttpContext _context = new HttpContext(_request, _response);
-
-        return _handleUpdateCustomerMetadataResponse(_context);
-    }
-
-    /**
-     * Updates the metadata a customer
-     * @param    customerId    Required parameter: The customer id
-     * @param    body    Required parameter: Request for updating the customer metadata
-     * @param    idempotencyKey    Optional parameter: Example: 
-     */
-    public void updateCustomerMetadataAsync(
-                final String customerId,
-                final CustomersMetadataRequest body,
-                final String idempotencyKey,
-                final APICallBack<CustomersMetadataResponse> callBack
-    ) {
-        Runnable _responseTask = new Runnable() {
-            public void run() {
-
-                HttpRequest _request;
-                try {
-                    _request = _buildUpdateCustomerMetadataRequest(customerId, body, idempotencyKey);
-                } catch (Exception e) {
-                    callBack.onFailure(null, e);
-                    return;
-                }
-
-                // Invoke request and get response
-                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
-                    public void onSuccess(HttpContext _context, HttpResponse _response) {
-                        try {
-                            CustomersMetadataResponse returnValue = _handleUpdateCustomerMetadataResponse(_context);
-                            callBack.onSuccess(_context, returnValue);
-                        } catch (Exception e) {
-                            callBack.onFailure(_context, e);
-                        }
-                    }
-
-                    public void onFailure(HttpContext _context, Throwable _exception) {
-                        // Let the caller know of the failure
-                        callBack.onFailure(_context, _exception);
-                    }
-                });
-            }
-        };
-
-        // Execute async using thread pool
-        APIHelper.getScheduler().execute(_responseTask);
-    }
-
-    /**
-     * Builds the HttpRequest object for updateCustomerMetadata
-     */
-    private HttpRequest _buildUpdateCustomerMetadataRequest(
-                final String customerId,
-                final CustomersMetadataRequest body,
-                final String idempotencyKey) throws IOException, APIException {
-        //the base uri for api requests
-        String _baseUri = Configuration.baseUri;
-
-        //prepare query string for API call
-        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/Customers/{customer_id}/metadata");
-
-        //process template parameters
-        Map<String, Object> _templateParameters = new HashMap<String, Object>();
-        _templateParameters.put("customer_id", customerId);
-        APIHelper.appendUrlWithTemplateParameters(_queryBuilder, _templateParameters);
-        //validate and preprocess url
-        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
-
-        //load all headers for the outgoing API request
-        Map<String, String> _headers = new HashMap<String, String>();
-        _headers.put("Content-Type", "application/json");
-        if (idempotencyKey != null) {
-            _headers.put("idempotency-key", idempotencyKey);
-        }
-        _headers.put("user-agent", BaseController.userAgent);
-        _headers.put("accept", "application/json");
-
-
-        //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().patchBody(_queryUrl, _headers, APIHelper.serialize(body),
-                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
-
-        // Invoke the callback before request if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnBeforeRequest(_request);
-        }
-
-        return _request;
-    }
-
-    /**
-     * Processes the response for updateCustomerMetadata
-     * @return An object of type CustomersMetadataResponse
-     */
-    private CustomersMetadataResponse _handleUpdateCustomerMetadataResponse(HttpContext _context)
-            throws APIException, IOException {
-        HttpResponse _response = _context.getResponse();
-
-        //invoke the callback after response if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnAfterResponse(_context);
-        }
-
-        //Error handling using HTTP status codes
-        int _responseCode = _response.getStatusCode();
-
-        if (_responseCode == 400) {
-            throw new MErrorException("Invalid request", _context);
-        }
-        if (_responseCode == 401) {
-            throw new MErrorException("Invalid API key", _context);
-        }
-        if (_responseCode == 404) {
-            throw new MErrorException("An informed resource was not found", _context);
-        }
-        if (_responseCode == 412) {
-            throw new MErrorException("Business validation error", _context);
-        }
-        if (_responseCode == 422) {
-            throw new MErrorException("Contract validation error", _context);
-        }
-        if (_responseCode == 500) {
-            throw new MErrorException("Internal server error", _context);
-        }
-        //handle errors defined at the API level
-        validateResponse(_response, _context);
-
-        //extract result from the http response
-        String _responseBody = ((HttpStringResponse)_response).getBody();
-        CustomersMetadataResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<CustomersMetadataResponse>(){});
-
-        return _result;
-    }
-
-    /**
-     * Delete a customer's card
-     * @param    customerId    Required parameter: Customer Id
-     * @param    cardId    Required parameter: Card Id
-     * @param    idempotencyKey    Optional parameter: Example: 
-     * @return    Returns the CustomersCardsResponse response from the API call 
-     */
-    public CustomersCardsResponse deleteCard(
-                final String customerId,
-                final String cardId,
-                final String idempotencyKey
-    ) throws Throwable {
-
-        HttpRequest _request = _buildDeleteCardRequest(customerId, cardId, idempotencyKey);
-        HttpResponse _response = getClientInstance().executeAsString(_request);
-        HttpContext _context = new HttpContext(_request, _response);
-
-        return _handleDeleteCardResponse(_context);
-    }
-
-    /**
-     * Delete a customer's card
-     * @param    customerId    Required parameter: Customer Id
-     * @param    cardId    Required parameter: Card Id
-     * @param    idempotencyKey    Optional parameter: Example: 
-     */
-    public void deleteCardAsync(
-                final String customerId,
-                final String cardId,
-                final String idempotencyKey,
-                final APICallBack<CustomersCardsResponse> callBack
-    ) {
-        Runnable _responseTask = new Runnable() {
-            public void run() {
-
-                HttpRequest _request;
-                try {
-                    _request = _buildDeleteCardRequest(customerId, cardId, idempotencyKey);
-                } catch (Exception e) {
-                    callBack.onFailure(null, e);
-                    return;
-                }
-
-                // Invoke request and get response
-                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
-                    public void onSuccess(HttpContext _context, HttpResponse _response) {
-                        try {
-                            CustomersCardsResponse returnValue = _handleDeleteCardResponse(_context);
-                            callBack.onSuccess(_context, returnValue);
-                        } catch (Exception e) {
-                            callBack.onFailure(_context, e);
-                        }
-                    }
-
-                    public void onFailure(HttpContext _context, Throwable _exception) {
-                        // Let the caller know of the failure
-                        callBack.onFailure(_context, _exception);
-                    }
-                });
-            }
-        };
-
-        // Execute async using thread pool
-        APIHelper.getScheduler().execute(_responseTask);
-    }
-
-    /**
-     * Builds the HttpRequest object for deleteCard
-     */
-    private HttpRequest _buildDeleteCardRequest(
-                final String customerId,
-                final String cardId,
-                final String idempotencyKey) throws IOException, APIException {
-        //the base uri for api requests
-        String _baseUri = Configuration.baseUri;
-
-        //prepare query string for API call
-        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/customers/{customer_id}/cards/{card_id}");
-
-        //process template parameters
-        Map<String, Object> _templateParameters = new HashMap<String, Object>();
-        _templateParameters.put("customer_id", customerId);
-        _templateParameters.put("card_id", cardId);
-        APIHelper.appendUrlWithTemplateParameters(_queryBuilder, _templateParameters);
-        //validate and preprocess url
-        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
-
-        //load all headers for the outgoing API request
-        Map<String, String> _headers = new HashMap<String, String>();
-        if (idempotencyKey != null) {
-            _headers.put("idempotency-key", idempotencyKey);
-        }
-        _headers.put("user-agent", BaseController.userAgent);
-        _headers.put("accept", "application/json");
-
-
-        //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().delete(_queryUrl, _headers, null,
-                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
-
-        // Invoke the callback before request if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnBeforeRequest(_request);
-        }
-
-        return _request;
-    }
-
-    /**
-     * Processes the response for deleteCard
-     * @return An object of type CustomersCardsResponse
-     */
-    private CustomersCardsResponse _handleDeleteCardResponse(HttpContext _context)
-            throws APIException, IOException {
-        HttpResponse _response = _context.getResponse();
-
-        //invoke the callback after response if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnAfterResponse(_context);
-        }
-
-        //Error handling using HTTP status codes
-        int _responseCode = _response.getStatusCode();
-
-        if (_responseCode == 400) {
-            throw new MErrorException("Invalid request", _context);
-        }
-        if (_responseCode == 401) {
-            throw new MErrorException("Invalid API key", _context);
-        }
-        if (_responseCode == 404) {
-            throw new MErrorException("An informed resource was not found", _context);
-        }
-        if (_responseCode == 412) {
-            throw new MErrorException("Business validation error", _context);
-        }
-        if (_responseCode == 422) {
-            throw new MErrorException("Contract validation error", _context);
-        }
-        if (_responseCode == 500) {
-            throw new MErrorException("Internal server error", _context);
-        }
-        //handle errors defined at the API level
-        validateResponse(_response, _context);
-
-        //extract result from the http response
-        String _responseBody = ((HttpStringResponse)_response).getBody();
-        CustomersCardsResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<CustomersCardsResponse>(){});
-
-        return _result;
-    }
-
-    /**
-     * Get a customer's card
-     * @param    customerId    Required parameter: Customer id
-     * @param    cardId    Required parameter: Card id
-     * @return    Returns the CustomersCardsResponse response from the API call 
-     */
-    public CustomersCardsResponse getCard(
-                final String customerId,
-                final String cardId
-    ) throws Throwable {
-
-        HttpRequest _request = _buildGetCardRequest(customerId, cardId);
-        HttpResponse _response = getClientInstance().executeAsString(_request);
-        HttpContext _context = new HttpContext(_request, _response);
-
-        return _handleGetCardResponse(_context);
-    }
-
-    /**
-     * Get a customer's card
-     * @param    customerId    Required parameter: Customer id
-     * @param    cardId    Required parameter: Card id
-     */
-    public void getCardAsync(
-                final String customerId,
-                final String cardId,
-                final APICallBack<CustomersCardsResponse> callBack
-    ) {
-        Runnable _responseTask = new Runnable() {
-            public void run() {
-
-                HttpRequest _request;
-                try {
-                    _request = _buildGetCardRequest(customerId, cardId);
-                } catch (Exception e) {
-                    callBack.onFailure(null, e);
-                    return;
-                }
-
-                // Invoke request and get response
-                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
-                    public void onSuccess(HttpContext _context, HttpResponse _response) {
-                        try {
-                            CustomersCardsResponse returnValue = _handleGetCardResponse(_context);
-                            callBack.onSuccess(_context, returnValue);
-                        } catch (Exception e) {
-                            callBack.onFailure(_context, e);
-                        }
-                    }
-
-                    public void onFailure(HttpContext _context, Throwable _exception) {
-                        // Let the caller know of the failure
-                        callBack.onFailure(_context, _exception);
-                    }
-                });
-            }
-        };
-
-        // Execute async using thread pool
-        APIHelper.getScheduler().execute(_responseTask);
-    }
-
-    /**
-     * Builds the HttpRequest object for getCard
-     */
-    private HttpRequest _buildGetCardRequest(
-                final String customerId,
-                final String cardId) throws IOException, APIException {
-        //the base uri for api requests
-        String _baseUri = Configuration.baseUri;
-
-        //prepare query string for API call
-        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/customers/{customer_id}/cards/{card_id}");
-
-        //process template parameters
-        Map<String, Object> _templateParameters = new HashMap<String, Object>();
-        _templateParameters.put("customer_id", customerId);
-        _templateParameters.put("card_id", cardId);
-        APIHelper.appendUrlWithTemplateParameters(_queryBuilder, _templateParameters);
-        //validate and preprocess url
-        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
-
-        //load all headers for the outgoing API request
-        Map<String, String> _headers = new HashMap<String, String>();
-        _headers.put("user-agent", BaseController.userAgent);
-        _headers.put("accept", "application/json");
-
-
-        //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().get(_queryUrl, _headers, null,
-                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
-
-        // Invoke the callback before request if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnBeforeRequest(_request);
-        }
-
-        return _request;
-    }
-
-    /**
-     * Processes the response for getCard
-     * @return An object of type CustomersCardsResponse
-     */
-    private CustomersCardsResponse _handleGetCardResponse(HttpContext _context)
-            throws APIException, IOException {
-        HttpResponse _response = _context.getResponse();
-
-        //invoke the callback after response if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnAfterResponse(_context);
-        }
-
-        //Error handling using HTTP status codes
-        int _responseCode = _response.getStatusCode();
-
-        if (_responseCode == 400) {
-            throw new MErrorException("Invalid request", _context);
-        }
-        if (_responseCode == 401) {
-            throw new MErrorException("Invalid API key", _context);
-        }
-        if (_responseCode == 404) {
-            throw new MErrorException("An informed resource was not found", _context);
-        }
-        if (_responseCode == 412) {
-            throw new MErrorException("Business validation error", _context);
-        }
-        if (_responseCode == 422) {
-            throw new MErrorException("Contract validation error", _context);
-        }
-        if (_responseCode == 500) {
-            throw new MErrorException("Internal server error", _context);
-        }
-        //handle errors defined at the API level
-        validateResponse(_response, _context);
-
-        //extract result from the http response
-        String _responseBody = ((HttpStringResponse)_response).getBody();
-        CustomersCardsResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<CustomersCardsResponse>(){});
+        CustomersAccessTokensResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<CustomersAccessTokensResponse>(){});
 
         return _result;
     }
@@ -1698,43 +508,35 @@ public class CustomersController extends BaseController {
     }
 
     /**
-     * Renew a card
-     * @param    customerId    Required parameter: Customer id
-     * @param    cardId    Required parameter: Card Id
-     * @param    idempotencyKey    Optional parameter: Example: 
-     * @return    Returns the CustomersCardsRenewResponse response from the API call 
+     * Get a customer
+     * @param    customerId    Required parameter: Customer Id
+     * @return    Returns the CustomersResponse response from the API call 
      */
-    public CustomersCardsRenewResponse renewCard(
-                final String customerId,
-                final String cardId,
-                final String idempotencyKey
+    public CustomersResponse getCustomer(
+                final String customerId
     ) throws Throwable {
 
-        HttpRequest _request = _buildRenewCardRequest(customerId, cardId, idempotencyKey);
+        HttpRequest _request = _buildGetCustomerRequest(customerId);
         HttpResponse _response = getClientInstance().executeAsString(_request);
         HttpContext _context = new HttpContext(_request, _response);
 
-        return _handleRenewCardResponse(_context);
+        return _handleGetCustomerResponse(_context);
     }
 
     /**
-     * Renew a card
-     * @param    customerId    Required parameter: Customer id
-     * @param    cardId    Required parameter: Card Id
-     * @param    idempotencyKey    Optional parameter: Example: 
+     * Get a customer
+     * @param    customerId    Required parameter: Customer Id
      */
-    public void renewCardAsync(
+    public void getCustomerAsync(
                 final String customerId,
-                final String cardId,
-                final String idempotencyKey,
-                final APICallBack<CustomersCardsRenewResponse> callBack
+                final APICallBack<CustomersResponse> callBack
     ) {
         Runnable _responseTask = new Runnable() {
             public void run() {
 
                 HttpRequest _request;
                 try {
-                    _request = _buildRenewCardRequest(customerId, cardId, idempotencyKey);
+                    _request = _buildGetCustomerRequest(customerId);
                 } catch (Exception e) {
                     callBack.onFailure(null, e);
                     return;
@@ -1744,7 +546,7 @@ public class CustomersController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            CustomersCardsRenewResponse returnValue = _handleRenewCardResponse(_context);
+                            CustomersResponse returnValue = _handleGetCustomerResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -1764,207 +566,20 @@ public class CustomersController extends BaseController {
     }
 
     /**
-     * Builds the HttpRequest object for renewCard
+     * Builds the HttpRequest object for getCustomer
      */
-    private HttpRequest _buildRenewCardRequest(
-                final String customerId,
-                final String cardId,
-                final String idempotencyKey) throws IOException, APIException {
+    private HttpRequest _buildGetCustomerRequest(
+                final String customerId) throws IOException, APIException {
         //the base uri for api requests
         String _baseUri = Configuration.baseUri;
 
         //prepare query string for API call
-        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/customers/{customer_id}/cards/{card_id}/renew");
+        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/customers/{customer_id}");
 
         //process template parameters
         Map<String, Object> _templateParameters = new HashMap<String, Object>();
         _templateParameters.put("customer_id", customerId);
-        _templateParameters.put("card_id", cardId);
         APIHelper.appendUrlWithTemplateParameters(_queryBuilder, _templateParameters);
-        //validate and preprocess url
-        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
-
-        //load all headers for the outgoing API request
-        Map<String, String> _headers = new HashMap<String, String>();
-        if (idempotencyKey != null) {
-            _headers.put("idempotency-key", idempotencyKey);
-        }
-        _headers.put("user-agent", BaseController.userAgent);
-        _headers.put("accept", "application/json");
-
-
-        //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().post(_queryUrl, _headers, null,
-                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
-
-        // Invoke the callback before request if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnBeforeRequest(_request);
-        }
-
-        return _request;
-    }
-
-    /**
-     * Processes the response for renewCard
-     * @return An object of type CustomersCardsRenewResponse
-     */
-    private CustomersCardsRenewResponse _handleRenewCardResponse(HttpContext _context)
-            throws APIException, IOException {
-        HttpResponse _response = _context.getResponse();
-
-        //invoke the callback after response if its not null
-        if (getHttpCallBack() != null) {
-            getHttpCallBack().OnAfterResponse(_context);
-        }
-
-        //Error handling using HTTP status codes
-        int _responseCode = _response.getStatusCode();
-
-        if (_responseCode == 400) {
-            throw new MErrorException("Invalid request", _context);
-        }
-        if (_responseCode == 401) {
-            throw new MErrorException("Invalid API key", _context);
-        }
-        if (_responseCode == 404) {
-            throw new MErrorException("An informed resource was not found", _context);
-        }
-        if (_responseCode == 412) {
-            throw new MErrorException("Business validation error", _context);
-        }
-        if (_responseCode == 422) {
-            throw new MErrorException("Contract validation error", _context);
-        }
-        if (_responseCode == 500) {
-            throw new MErrorException("Internal server error", _context);
-        }
-        //handle errors defined at the API level
-        validateResponse(_response, _context);
-
-        //extract result from the http response
-        String _responseBody = ((HttpStringResponse)_response).getBody();
-        CustomersCardsRenewResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<CustomersCardsRenewResponse>(){});
-
-        return _result;
-    }
-
-    /**
-     * Get all Customers
-     * @param    name    Optional parameter: Name of the Customer
-     * @param    document    Optional parameter: Document of the Customer
-     * @param    page    Optional parameter: Current page the the search
-     * @param    size    Optional parameter: Quantity pages of the search
-     * @param    email    Optional parameter: Customer's email
-     * @param    code    Optional parameter: Customer's code
-     * @return    Returns the CustomersResponse3 response from the API call 
-     */
-    public CustomersResponse3 getCustomers(
-                final String name,
-                final String document,
-                final Integer page,
-                final Integer size,
-                final String email,
-                final String code
-    ) throws Throwable {
-
-        HttpRequest _request = _buildGetCustomersRequest(name, document, page, size, email, code);
-        HttpResponse _response = getClientInstance().executeAsString(_request);
-        HttpContext _context = new HttpContext(_request, _response);
-
-        return _handleGetCustomersResponse(_context);
-    }
-
-    /**
-     * Get all Customers
-     * @param    name    Optional parameter: Name of the Customer
-     * @param    document    Optional parameter: Document of the Customer
-     * @param    page    Optional parameter: Current page the the search
-     * @param    size    Optional parameter: Quantity pages of the search
-     * @param    email    Optional parameter: Customer's email
-     * @param    code    Optional parameter: Customer's code
-     */
-    public void getCustomersAsync(
-                final String name,
-                final String document,
-                final Integer page,
-                final Integer size,
-                final String email,
-                final String code,
-                final APICallBack<CustomersResponse3> callBack
-    ) {
-        Runnable _responseTask = new Runnable() {
-            public void run() {
-
-                HttpRequest _request;
-                try {
-                    _request = _buildGetCustomersRequest(name, document, page, size, email, code);
-                } catch (Exception e) {
-                    callBack.onFailure(null, e);
-                    return;
-                }
-
-                // Invoke request and get response
-                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
-                    public void onSuccess(HttpContext _context, HttpResponse _response) {
-                        try {
-                            CustomersResponse3 returnValue = _handleGetCustomersResponse(_context);
-                            callBack.onSuccess(_context, returnValue);
-                        } catch (Exception e) {
-                            callBack.onFailure(_context, e);
-                        }
-                    }
-
-                    public void onFailure(HttpContext _context, Throwable _exception) {
-                        // Let the caller know of the failure
-                        callBack.onFailure(_context, _exception);
-                    }
-                });
-            }
-        };
-
-        // Execute async using thread pool
-        APIHelper.getScheduler().execute(_responseTask);
-    }
-
-    /**
-     * Builds the HttpRequest object for getCustomers
-     */
-    private HttpRequest _buildGetCustomersRequest(
-                final String name,
-                final String document,
-                final Integer page,
-                final Integer size,
-                final String email,
-                final String code) throws IOException, APIException {
-        //the base uri for api requests
-        String _baseUri = Configuration.baseUri;
-
-        //prepare query string for API call
-        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/customers");
-
-        //process query parameters
-        Map<String, Object> _queryParameters = new HashMap<String, Object>();
-        if (name != null) {
-            _queryParameters.put("name", name);
-        }
-        if (document != null) {
-            _queryParameters.put("document", document);
-        }
-        if (page != null) {
-            _queryParameters.put("page", (page != null) ? page : 1);
-        }
-        if (size != null) {
-            _queryParameters.put("size", (size != null) ? size : 10);
-        }
-        if (email != null) {
-            _queryParameters.put("email", email);
-        }
-        if (code != null) {
-            _queryParameters.put("Code", code);
-        }
-        APIHelper.appendUrlWithQueryParameters(_queryBuilder, _queryParameters);
         //validate and preprocess url
         String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
 
@@ -1987,10 +602,10 @@ public class CustomersController extends BaseController {
     }
 
     /**
-     * Processes the response for getCustomers
-     * @return An object of type CustomersResponse3
+     * Processes the response for getCustomer
+     * @return An object of type CustomersResponse
      */
-    private CustomersResponse3 _handleGetCustomersResponse(HttpContext _context)
+    private CustomersResponse _handleGetCustomerResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -2025,50 +640,42 @@ public class CustomersController extends BaseController {
 
         //extract result from the http response
         String _responseBody = ((HttpStringResponse)_response).getBody();
-        CustomersResponse3 _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<CustomersResponse3>(){});
+        CustomersResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<CustomersResponse>(){});
 
         return _result;
     }
 
     /**
-     * Creates a access token for a customer
+     * Delete a Customer's access tokens
      * @param    customerId    Required parameter: Customer Id
-     * @param    body    Required parameter: Request for creating a access token
-     * @param    idempotencyKey    Optional parameter: Example: 
-     * @return    Returns the CustomersAccessTokensResponse response from the API call 
+     * @return    Returns the CustomersAccessTokensResponse1 response from the API call 
      */
-    public CustomersAccessTokensResponse createAccessToken(
-                final String customerId,
-                final CustomersAccessTokensRequest body,
-                final String idempotencyKey
+    public CustomersAccessTokensResponse1 deleteAccessTokens(
+                final String customerId
     ) throws Throwable {
 
-        HttpRequest _request = _buildCreateAccessTokenRequest(customerId, body, idempotencyKey);
+        HttpRequest _request = _buildDeleteAccessTokensRequest(customerId);
         HttpResponse _response = getClientInstance().executeAsString(_request);
         HttpContext _context = new HttpContext(_request, _response);
 
-        return _handleCreateAccessTokenResponse(_context);
+        return _handleDeleteAccessTokensResponse(_context);
     }
 
     /**
-     * Creates a access token for a customer
+     * Delete a Customer's access tokens
      * @param    customerId    Required parameter: Customer Id
-     * @param    body    Required parameter: Request for creating a access token
-     * @param    idempotencyKey    Optional parameter: Example: 
      */
-    public void createAccessTokenAsync(
+    public void deleteAccessTokensAsync(
                 final String customerId,
-                final CustomersAccessTokensRequest body,
-                final String idempotencyKey,
-                final APICallBack<CustomersAccessTokensResponse> callBack
+                final APICallBack<CustomersAccessTokensResponse1> callBack
     ) {
         Runnable _responseTask = new Runnable() {
             public void run() {
 
                 HttpRequest _request;
                 try {
-                    _request = _buildCreateAccessTokenRequest(customerId, body, idempotencyKey);
+                    _request = _buildDeleteAccessTokensRequest(customerId);
                 } catch (Exception e) {
                     callBack.onFailure(null, e);
                     return;
@@ -2078,7 +685,7 @@ public class CustomersController extends BaseController {
                 getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
                     public void onSuccess(HttpContext _context, HttpResponse _response) {
                         try {
-                            CustomersAccessTokensResponse returnValue = _handleCreateAccessTokenResponse(_context);
+                            CustomersAccessTokensResponse1 returnValue = _handleDeleteAccessTokensResponse(_context);
                             callBack.onSuccess(_context, returnValue);
                         } catch (Exception e) {
                             callBack.onFailure(_context, e);
@@ -2098,17 +705,15 @@ public class CustomersController extends BaseController {
     }
 
     /**
-     * Builds the HttpRequest object for createAccessToken
+     * Builds the HttpRequest object for deleteAccessTokens
      */
-    private HttpRequest _buildCreateAccessTokenRequest(
-                final String customerId,
-                final CustomersAccessTokensRequest body,
-                final String idempotencyKey) throws IOException, APIException {
+    private HttpRequest _buildDeleteAccessTokensRequest(
+                final String customerId) throws IOException, APIException {
         //the base uri for api requests
         String _baseUri = Configuration.baseUri;
 
         //prepare query string for API call
-        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/customers/{customer_id}/access-tokens");
+        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/customers/{customer_id}/access-tokens/");
 
         //process template parameters
         Map<String, Object> _templateParameters = new HashMap<String, Object>();
@@ -2119,16 +724,12 @@ public class CustomersController extends BaseController {
 
         //load all headers for the outgoing API request
         Map<String, String> _headers = new HashMap<String, String>();
-        _headers.put("Content-Type", "application/json");
-        if (idempotencyKey != null) {
-            _headers.put("idempotency-key", idempotencyKey);
-        }
         _headers.put("user-agent", BaseController.userAgent);
         _headers.put("accept", "application/json");
 
 
         //prepare and invoke the API call request to fetch the response
-        HttpRequest _request = getClientInstance().postBody(_queryUrl, _headers, APIHelper.serialize(body),
+        HttpRequest _request = getClientInstance().get(_queryUrl, _headers, null,
                 Configuration.basicAuthUserName, Configuration.basicAuthPassword);
 
         // Invoke the callback before request if its not null
@@ -2140,10 +741,10 @@ public class CustomersController extends BaseController {
     }
 
     /**
-     * Processes the response for createAccessToken
-     * @return An object of type CustomersAccessTokensResponse
+     * Processes the response for deleteAccessTokens
+     * @return An object of type CustomersAccessTokensResponse1
      */
-    private CustomersAccessTokensResponse _handleCreateAccessTokenResponse(HttpContext _context)
+    private CustomersAccessTokensResponse1 _handleDeleteAccessTokensResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
@@ -2178,8 +779,8 @@ public class CustomersController extends BaseController {
 
         //extract result from the http response
         String _responseBody = ((HttpStringResponse)_response).getBody();
-        CustomersAccessTokensResponse _result = APIHelper.deserialize(_responseBody,
-                                                        new TypeReference<CustomersAccessTokensResponse>(){});
+        CustomersAccessTokensResponse1 _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<CustomersAccessTokensResponse1>(){});
 
         return _result;
     }
@@ -2339,6 +940,159 @@ public class CustomersController extends BaseController {
         String _responseBody = ((HttpStringResponse)_response).getBody();
         CustomersAddressesResponse _result = APIHelper.deserialize(_responseBody,
                                                         new TypeReference<CustomersAddressesResponse>(){});
+
+        return _result;
+    }
+
+    /**
+     * Creates a new address for a customer
+     * @param    customerId    Required parameter: Customer Id
+     * @param    body    Required parameter: Request for creating an address
+     * @param    idempotencyKey    Optional parameter: Example: 
+     * @return    Returns the CustomersAddressesResponse1 response from the API call 
+     */
+    public CustomersAddressesResponse1 createAddress(
+                final String customerId,
+                final CustomersAddressesRequest body,
+                final String idempotencyKey
+    ) throws Throwable {
+
+        HttpRequest _request = _buildCreateAddressRequest(customerId, body, idempotencyKey);
+        HttpResponse _response = getClientInstance().executeAsString(_request);
+        HttpContext _context = new HttpContext(_request, _response);
+
+        return _handleCreateAddressResponse(_context);
+    }
+
+    /**
+     * Creates a new address for a customer
+     * @param    customerId    Required parameter: Customer Id
+     * @param    body    Required parameter: Request for creating an address
+     * @param    idempotencyKey    Optional parameter: Example: 
+     */
+    public void createAddressAsync(
+                final String customerId,
+                final CustomersAddressesRequest body,
+                final String idempotencyKey,
+                final APICallBack<CustomersAddressesResponse1> callBack
+    ) {
+        Runnable _responseTask = new Runnable() {
+            public void run() {
+
+                HttpRequest _request;
+                try {
+                    _request = _buildCreateAddressRequest(customerId, body, idempotencyKey);
+                } catch (Exception e) {
+                    callBack.onFailure(null, e);
+                    return;
+                }
+
+                // Invoke request and get response
+                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
+                    public void onSuccess(HttpContext _context, HttpResponse _response) {
+                        try {
+                            CustomersAddressesResponse1 returnValue = _handleCreateAddressResponse(_context);
+                            callBack.onSuccess(_context, returnValue);
+                        } catch (Exception e) {
+                            callBack.onFailure(_context, e);
+                        }
+                    }
+
+                    public void onFailure(HttpContext _context, Throwable _exception) {
+                        // Let the caller know of the failure
+                        callBack.onFailure(_context, _exception);
+                    }
+                });
+            }
+        };
+
+        // Execute async using thread pool
+        APIHelper.getScheduler().execute(_responseTask);
+    }
+
+    /**
+     * Builds the HttpRequest object for createAddress
+     */
+    private HttpRequest _buildCreateAddressRequest(
+                final String customerId,
+                final CustomersAddressesRequest body,
+                final String idempotencyKey) throws IOException, APIException {
+        //the base uri for api requests
+        String _baseUri = Configuration.baseUri;
+
+        //prepare query string for API call
+        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/customers/{customer_id}/addresses");
+
+        //process template parameters
+        Map<String, Object> _templateParameters = new HashMap<String, Object>();
+        _templateParameters.put("customer_id", customerId);
+        APIHelper.appendUrlWithTemplateParameters(_queryBuilder, _templateParameters);
+        //validate and preprocess url
+        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
+
+        //load all headers for the outgoing API request
+        Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("Content-Type", "application/json");
+        if (idempotencyKey != null) {
+            _headers.put("idempotency-key", idempotencyKey);
+        }
+        _headers.put("user-agent", BaseController.userAgent);
+        _headers.put("accept", "application/json");
+
+
+        //prepare and invoke the API call request to fetch the response
+        HttpRequest _request = getClientInstance().postBody(_queryUrl, _headers, APIHelper.serialize(body),
+                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
+
+        // Invoke the callback before request if its not null
+        if (getHttpCallBack() != null) {
+            getHttpCallBack().OnBeforeRequest(_request);
+        }
+
+        return _request;
+    }
+
+    /**
+     * Processes the response for createAddress
+     * @return An object of type CustomersAddressesResponse1
+     */
+    private CustomersAddressesResponse1 _handleCreateAddressResponse(HttpContext _context)
+            throws APIException, IOException {
+        HttpResponse _response = _context.getResponse();
+
+        //invoke the callback after response if its not null
+        if (getHttpCallBack() != null) {
+            getHttpCallBack().OnAfterResponse(_context);
+        }
+
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
+        //handle errors defined at the API level
+        validateResponse(_response, _context);
+
+        //extract result from the http response
+        String _responseBody = ((HttpStringResponse)_response).getBody();
+        CustomersAddressesResponse1 _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<CustomersAddressesResponse1>(){});
 
         return _result;
     }
@@ -2787,6 +1541,165 @@ public class CustomersController extends BaseController {
     }
 
     /**
+     * Updates an address
+     * @param    customerId    Required parameter: Customer Id
+     * @param    addressId    Required parameter: Address Id
+     * @param    body    Required parameter: Request for updating an address
+     * @param    idempotencyKey    Optional parameter: Example: 
+     * @return    Returns the CustomersAddressesResponse1 response from the API call 
+     */
+    public CustomersAddressesResponse1 updateAddress(
+                final String customerId,
+                final String addressId,
+                final CustomersAddressesRequest1 body,
+                final String idempotencyKey
+    ) throws Throwable {
+
+        HttpRequest _request = _buildUpdateAddressRequest(customerId, addressId, body, idempotencyKey);
+        HttpResponse _response = getClientInstance().executeAsString(_request);
+        HttpContext _context = new HttpContext(_request, _response);
+
+        return _handleUpdateAddressResponse(_context);
+    }
+
+    /**
+     * Updates an address
+     * @param    customerId    Required parameter: Customer Id
+     * @param    addressId    Required parameter: Address Id
+     * @param    body    Required parameter: Request for updating an address
+     * @param    idempotencyKey    Optional parameter: Example: 
+     */
+    public void updateAddressAsync(
+                final String customerId,
+                final String addressId,
+                final CustomersAddressesRequest1 body,
+                final String idempotencyKey,
+                final APICallBack<CustomersAddressesResponse1> callBack
+    ) {
+        Runnable _responseTask = new Runnable() {
+            public void run() {
+
+                HttpRequest _request;
+                try {
+                    _request = _buildUpdateAddressRequest(customerId, addressId, body, idempotencyKey);
+                } catch (Exception e) {
+                    callBack.onFailure(null, e);
+                    return;
+                }
+
+                // Invoke request and get response
+                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
+                    public void onSuccess(HttpContext _context, HttpResponse _response) {
+                        try {
+                            CustomersAddressesResponse1 returnValue = _handleUpdateAddressResponse(_context);
+                            callBack.onSuccess(_context, returnValue);
+                        } catch (Exception e) {
+                            callBack.onFailure(_context, e);
+                        }
+                    }
+
+                    public void onFailure(HttpContext _context, Throwable _exception) {
+                        // Let the caller know of the failure
+                        callBack.onFailure(_context, _exception);
+                    }
+                });
+            }
+        };
+
+        // Execute async using thread pool
+        APIHelper.getScheduler().execute(_responseTask);
+    }
+
+    /**
+     * Builds the HttpRequest object for updateAddress
+     */
+    private HttpRequest _buildUpdateAddressRequest(
+                final String customerId,
+                final String addressId,
+                final CustomersAddressesRequest1 body,
+                final String idempotencyKey) throws IOException, APIException {
+        //the base uri for api requests
+        String _baseUri = Configuration.baseUri;
+
+        //prepare query string for API call
+        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/customers/{customer_id}/addresses/{address_id}");
+
+        //process template parameters
+        Map<String, Object> _templateParameters = new HashMap<String, Object>();
+        _templateParameters.put("customer_id", customerId);
+        _templateParameters.put("address_id", addressId);
+        APIHelper.appendUrlWithTemplateParameters(_queryBuilder, _templateParameters);
+        //validate and preprocess url
+        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
+
+        //load all headers for the outgoing API request
+        Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("Content-Type", "application/json");
+        if (idempotencyKey != null) {
+            _headers.put("idempotency-key", idempotencyKey);
+        }
+        _headers.put("user-agent", BaseController.userAgent);
+        _headers.put("accept", "application/json");
+
+
+        //prepare and invoke the API call request to fetch the response
+        HttpRequest _request = getClientInstance().putBody(_queryUrl, _headers, APIHelper.serialize(body),
+                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
+
+        // Invoke the callback before request if its not null
+        if (getHttpCallBack() != null) {
+            getHttpCallBack().OnBeforeRequest(_request);
+        }
+
+        return _request;
+    }
+
+    /**
+     * Processes the response for updateAddress
+     * @return An object of type CustomersAddressesResponse1
+     */
+    private CustomersAddressesResponse1 _handleUpdateAddressResponse(HttpContext _context)
+            throws APIException, IOException {
+        HttpResponse _response = _context.getResponse();
+
+        //invoke the callback after response if its not null
+        if (getHttpCallBack() != null) {
+            getHttpCallBack().OnAfterResponse(_context);
+        }
+
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
+        //handle errors defined at the API level
+        validateResponse(_response, _context);
+
+        //extract result from the http response
+        String _responseBody = ((HttpStringResponse)_response).getBody();
+        CustomersAddressesResponse1 _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<CustomersAddressesResponse1>(){});
+
+        return _result;
+    }
+
+    /**
      * Delete a Customer's address
      * @param    customerId    Required parameter: Customer Id
      * @param    addressId    Required parameter: Address Id
@@ -3093,6 +2006,795 @@ public class CustomersController extends BaseController {
     }
 
     /**
+     * Get all cards from a customer
+     * @param    customerId    Required parameter: Customer Id
+     * @param    page    Optional parameter: Page number
+     * @param    size    Optional parameter: Page size
+     * @return    Returns the CustomersCardsResponse1 response from the API call 
+     */
+    public CustomersCardsResponse1 getCards(
+                final String customerId,
+                final Integer page,
+                final Integer size
+    ) throws Throwable {
+
+        HttpRequest _request = _buildGetCardsRequest(customerId, page, size);
+        HttpResponse _response = getClientInstance().executeAsString(_request);
+        HttpContext _context = new HttpContext(_request, _response);
+
+        return _handleGetCardsResponse(_context);
+    }
+
+    /**
+     * Get all cards from a customer
+     * @param    customerId    Required parameter: Customer Id
+     * @param    page    Optional parameter: Page number
+     * @param    size    Optional parameter: Page size
+     */
+    public void getCardsAsync(
+                final String customerId,
+                final Integer page,
+                final Integer size,
+                final APICallBack<CustomersCardsResponse1> callBack
+    ) {
+        Runnable _responseTask = new Runnable() {
+            public void run() {
+
+                HttpRequest _request;
+                try {
+                    _request = _buildGetCardsRequest(customerId, page, size);
+                } catch (Exception e) {
+                    callBack.onFailure(null, e);
+                    return;
+                }
+
+                // Invoke request and get response
+                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
+                    public void onSuccess(HttpContext _context, HttpResponse _response) {
+                        try {
+                            CustomersCardsResponse1 returnValue = _handleGetCardsResponse(_context);
+                            callBack.onSuccess(_context, returnValue);
+                        } catch (Exception e) {
+                            callBack.onFailure(_context, e);
+                        }
+                    }
+
+                    public void onFailure(HttpContext _context, Throwable _exception) {
+                        // Let the caller know of the failure
+                        callBack.onFailure(_context, _exception);
+                    }
+                });
+            }
+        };
+
+        // Execute async using thread pool
+        APIHelper.getScheduler().execute(_responseTask);
+    }
+
+    /**
+     * Builds the HttpRequest object for getCards
+     */
+    private HttpRequest _buildGetCardsRequest(
+                final String customerId,
+                final Integer page,
+                final Integer size) throws IOException, APIException {
+        //the base uri for api requests
+        String _baseUri = Configuration.baseUri;
+
+        //prepare query string for API call
+        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/customers/{customer_id}/cards");
+
+        //process template parameters
+        Map<String, Object> _templateParameters = new HashMap<String, Object>();
+        _templateParameters.put("customer_id", customerId);
+        APIHelper.appendUrlWithTemplateParameters(_queryBuilder, _templateParameters);
+
+        //process query parameters
+        Map<String, Object> _queryParameters = new HashMap<String, Object>();
+        if (page != null) {
+            _queryParameters.put("page", page);
+        }
+        if (size != null) {
+            _queryParameters.put("size", size);
+        }
+        APIHelper.appendUrlWithQueryParameters(_queryBuilder, _queryParameters);
+        //validate and preprocess url
+        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
+
+        //load all headers for the outgoing API request
+        Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("user-agent", BaseController.userAgent);
+        _headers.put("accept", "application/json");
+
+
+        //prepare and invoke the API call request to fetch the response
+        HttpRequest _request = getClientInstance().get(_queryUrl, _headers, null,
+                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
+
+        // Invoke the callback before request if its not null
+        if (getHttpCallBack() != null) {
+            getHttpCallBack().OnBeforeRequest(_request);
+        }
+
+        return _request;
+    }
+
+    /**
+     * Processes the response for getCards
+     * @return An object of type CustomersCardsResponse1
+     */
+    private CustomersCardsResponse1 _handleGetCardsResponse(HttpContext _context)
+            throws APIException, IOException {
+        HttpResponse _response = _context.getResponse();
+
+        //invoke the callback after response if its not null
+        if (getHttpCallBack() != null) {
+            getHttpCallBack().OnAfterResponse(_context);
+        }
+
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
+        //handle errors defined at the API level
+        validateResponse(_response, _context);
+
+        //extract result from the http response
+        String _responseBody = ((HttpStringResponse)_response).getBody();
+        CustomersCardsResponse1 _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<CustomersCardsResponse1>(){});
+
+        return _result;
+    }
+
+    /**
+     * Renew a card
+     * @param    customerId    Required parameter: Customer id
+     * @param    cardId    Required parameter: Card Id
+     * @param    idempotencyKey    Optional parameter: Example: 
+     * @return    Returns the CustomersCardsRenewResponse response from the API call 
+     */
+    public CustomersCardsRenewResponse renewCard(
+                final String customerId,
+                final String cardId,
+                final String idempotencyKey
+    ) throws Throwable {
+
+        HttpRequest _request = _buildRenewCardRequest(customerId, cardId, idempotencyKey);
+        HttpResponse _response = getClientInstance().executeAsString(_request);
+        HttpContext _context = new HttpContext(_request, _response);
+
+        return _handleRenewCardResponse(_context);
+    }
+
+    /**
+     * Renew a card
+     * @param    customerId    Required parameter: Customer id
+     * @param    cardId    Required parameter: Card Id
+     * @param    idempotencyKey    Optional parameter: Example: 
+     */
+    public void renewCardAsync(
+                final String customerId,
+                final String cardId,
+                final String idempotencyKey,
+                final APICallBack<CustomersCardsRenewResponse> callBack
+    ) {
+        Runnable _responseTask = new Runnable() {
+            public void run() {
+
+                HttpRequest _request;
+                try {
+                    _request = _buildRenewCardRequest(customerId, cardId, idempotencyKey);
+                } catch (Exception e) {
+                    callBack.onFailure(null, e);
+                    return;
+                }
+
+                // Invoke request and get response
+                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
+                    public void onSuccess(HttpContext _context, HttpResponse _response) {
+                        try {
+                            CustomersCardsRenewResponse returnValue = _handleRenewCardResponse(_context);
+                            callBack.onSuccess(_context, returnValue);
+                        } catch (Exception e) {
+                            callBack.onFailure(_context, e);
+                        }
+                    }
+
+                    public void onFailure(HttpContext _context, Throwable _exception) {
+                        // Let the caller know of the failure
+                        callBack.onFailure(_context, _exception);
+                    }
+                });
+            }
+        };
+
+        // Execute async using thread pool
+        APIHelper.getScheduler().execute(_responseTask);
+    }
+
+    /**
+     * Builds the HttpRequest object for renewCard
+     */
+    private HttpRequest _buildRenewCardRequest(
+                final String customerId,
+                final String cardId,
+                final String idempotencyKey) throws IOException, APIException {
+        //the base uri for api requests
+        String _baseUri = Configuration.baseUri;
+
+        //prepare query string for API call
+        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/customers/{customer_id}/cards/{card_id}/renew");
+
+        //process template parameters
+        Map<String, Object> _templateParameters = new HashMap<String, Object>();
+        _templateParameters.put("customer_id", customerId);
+        _templateParameters.put("card_id", cardId);
+        APIHelper.appendUrlWithTemplateParameters(_queryBuilder, _templateParameters);
+        //validate and preprocess url
+        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
+
+        //load all headers for the outgoing API request
+        Map<String, String> _headers = new HashMap<String, String>();
+        if (idempotencyKey != null) {
+            _headers.put("idempotency-key", idempotencyKey);
+        }
+        _headers.put("user-agent", BaseController.userAgent);
+        _headers.put("accept", "application/json");
+
+
+        //prepare and invoke the API call request to fetch the response
+        HttpRequest _request = getClientInstance().post(_queryUrl, _headers, null,
+                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
+
+        // Invoke the callback before request if its not null
+        if (getHttpCallBack() != null) {
+            getHttpCallBack().OnBeforeRequest(_request);
+        }
+
+        return _request;
+    }
+
+    /**
+     * Processes the response for renewCard
+     * @return An object of type CustomersCardsRenewResponse
+     */
+    private CustomersCardsRenewResponse _handleRenewCardResponse(HttpContext _context)
+            throws APIException, IOException {
+        HttpResponse _response = _context.getResponse();
+
+        //invoke the callback after response if its not null
+        if (getHttpCallBack() != null) {
+            getHttpCallBack().OnAfterResponse(_context);
+        }
+
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
+        //handle errors defined at the API level
+        validateResponse(_response, _context);
+
+        //extract result from the http response
+        String _responseBody = ((HttpStringResponse)_response).getBody();
+        CustomersCardsRenewResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<CustomersCardsRenewResponse>(){});
+
+        return _result;
+    }
+
+    /**
+     * Creates a new customer
+     * @param    body    Required parameter: Request for creating a customer
+     * @param    idempotencyKey    Optional parameter: Example: 
+     * @return    Returns the CustomersResponse response from the API call 
+     */
+    public CustomersResponse createCustomer(
+                final CustomersRequest1 body,
+                final String idempotencyKey
+    ) throws Throwable {
+
+        HttpRequest _request = _buildCreateCustomerRequest(body, idempotencyKey);
+        HttpResponse _response = getClientInstance().executeAsString(_request);
+        HttpContext _context = new HttpContext(_request, _response);
+
+        return _handleCreateCustomerResponse(_context);
+    }
+
+    /**
+     * Creates a new customer
+     * @param    body    Required parameter: Request for creating a customer
+     * @param    idempotencyKey    Optional parameter: Example: 
+     */
+    public void createCustomerAsync(
+                final CustomersRequest1 body,
+                final String idempotencyKey,
+                final APICallBack<CustomersResponse> callBack
+    ) {
+        Runnable _responseTask = new Runnable() {
+            public void run() {
+
+                HttpRequest _request;
+                try {
+                    _request = _buildCreateCustomerRequest(body, idempotencyKey);
+                } catch (Exception e) {
+                    callBack.onFailure(null, e);
+                    return;
+                }
+
+                // Invoke request and get response
+                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
+                    public void onSuccess(HttpContext _context, HttpResponse _response) {
+                        try {
+                            CustomersResponse returnValue = _handleCreateCustomerResponse(_context);
+                            callBack.onSuccess(_context, returnValue);
+                        } catch (Exception e) {
+                            callBack.onFailure(_context, e);
+                        }
+                    }
+
+                    public void onFailure(HttpContext _context, Throwable _exception) {
+                        // Let the caller know of the failure
+                        callBack.onFailure(_context, _exception);
+                    }
+                });
+            }
+        };
+
+        // Execute async using thread pool
+        APIHelper.getScheduler().execute(_responseTask);
+    }
+
+    /**
+     * Builds the HttpRequest object for createCustomer
+     */
+    private HttpRequest _buildCreateCustomerRequest(
+                final CustomersRequest1 body,
+                final String idempotencyKey) throws IOException, APIException {
+        //the base uri for api requests
+        String _baseUri = Configuration.baseUri;
+
+        //prepare query string for API call
+        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/customers");
+        //validate and preprocess url
+        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
+
+        //load all headers for the outgoing API request
+        Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("Content-Type", "application/json");
+        if (idempotencyKey != null) {
+            _headers.put("idempotency-key", idempotencyKey);
+        }
+        _headers.put("user-agent", BaseController.userAgent);
+        _headers.put("accept", "application/json");
+
+
+        //prepare and invoke the API call request to fetch the response
+        HttpRequest _request = getClientInstance().postBody(_queryUrl, _headers, APIHelper.serialize(body),
+                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
+
+        // Invoke the callback before request if its not null
+        if (getHttpCallBack() != null) {
+            getHttpCallBack().OnBeforeRequest(_request);
+        }
+
+        return _request;
+    }
+
+    /**
+     * Processes the response for createCustomer
+     * @return An object of type CustomersResponse
+     */
+    private CustomersResponse _handleCreateCustomerResponse(HttpContext _context)
+            throws APIException, IOException {
+        HttpResponse _response = _context.getResponse();
+
+        //invoke the callback after response if its not null
+        if (getHttpCallBack() != null) {
+            getHttpCallBack().OnAfterResponse(_context);
+        }
+
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
+        //handle errors defined at the API level
+        validateResponse(_response, _context);
+
+        //extract result from the http response
+        String _responseBody = ((HttpStringResponse)_response).getBody();
+        CustomersResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<CustomersResponse>(){});
+
+        return _result;
+    }
+
+    /**
+     * Get all Customers
+     * @param    name    Optional parameter: Name of the Customer
+     * @param    document    Optional parameter: Document of the Customer
+     * @param    page    Optional parameter: Current page the the search
+     * @param    size    Optional parameter: Quantity pages of the search
+     * @param    email    Optional parameter: Customer's email
+     * @param    code    Optional parameter: Customer's code
+     * @return    Returns the CustomersResponse3 response from the API call 
+     */
+    public CustomersResponse3 getCustomers(
+                final String name,
+                final String document,
+                final Integer page,
+                final Integer size,
+                final String email,
+                final String code
+    ) throws Throwable {
+
+        HttpRequest _request = _buildGetCustomersRequest(name, document, page, size, email, code);
+        HttpResponse _response = getClientInstance().executeAsString(_request);
+        HttpContext _context = new HttpContext(_request, _response);
+
+        return _handleGetCustomersResponse(_context);
+    }
+
+    /**
+     * Get all Customers
+     * @param    name    Optional parameter: Name of the Customer
+     * @param    document    Optional parameter: Document of the Customer
+     * @param    page    Optional parameter: Current page the the search
+     * @param    size    Optional parameter: Quantity pages of the search
+     * @param    email    Optional parameter: Customer's email
+     * @param    code    Optional parameter: Customer's code
+     */
+    public void getCustomersAsync(
+                final String name,
+                final String document,
+                final Integer page,
+                final Integer size,
+                final String email,
+                final String code,
+                final APICallBack<CustomersResponse3> callBack
+    ) {
+        Runnable _responseTask = new Runnable() {
+            public void run() {
+
+                HttpRequest _request;
+                try {
+                    _request = _buildGetCustomersRequest(name, document, page, size, email, code);
+                } catch (Exception e) {
+                    callBack.onFailure(null, e);
+                    return;
+                }
+
+                // Invoke request and get response
+                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
+                    public void onSuccess(HttpContext _context, HttpResponse _response) {
+                        try {
+                            CustomersResponse3 returnValue = _handleGetCustomersResponse(_context);
+                            callBack.onSuccess(_context, returnValue);
+                        } catch (Exception e) {
+                            callBack.onFailure(_context, e);
+                        }
+                    }
+
+                    public void onFailure(HttpContext _context, Throwable _exception) {
+                        // Let the caller know of the failure
+                        callBack.onFailure(_context, _exception);
+                    }
+                });
+            }
+        };
+
+        // Execute async using thread pool
+        APIHelper.getScheduler().execute(_responseTask);
+    }
+
+    /**
+     * Builds the HttpRequest object for getCustomers
+     */
+    private HttpRequest _buildGetCustomersRequest(
+                final String name,
+                final String document,
+                final Integer page,
+                final Integer size,
+                final String email,
+                final String code) throws IOException, APIException {
+        //the base uri for api requests
+        String _baseUri = Configuration.baseUri;
+
+        //prepare query string for API call
+        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/customers");
+
+        //process query parameters
+        Map<String, Object> _queryParameters = new HashMap<String, Object>();
+        if (name != null) {
+            _queryParameters.put("name", name);
+        }
+        if (document != null) {
+            _queryParameters.put("document", document);
+        }
+        if (page != null) {
+            _queryParameters.put("page", (page != null) ? page : 1);
+        }
+        if (size != null) {
+            _queryParameters.put("size", (size != null) ? size : 10);
+        }
+        if (email != null) {
+            _queryParameters.put("email", email);
+        }
+        if (code != null) {
+            _queryParameters.put("Code", code);
+        }
+        APIHelper.appendUrlWithQueryParameters(_queryBuilder, _queryParameters);
+        //validate and preprocess url
+        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
+
+        //load all headers for the outgoing API request
+        Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("user-agent", BaseController.userAgent);
+        _headers.put("accept", "application/json");
+
+
+        //prepare and invoke the API call request to fetch the response
+        HttpRequest _request = getClientInstance().get(_queryUrl, _headers, null,
+                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
+
+        // Invoke the callback before request if its not null
+        if (getHttpCallBack() != null) {
+            getHttpCallBack().OnBeforeRequest(_request);
+        }
+
+        return _request;
+    }
+
+    /**
+     * Processes the response for getCustomers
+     * @return An object of type CustomersResponse3
+     */
+    private CustomersResponse3 _handleGetCustomersResponse(HttpContext _context)
+            throws APIException, IOException {
+        HttpResponse _response = _context.getResponse();
+
+        //invoke the callback after response if its not null
+        if (getHttpCallBack() != null) {
+            getHttpCallBack().OnAfterResponse(_context);
+        }
+
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
+        //handle errors defined at the API level
+        validateResponse(_response, _context);
+
+        //extract result from the http response
+        String _responseBody = ((HttpStringResponse)_response).getBody();
+        CustomersResponse3 _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<CustomersResponse3>(){});
+
+        return _result;
+    }
+
+    /**
+     * Updates the metadata a customer
+     * @param    customerId    Required parameter: The customer id
+     * @param    body    Required parameter: Request for updating the customer metadata
+     * @param    idempotencyKey    Optional parameter: Example: 
+     * @return    Returns the CustomersMetadataResponse response from the API call 
+     */
+    public CustomersMetadataResponse updateCustomerMetadata(
+                final String customerId,
+                final CustomersMetadataRequest body,
+                final String idempotencyKey
+    ) throws Throwable {
+
+        HttpRequest _request = _buildUpdateCustomerMetadataRequest(customerId, body, idempotencyKey);
+        HttpResponse _response = getClientInstance().executeAsString(_request);
+        HttpContext _context = new HttpContext(_request, _response);
+
+        return _handleUpdateCustomerMetadataResponse(_context);
+    }
+
+    /**
+     * Updates the metadata a customer
+     * @param    customerId    Required parameter: The customer id
+     * @param    body    Required parameter: Request for updating the customer metadata
+     * @param    idempotencyKey    Optional parameter: Example: 
+     */
+    public void updateCustomerMetadataAsync(
+                final String customerId,
+                final CustomersMetadataRequest body,
+                final String idempotencyKey,
+                final APICallBack<CustomersMetadataResponse> callBack
+    ) {
+        Runnable _responseTask = new Runnable() {
+            public void run() {
+
+                HttpRequest _request;
+                try {
+                    _request = _buildUpdateCustomerMetadataRequest(customerId, body, idempotencyKey);
+                } catch (Exception e) {
+                    callBack.onFailure(null, e);
+                    return;
+                }
+
+                // Invoke request and get response
+                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
+                    public void onSuccess(HttpContext _context, HttpResponse _response) {
+                        try {
+                            CustomersMetadataResponse returnValue = _handleUpdateCustomerMetadataResponse(_context);
+                            callBack.onSuccess(_context, returnValue);
+                        } catch (Exception e) {
+                            callBack.onFailure(_context, e);
+                        }
+                    }
+
+                    public void onFailure(HttpContext _context, Throwable _exception) {
+                        // Let the caller know of the failure
+                        callBack.onFailure(_context, _exception);
+                    }
+                });
+            }
+        };
+
+        // Execute async using thread pool
+        APIHelper.getScheduler().execute(_responseTask);
+    }
+
+    /**
+     * Builds the HttpRequest object for updateCustomerMetadata
+     */
+    private HttpRequest _buildUpdateCustomerMetadataRequest(
+                final String customerId,
+                final CustomersMetadataRequest body,
+                final String idempotencyKey) throws IOException, APIException {
+        //the base uri for api requests
+        String _baseUri = Configuration.baseUri;
+
+        //prepare query string for API call
+        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/Customers/{customer_id}/metadata");
+
+        //process template parameters
+        Map<String, Object> _templateParameters = new HashMap<String, Object>();
+        _templateParameters.put("customer_id", customerId);
+        APIHelper.appendUrlWithTemplateParameters(_queryBuilder, _templateParameters);
+        //validate and preprocess url
+        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
+
+        //load all headers for the outgoing API request
+        Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("Content-Type", "application/json");
+        if (idempotencyKey != null) {
+            _headers.put("idempotency-key", idempotencyKey);
+        }
+        _headers.put("user-agent", BaseController.userAgent);
+        _headers.put("accept", "application/json");
+
+
+        //prepare and invoke the API call request to fetch the response
+        HttpRequest _request = getClientInstance().patchBody(_queryUrl, _headers, APIHelper.serialize(body),
+                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
+
+        // Invoke the callback before request if its not null
+        if (getHttpCallBack() != null) {
+            getHttpCallBack().OnBeforeRequest(_request);
+        }
+
+        return _request;
+    }
+
+    /**
+     * Processes the response for updateCustomerMetadata
+     * @return An object of type CustomersMetadataResponse
+     */
+    private CustomersMetadataResponse _handleUpdateCustomerMetadataResponse(HttpContext _context)
+            throws APIException, IOException {
+        HttpResponse _response = _context.getResponse();
+
+        //invoke the callback after response if its not null
+        if (getHttpCallBack() != null) {
+            getHttpCallBack().OnAfterResponse(_context);
+        }
+
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
+        //handle errors defined at the API level
+        validateResponse(_response, _context);
+
+        //extract result from the http response
+        String _responseBody = ((HttpStringResponse)_response).getBody();
+        CustomersMetadataResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<CustomersMetadataResponse>(){});
+
+        return _result;
+    }
+
+    /**
      * Updates a card
      * @param    customerId    Required parameter: Customer Id
      * @param    cardId    Required parameter: Card id
@@ -3211,6 +2913,304 @@ public class CustomersController extends BaseController {
      * @return An object of type CustomersCardsResponse
      */
     private CustomersCardsResponse _handleUpdateCardResponse(HttpContext _context)
+            throws APIException, IOException {
+        HttpResponse _response = _context.getResponse();
+
+        //invoke the callback after response if its not null
+        if (getHttpCallBack() != null) {
+            getHttpCallBack().OnAfterResponse(_context);
+        }
+
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
+        //handle errors defined at the API level
+        validateResponse(_response, _context);
+
+        //extract result from the http response
+        String _responseBody = ((HttpStringResponse)_response).getBody();
+        CustomersCardsResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<CustomersCardsResponse>(){});
+
+        return _result;
+    }
+
+    /**
+     * Delete a customer's card
+     * @param    customerId    Required parameter: Customer Id
+     * @param    cardId    Required parameter: Card Id
+     * @param    idempotencyKey    Optional parameter: Example: 
+     * @return    Returns the CustomersCardsResponse response from the API call 
+     */
+    public CustomersCardsResponse deleteCard(
+                final String customerId,
+                final String cardId,
+                final String idempotencyKey
+    ) throws Throwable {
+
+        HttpRequest _request = _buildDeleteCardRequest(customerId, cardId, idempotencyKey);
+        HttpResponse _response = getClientInstance().executeAsString(_request);
+        HttpContext _context = new HttpContext(_request, _response);
+
+        return _handleDeleteCardResponse(_context);
+    }
+
+    /**
+     * Delete a customer's card
+     * @param    customerId    Required parameter: Customer Id
+     * @param    cardId    Required parameter: Card Id
+     * @param    idempotencyKey    Optional parameter: Example: 
+     */
+    public void deleteCardAsync(
+                final String customerId,
+                final String cardId,
+                final String idempotencyKey,
+                final APICallBack<CustomersCardsResponse> callBack
+    ) {
+        Runnable _responseTask = new Runnable() {
+            public void run() {
+
+                HttpRequest _request;
+                try {
+                    _request = _buildDeleteCardRequest(customerId, cardId, idempotencyKey);
+                } catch (Exception e) {
+                    callBack.onFailure(null, e);
+                    return;
+                }
+
+                // Invoke request and get response
+                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
+                    public void onSuccess(HttpContext _context, HttpResponse _response) {
+                        try {
+                            CustomersCardsResponse returnValue = _handleDeleteCardResponse(_context);
+                            callBack.onSuccess(_context, returnValue);
+                        } catch (Exception e) {
+                            callBack.onFailure(_context, e);
+                        }
+                    }
+
+                    public void onFailure(HttpContext _context, Throwable _exception) {
+                        // Let the caller know of the failure
+                        callBack.onFailure(_context, _exception);
+                    }
+                });
+            }
+        };
+
+        // Execute async using thread pool
+        APIHelper.getScheduler().execute(_responseTask);
+    }
+
+    /**
+     * Builds the HttpRequest object for deleteCard
+     */
+    private HttpRequest _buildDeleteCardRequest(
+                final String customerId,
+                final String cardId,
+                final String idempotencyKey) throws IOException, APIException {
+        //the base uri for api requests
+        String _baseUri = Configuration.baseUri;
+
+        //prepare query string for API call
+        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/customers/{customer_id}/cards/{card_id}");
+
+        //process template parameters
+        Map<String, Object> _templateParameters = new HashMap<String, Object>();
+        _templateParameters.put("customer_id", customerId);
+        _templateParameters.put("card_id", cardId);
+        APIHelper.appendUrlWithTemplateParameters(_queryBuilder, _templateParameters);
+        //validate and preprocess url
+        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
+
+        //load all headers for the outgoing API request
+        Map<String, String> _headers = new HashMap<String, String>();
+        if (idempotencyKey != null) {
+            _headers.put("idempotency-key", idempotencyKey);
+        }
+        _headers.put("user-agent", BaseController.userAgent);
+        _headers.put("accept", "application/json");
+
+
+        //prepare and invoke the API call request to fetch the response
+        HttpRequest _request = getClientInstance().delete(_queryUrl, _headers, null,
+                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
+
+        // Invoke the callback before request if its not null
+        if (getHttpCallBack() != null) {
+            getHttpCallBack().OnBeforeRequest(_request);
+        }
+
+        return _request;
+    }
+
+    /**
+     * Processes the response for deleteCard
+     * @return An object of type CustomersCardsResponse
+     */
+    private CustomersCardsResponse _handleDeleteCardResponse(HttpContext _context)
+            throws APIException, IOException {
+        HttpResponse _response = _context.getResponse();
+
+        //invoke the callback after response if its not null
+        if (getHttpCallBack() != null) {
+            getHttpCallBack().OnAfterResponse(_context);
+        }
+
+        //Error handling using HTTP status codes
+        int _responseCode = _response.getStatusCode();
+
+        if (_responseCode == 400) {
+            throw new MErrorException("Invalid request", _context);
+        }
+        if (_responseCode == 401) {
+            throw new MErrorException("Invalid API key", _context);
+        }
+        if (_responseCode == 404) {
+            throw new MErrorException("An informed resource was not found", _context);
+        }
+        if (_responseCode == 412) {
+            throw new MErrorException("Business validation error", _context);
+        }
+        if (_responseCode == 422) {
+            throw new MErrorException("Contract validation error", _context);
+        }
+        if (_responseCode == 500) {
+            throw new MErrorException("Internal server error", _context);
+        }
+        //handle errors defined at the API level
+        validateResponse(_response, _context);
+
+        //extract result from the http response
+        String _responseBody = ((HttpStringResponse)_response).getBody();
+        CustomersCardsResponse _result = APIHelper.deserialize(_responseBody,
+                                                        new TypeReference<CustomersCardsResponse>(){});
+
+        return _result;
+    }
+
+    /**
+     * Get a customer's card
+     * @param    customerId    Required parameter: Customer id
+     * @param    cardId    Required parameter: Card id
+     * @return    Returns the CustomersCardsResponse response from the API call 
+     */
+    public CustomersCardsResponse getCard(
+                final String customerId,
+                final String cardId
+    ) throws Throwable {
+
+        HttpRequest _request = _buildGetCardRequest(customerId, cardId);
+        HttpResponse _response = getClientInstance().executeAsString(_request);
+        HttpContext _context = new HttpContext(_request, _response);
+
+        return _handleGetCardResponse(_context);
+    }
+
+    /**
+     * Get a customer's card
+     * @param    customerId    Required parameter: Customer id
+     * @param    cardId    Required parameter: Card id
+     */
+    public void getCardAsync(
+                final String customerId,
+                final String cardId,
+                final APICallBack<CustomersCardsResponse> callBack
+    ) {
+        Runnable _responseTask = new Runnable() {
+            public void run() {
+
+                HttpRequest _request;
+                try {
+                    _request = _buildGetCardRequest(customerId, cardId);
+                } catch (Exception e) {
+                    callBack.onFailure(null, e);
+                    return;
+                }
+
+                // Invoke request and get response
+                getClientInstance().executeAsStringAsync(_request, new APICallBack<HttpResponse>() {
+                    public void onSuccess(HttpContext _context, HttpResponse _response) {
+                        try {
+                            CustomersCardsResponse returnValue = _handleGetCardResponse(_context);
+                            callBack.onSuccess(_context, returnValue);
+                        } catch (Exception e) {
+                            callBack.onFailure(_context, e);
+                        }
+                    }
+
+                    public void onFailure(HttpContext _context, Throwable _exception) {
+                        // Let the caller know of the failure
+                        callBack.onFailure(_context, _exception);
+                    }
+                });
+            }
+        };
+
+        // Execute async using thread pool
+        APIHelper.getScheduler().execute(_responseTask);
+    }
+
+    /**
+     * Builds the HttpRequest object for getCard
+     */
+    private HttpRequest _buildGetCardRequest(
+                final String customerId,
+                final String cardId) throws IOException, APIException {
+        //the base uri for api requests
+        String _baseUri = Configuration.baseUri;
+
+        //prepare query string for API call
+        StringBuilder _queryBuilder = new StringBuilder(_baseUri + "/customers/{customer_id}/cards/{card_id}");
+
+        //process template parameters
+        Map<String, Object> _templateParameters = new HashMap<String, Object>();
+        _templateParameters.put("customer_id", customerId);
+        _templateParameters.put("card_id", cardId);
+        APIHelper.appendUrlWithTemplateParameters(_queryBuilder, _templateParameters);
+        //validate and preprocess url
+        String _queryUrl = APIHelper.cleanUrl(_queryBuilder);
+
+        //load all headers for the outgoing API request
+        Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("user-agent", BaseController.userAgent);
+        _headers.put("accept", "application/json");
+
+
+        //prepare and invoke the API call request to fetch the response
+        HttpRequest _request = getClientInstance().get(_queryUrl, _headers, null,
+                Configuration.basicAuthUserName, Configuration.basicAuthPassword);
+
+        // Invoke the callback before request if its not null
+        if (getHttpCallBack() != null) {
+            getHttpCallBack().OnBeforeRequest(_request);
+        }
+
+        return _request;
+    }
+
+    /**
+     * Processes the response for getCard
+     * @return An object of type CustomersCardsResponse
+     */
+    private CustomersCardsResponse _handleGetCardResponse(HttpContext _context)
             throws APIException, IOException {
         HttpResponse _response = _context.getResponse();
 
