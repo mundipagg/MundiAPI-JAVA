@@ -114,8 +114,9 @@ public class MundiAPIClient {
     /**
      * Client initialization constructor 
      */     
-    public MundiAPIClient(String basicAuthUserName, String basicAuthPassword) {
+    public MundiAPIClient(String serviceRefererName, String basicAuthUserName, String basicAuthPassword) {
         this();
+        Configuration.serviceRefererName = serviceRefererName;
         Configuration.basicAuthUserName = basicAuthUserName;
         Configuration.basicAuthPassword = basicAuthPassword;
     }
