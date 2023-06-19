@@ -135,6 +135,8 @@ public class OrdersController extends BaseController {
         if (idempotencyKey != null) {
             _headers.put("idempotency-key", idempotencyKey);
         }
+        _headers.put("ServiceRefererName", Configuration.serviceRefererName);
+
         _headers.put("user-agent", BaseController.userAgent);
         _headers.put("accept", "application/json");
 
@@ -282,6 +284,8 @@ public class OrdersController extends BaseController {
         if (idempotencyKey != null) {
             _headers.put("idempotency-key", idempotencyKey);
         }
+        _headers.put("ServiceRefererName", Configuration.serviceRefererName);
+
         _headers.put("user-agent", BaseController.userAgent);
         _headers.put("accept", "application/json");
 
@@ -435,6 +439,8 @@ public class OrdersController extends BaseController {
         if (idempotencyKey != null) {
             _headers.put("idempotency-key", idempotencyKey);
         }
+        _headers.put("ServiceRefererName", Configuration.serviceRefererName);
+
         _headers.put("user-agent", BaseController.userAgent);
         _headers.put("accept", "application/json");
 
@@ -588,6 +594,8 @@ public class OrdersController extends BaseController {
         if (idempotencyKey != null) {
             _headers.put("idempotency-key", idempotencyKey);
         }
+        _headers.put("ServiceRefererName", Configuration.serviceRefererName);
+
         _headers.put("user-agent", BaseController.userAgent);
         _headers.put("accept", "application/json");
 
@@ -777,6 +785,8 @@ public class OrdersController extends BaseController {
 
         //load all headers for the outgoing API request
         Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("ServiceRefererName", Configuration.serviceRefererName);
+
         _headers.put("user-agent", BaseController.userAgent);
         _headers.put("accept", "application/json");
 
@@ -920,6 +930,8 @@ public class OrdersController extends BaseController {
         if (idempotencyKey != null) {
             _headers.put("idempotency-key", idempotencyKey);
         }
+        _headers.put("ServiceRefererName", Configuration.serviceRefererName);
+
         _headers.put("user-agent", BaseController.userAgent);
         _headers.put("accept", "application/json");
 
@@ -1073,6 +1085,8 @@ public class OrdersController extends BaseController {
         if (idempotencyKey != null) {
             _headers.put("idempotency-key", idempotencyKey);
         }
+        _headers.put("ServiceRefererName", Configuration.serviceRefererName);
+
         _headers.put("user-agent", BaseController.userAgent);
         _headers.put("accept", "application/json");
 
@@ -1218,6 +1232,8 @@ public class OrdersController extends BaseController {
 
         //load all headers for the outgoing API request
         Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("ServiceRefererName", Configuration.serviceRefererName);
+
         _headers.put("user-agent", BaseController.userAgent);
         _headers.put("accept", "application/json");
 
@@ -1377,6 +1393,8 @@ public class OrdersController extends BaseController {
         if (idempotencyKey != null) {
             _headers.put("idempotency-key", idempotencyKey);
         }
+        _headers.put("ServiceRefererName", Configuration.serviceRefererName);
+
         _headers.put("user-agent", BaseController.userAgent);
         _headers.put("accept", "application/json");
 
@@ -1516,6 +1534,8 @@ public class OrdersController extends BaseController {
 
         //load all headers for the outgoing API request
         Map<String, String> _headers = new HashMap<String, String>();
+        _headers.put("ServiceRefererName", Configuration.serviceRefererName);
+
         _headers.put("user-agent", BaseController.userAgent);
         _headers.put("accept", "application/json");
 
